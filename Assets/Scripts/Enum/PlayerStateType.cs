@@ -4,15 +4,13 @@ public enum PlayerStateType
     Move,
     Jump,
     Fall,
+    Dodge,
     Dash,
-
     Attack,
     Skill,
     Burst,
-
     Climb,
     Glide,
-
     Hit,
     Dead
 }

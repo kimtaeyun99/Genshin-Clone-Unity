@@ -11,17 +11,19 @@ public class InputManager : MonoBehaviour
     public Vector2 LookInput { get; private set; }
 
     // 상태 입력
-    public bool IsSprinting { get; private set; }
+    public bool IsSprintHeld { get; private set; }
     public bool IsWalking { get; private set; }
 
     // 일회성 입력
     public event Action OnAttack;
     public event Action OnInteract;
     public event Action OnJump;
+    public event Action OnDodge;
     public event Action OnSkill;
     public event Action OnBurst;
     public event Action OnMenu;
     public event Action OnInventory;
+
 
     // 캐릭터 변경
     public event Action<int> OnSwitchCharacter;
@@ -143,10 +145,15 @@ public class InputManager : MonoBehaviour
     private void OnSprint(InputAction.CallbackContext context)
     {
         if (context.performed)
-            IsSprinting = true;
+        {
+            IsSprintHeld = true;
+            OnDodge?.Invoke();
+        }
 
         if (context.canceled)
-            IsSprinting = false;
+        {
+            IsSprintHeld = false;
+        }
     }
 
     private void OnToggleWalk(InputAction.CallbackContext context)
