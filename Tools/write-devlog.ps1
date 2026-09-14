@@ -1,4 +1,18 @@
 # ==========================================
+# UTF-8 Encoding
+# ==========================================
+
+$utf8 = [System.Text.UTF8Encoding]::new($false)
+
+[Console]::InputEncoding = $utf8
+[Console]::OutputEncoding = $utf8
+$OutputEncoding = $utf8
+
+$env:LANG = "ko_KR.UTF-8"
+$env:LC_ALL = "ko_KR.UTF-8"
+
+
+# ==========================================
 # Basic Settings
 # ==========================================
 
@@ -23,7 +37,12 @@ $outputFile = Join-Path $outputDir "$date.md"
 
 
 if (!(Test-Path -LiteralPath $outputDir)) {
-    New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
+
+    New-Item `
+        -ItemType Directory `
+        -Force `
+        -Path $outputDir |
+        Out-Null
 }
 
 
@@ -31,11 +50,17 @@ if (!(Test-Path -LiteralPath $outputDir)) {
 # Git Information
 # ==========================================
 
-$commit = git log -1 --pretty=format:"%s"
+$commit = git `
+    -c i18n.logOutputEncoding=utf-8 `
+    log -1 `
+    --pretty=format:"%s"
+
 
 $hash = git log -1 --pretty=format:"%h"
 
+
 $branch = git branch --show-current
+
 
 $files = git diff-tree `
     --no-commit-id `
@@ -57,7 +82,7 @@ if (!(Test-Path -LiteralPath $outputFile)) {
     [System.IO.File]::WriteAllText(
         $outputFile,
         $header,
-        [System.Text.UTF8Encoding]::new($false)
+        $utf8
     )
 }
 
@@ -69,6 +94,7 @@ if (!(Test-Path -LiteralPath $outputFile)) {
 $fileList = ""
 
 foreach ($file in $files) {
+
     $fileList += "- $file`r`n"
 }
 
@@ -105,9 +131,13 @@ $fileList
 [System.IO.File]::AppendAllText(
     $outputFile,
     $content,
-    [System.Text.UTF8Encoding]::new($false)
+    $utf8
 )
 
+
+# ==========================================
+# Complete
+# ==========================================
 
 Write-Host ""
 Write-Host "Dev log created successfully."

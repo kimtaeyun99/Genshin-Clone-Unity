@@ -6,12 +6,27 @@ $ErrorActionPreference = "Continue"
 
 
 # ==========================================
+# UTF-8 Encoding
+# ==========================================
+
+$utf8 = [System.Text.UTF8Encoding]::new($false)
+
+[Console]::InputEncoding = $utf8
+[Console]::OutputEncoding = $utf8
+$OutputEncoding = $utf8
+
+$env:LANG = "ko_KR.UTF-8"
+$env:LC_ALL = "ko_KR.UTF-8"
+
+
+# ==========================================
 # Settings
 # ==========================================
 
 $documents = [Environment]::GetFolderPath("MyDocuments")
 
 $vault = Join-Path $documents "Obsidian Vault\DevLog"
+
 $project = "Genshin-Clone-Unity"
 
 $date = Get-Date -Format "yyyy-MM-dd"
@@ -21,11 +36,9 @@ $outputDir = Join-Path $outputDir $project
 
 $outputFile = Join-Path $outputDir "$date.md"
 
-# OpenAI Model
 $model = "gpt-5.6-luna"
 
-# AI에 전송할 Diff 최대 글자 수
-# 비용 및 요청 크기 제한용
+# AI에 전달할 최대 Diff 글자 수
 $maxDiffLength = 60000
 
 
@@ -38,6 +51,7 @@ if ([string]::IsNullOrWhiteSpace($env:OPENAI_API_KEY)) {
     Write-Host ""
     Write-Host "OPENAI_API_KEY not found."
     Write-Host "PowerShell을 새로 실행했는지 확인하세요."
+
     exit
 }
 
@@ -48,10 +62,12 @@ if ([string]::IsNullOrWhiteSpace($env:OPENAI_API_KEY)) {
 
 $isGitRepo = git rev-parse --is-inside-work-tree 2>$null
 
+
 if ($LASTEXITCODE -ne 0 -or $isGitRepo -ne "true") {
 
     Write-Host ""
     Write-Host "현재 위치가 Git Repository가 아닙니다."
+
     exit
 }
 
@@ -63,7 +79,10 @@ if ($LASTEXITCODE -ne 0 -or $isGitRepo -ne "true") {
 Write-Host ""
 Write-Host "Collecting today's commits..."
 
-$commitLines = git log `
+
+$commitLines = git `
+    -c i18n.logOutputEncoding=utf-8 `
+    log `
     --since="$date 00:00:00" `
     --until="$date 23:59:59" `
     --pretty=format:"%h | %ad | %s" `
@@ -74,6 +93,7 @@ if ([string]::IsNullOrWhiteSpace(($commitLines -join ""))) {
 
     Write-Host ""
     Write-Host "오늘 생성된 Commit이 없습니다."
+
     exit
 }
 
@@ -82,7 +102,7 @@ $commitList = $commitLines -join "`r`n"
 
 
 # ==========================================
-# Collect Today's Commit Hashes
+# Today's Commit Hashes
 # ==========================================
 
 $todayHashes = git log `
@@ -98,29 +118,33 @@ if ($todayHashes.Count -eq 0) {
 
     Write-Host ""
     Write-Host "오늘 Commit Hash를 찾을 수 없습니다."
+
     exit
 }
 
 
-# git log 결과는 최신 -> 과거 순서
+# git log = 최신 -> 과거
 $firstCommit = $todayHashes[-1]
-$lastCommit  = $todayHashes[0]
+$lastCommit = $todayHashes[0]
 
 
 # ==========================================
-# Collect Today's Changed Files
+# Today's Changed Files
 # ==========================================
 
 Write-Host "Collecting changed files..."
 
-$changedFiles = git log `
+
+$changedFiles = git `
+    -c core.quotepath=false `
+    log `
     --since="$date 00:00:00" `
     --until="$date 23:59:59" `
     --name-only `
     --pretty=format:""
 
 
-# AI 분석에 필요 없는 Unity 파일 및 바이너리 제거
+# 필요 없는 Unity / Binary 파일 제외
 $changedFiles = $changedFiles |
     Where-Object {
 
@@ -138,6 +162,7 @@ $changedFiles = $changedFiles |
         $_ -notmatch "\.(fbx|blend|obj)$" -and
         $_ -notmatch "\.(wav|mp3|ogg|mp4|mov)$" -and
         $_ -notmatch "\.(dll|exe|pdb|zip|7z)$"
+
     } |
     Sort-Object -Unique
 
@@ -145,7 +170,9 @@ $changedFiles = $changedFiles |
 if ($changedFiles.Count -gt 0) {
 
     $changedFileList = ($changedFiles | ForEach-Object {
+
         "- $_"
+
     }) -join "`r`n"
 
 }
@@ -162,12 +189,11 @@ else {
 Write-Host "Collecting code changes..."
 
 
-# Git의 Empty Tree Hash
-# 최초 Commit을 비교할 때 사용
+# Git Empty Tree Hash
 $emptyTree = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 
 
-# 첫 Commit의 부모가 존재하는지 확인
+# 오늘 첫 Commit의 부모 존재 여부 확인
 git cat-file -e "$firstCommit^" 2>$null
 
 $hasParent = ($LASTEXITCODE -eq 0)
@@ -175,17 +201,16 @@ $hasParent = ($LASTEXITCODE -eq 0)
 
 if ($hasParent) {
 
-    # ======================================
-    # 일반적인 경우
     # 오늘 첫 Commit 이전 상태
-    #        ↓
+    # ↓
     # 오늘 마지막 Commit 상태
-    # ======================================
 
     $firstParent = git rev-parse "$firstCommit^" 2>$null
 
 
-    $diff = git diff `
+    $diff = git `
+        -c core.quotepath=false `
+        diff `
         $firstParent `
         $lastCommit `
         -- `
@@ -201,16 +226,12 @@ if ($hasParent) {
 }
 else {
 
-    # ======================================
-    # 오늘 첫 Commit이
     # Repository 최초 Commit인 경우
-    #
-    # Empty Tree
-    #      ↓
-    # 오늘 마지막 Commit
-    # ======================================
+    # Empty Tree와 오늘 마지막 Commit 비교
 
-    $diff = git diff `
+    $diff = git `
+        -c core.quotepath=false `
+        diff `
         $emptyTree `
         $lastCommit `
         -- `
@@ -229,7 +250,7 @@ $diffText = $diff -join "`r`n"
 
 
 # ==========================================
-# Diff Empty Check
+# Empty Diff
 # ==========================================
 
 if ([string]::IsNullOrWhiteSpace($diffText)) {
@@ -273,7 +294,7 @@ NOTICE
 
 
 # ==========================================
-# Build AI Prompt
+# AI Prompt
 # ==========================================
 
 $prompt = @"
@@ -307,36 +328,32 @@ $prompt = @"
 6. 클래스명, 메서드명, 시스템명 등 중요한 기술 요소는
    가능한 경우 구체적으로 언급합니다.
 
-7. "파일을 수정했다"보다
-   "왜 수정했고 어떤 기능이 구현되었는지"를 중심으로 설명합니다.
+7. 단순히 "파일을 수정했다"라고 작성하지 말고,
+   어떤 기능을 구현하거나 개선했는지 설명합니다.
 
 8. 리팩터링이 확인된다면
    기존 구조에서 무엇이 어떻게 개선되었는지 설명합니다.
 
 9. 버그 수정이 확인된다면
-   원인과 수정 방법을 Diff에서 확인 가능한 범위 내에서 설명합니다.
+   원인과 수정 방식을 확인 가능한 범위에서 설명합니다.
 
 10. 책임 분리, 데이터 관리, 이벤트 구조,
-    상태 관리, 객체지향 설계, 확장성 등
-    포트폴리오에 활용할 가치가 있는 설계가 확인된다면 설명합니다.
+    상태 관리, 객체지향 설계, 확장성, 재사용성 등
+    기술적으로 의미 있는 설계가 확인된다면 설명합니다.
 
-11. 기술적으로 특별한 내용이 없는 경우
-    억지로 설계 의도를 만들어내지 않습니다.
+11. 코드에서 확인할 수 없는 설계 의도는 추측하지 않습니다.
 
-12. 오늘 Commit 목록을 그대로 다시 출력하지 않습니다.
+12. Git Commit 목록을 그대로 다시 출력하지 않습니다.
 
 13. '# $date Dev Log' 제목은 작성하지 않습니다.
 
-14. 설명은 게임 개발 포트폴리오에 활용할 수 있도록
+14. 게임 개발 포트폴리오에 활용할 수 있도록
     명확하고 전문적으로 작성하되 과장하지 않습니다.
 
 
 ==================================================
 출력 형식
 ==================================================
-
-아래 형식을 사용하세요.
-
 
 ## AI Daily Summary
 
@@ -348,9 +365,7 @@ $prompt = @"
 
 ### 주요 구현 내용
 
-기능 또는 시스템 단위로 구분하여 작성합니다.
-
-각 기능에서 실제로 구현된 내용을
+기능 또는 시스템 단위로 핵심 구현 내용을
 Bullet Point 형태로 정리합니다.
 
 
@@ -445,6 +460,7 @@ $bodyObject = @{
     model = $model
 
     reasoning = @{
+
         effort = "low"
     }
 
@@ -486,7 +502,6 @@ catch {
     Write-Host $_.Exception.Message
 
 
-    # HTTP 오류 응답 본문 확인
     if ($_.Exception.Response) {
 
         try {
@@ -495,7 +510,9 @@ catch {
 
             if ($stream) {
 
-                $reader = New-Object System.IO.StreamReader($stream)
+                $reader = New-Object System.IO.StreamReader(
+                    $stream
+                )
 
                 $errorBody = $reader.ReadToEnd()
 
@@ -524,7 +541,7 @@ catch {
 
 
 # ==========================================
-# Extract AI Response Text
+# Extract AI Response
 # ==========================================
 
 $aiSummary = ""
@@ -549,7 +566,7 @@ if ($response -and $response.output) {
 
 
 # ==========================================
-# Empty AI Response Check
+# Empty Response Check
 # ==========================================
 
 if ([string]::IsNullOrWhiteSpace($aiSummary)) {
@@ -583,7 +600,7 @@ if (!(Test-Path -LiteralPath $outputDir)) {
 
 
 # ==========================================
-# Create Today's Dev Log if Missing
+# Create Dev Log If Missing
 # ==========================================
 
 if (!(Test-Path -LiteralPath $outputFile)) {
@@ -596,7 +613,7 @@ if (!(Test-Path -LiteralPath $outputFile)) {
     [System.IO.File]::WriteAllText(
         $outputFile,
         $header,
-        [System.Text.UTF8Encoding]::new($false)
+        $utf8
     )
 }
 
@@ -622,9 +639,6 @@ $endMarker = "<!-- AI_SUMMARY_END -->"
 
 # ==========================================
 # Remove Previous AI Summary
-#
-# 같은 날 여러 번 실행해도
-# AI Summary가 중복 생성되지 않도록 처리
 # ==========================================
 
 $pattern = "(?s)" +
@@ -642,7 +656,7 @@ $existingContent = [regex]::Replace(
 
 
 # ==========================================
-# Prepare New AI Summary
+# Prepare AI Section
 # ==========================================
 
 $aiSection = @"
@@ -658,8 +672,7 @@ $endMarker
 
 
 # ==========================================
-# Insert AI Summary
-# directly under main title
+# Insert AI Summary Under Main Header
 # ==========================================
 
 $headerPattern = "(?m)^(# .+?\r?\n)"
@@ -687,13 +700,13 @@ $existingContent
 
 
 # ==========================================
-# Save Markdown
+# Save Markdown UTF-8
 # ==========================================
 
 [System.IO.File]::WriteAllText(
     $outputFile,
     $newContent,
-    [System.Text.UTF8Encoding]::new($false)
+    $utf8
 )
 
 
