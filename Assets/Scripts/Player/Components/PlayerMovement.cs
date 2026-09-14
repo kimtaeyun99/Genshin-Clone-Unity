@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Dash")]
     [SerializeField] private float dashMoveSpeed = 8f;
-    [SerializeField] private float dashHoldTime = 1f;
+    [SerializeField] private float dashHoldTime = 0.5f;
 
     public bool IsGrounded { get; private set; }
     public bool IsDashMode { get; private set; }

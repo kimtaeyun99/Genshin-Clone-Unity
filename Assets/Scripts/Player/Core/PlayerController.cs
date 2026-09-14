@@ -5,9 +5,12 @@ public class PlayerController : MonoBehaviour
     public PlayerStateMachine StateMachine { get; private set; }
     public PlayerMovement Movement { get; private set; }
 
+    public PlayerStamina Stamina { get; private set; }
     private void Awake()
     {
         Movement = GetComponent<PlayerMovement>();
+
+        Stamina = GetComponent<PlayerStamina>();
 
         StateMachine = new PlayerStateMachine();
 

@@ -43,6 +43,13 @@ public class PlayerMoveState : PlayerStateBase
         if (player.Movement.IsDashMode)
         {
             player.Movement.DashMove(moveInput);
+            player.Stamina.ConsumeStamina(player.Stamina.DashStaminaCostPerSecond * Time.deltaTime);
+
+            if (player.Stamina.IsEmpty)
+            {
+                player.Movement.ExitDashMode();
+            }
+
         }
         else
         {
@@ -63,6 +70,11 @@ public class PlayerMoveState : PlayerStateBase
         if (player.Movement.IsDashMode)
         {
             return;
+        }
+        if (player.Stamina.IsEmpty)
+        {
+            sprintHoldTimer = 0f;
+
         }
 
         // 아직 대시 모드가 아니라면
