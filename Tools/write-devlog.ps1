@@ -1,28 +1,26 @@
-# Windows Documents 폴더 자동 탐색
+# ==========================================
+# Basic Settings
+# ==========================================
+
 $documents = [Environment]::GetFolderPath("MyDocuments")
 
-# Obsidian Vault 경로
 $vault = Join-Path $documents "Obsidian Vault\DevLog"
 
-# 프로젝트 이름
 $project = "Genshin-Clone-Unity"
 
-# 현재 날짜 / 시간
 $date = Get-Date -Format "yyyy-MM-dd"
 $time = Get-Date -Format "HH:mm"
 
-# 저장 경로
-# DevLog\Projects\Genshin-Clone-Unity
+
+# ==========================================
+# Output Path
+# ==========================================
+
 $outputDir = Join-Path $vault "Projects"
 $outputDir = Join-Path $outputDir $project
 
-# 오늘 날짜의 Markdown 파일
 $outputFile = Join-Path $outputDir "$date.md"
 
-
-# ==========================================
-# 폴더 생성
-# ==========================================
 
 if (!(Test-Path -LiteralPath $outputDir)) {
     New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
@@ -30,24 +28,23 @@ if (!(Test-Path -LiteralPath $outputDir)) {
 
 
 # ==========================================
-# Git 정보 가져오기
+# Git Information
 # ==========================================
 
-# 마지막 Commit 메시지
 $commit = git log -1 --pretty=format:"%s"
 
-# 마지막 Commit Hash
 $hash = git log -1 --pretty=format:"%h"
 
-# 현재 Branch
 $branch = git branch --show-current
 
-# 마지막 Commit에서 변경된 파일
-$files = git diff-tree --no-commit-id --name-only -r HEAD
+$files = git diff-tree `
+    --no-commit-id `
+    --name-only `
+    -r HEAD
 
 
 # ==========================================
-# 오늘의 개발일지가 없으면 생성
+# Create Daily Log
 # ==========================================
 
 if (!(Test-Path -LiteralPath $outputFile)) {
@@ -66,14 +63,18 @@ if (!(Test-Path -LiteralPath $outputFile)) {
 
 
 # ==========================================
-# 변경 파일 목록
+# Changed Files
 # ==========================================
 
-$fileList = $files -join "`r`n"
+$fileList = ""
+
+foreach ($file in $files) {
+    $fileList += "- $file`r`n"
+}
 
 
 # ==========================================
-# 개발일지 내용
+# Commit Log
 # ==========================================
 
 $content = @"
@@ -84,10 +85,10 @@ $content = @"
 $commit
 
 ### Commit Hash
-$hash
+``$hash``
 
 ### Branch
-$branch
+``$branch``
 
 ### Changed Files
 $fileList
@@ -98,7 +99,7 @@ $fileList
 
 
 # ==========================================
-# Markdown 파일에 추가
+# Save
 # ==========================================
 
 [System.IO.File]::AppendAllText(
@@ -107,10 +108,6 @@ $fileList
     [System.Text.UTF8Encoding]::new($false)
 )
 
-
-# ==========================================
-# 완료 메시지
-# ==========================================
 
 Write-Host ""
 Write-Host "Dev log created successfully."
