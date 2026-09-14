@@ -13,10 +13,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpHeight = 2f;
     [Header("Air Movement")]
     [SerializeField] private float airMoveSpeed = 3f;
+    [Header("Ground Check")]
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float groundCheckDistance = 0.2f;
+    [SerializeField] private float groundCheckRadius = 0.3f;
 
+    public bool IsGrounded { get; private set; }
     private float verticalVelocity;
     public float VerticalVelocity => verticalVelocity;
-    public bool IsGrounded => characterController.isGrounded;
 
     private CharacterController characterController;
     private Transform cameraTransform;
@@ -30,7 +34,10 @@ public class PlayerMovement : MonoBehaviour
             cameraTransform = Camera.main.transform;
         }
     }
-
+    private void Update()
+    {
+        CheckGround();
+    }
     public void Move(Vector2 input)
     {
         MoveInternal(input, moveSpeed);
@@ -65,6 +72,12 @@ public class PlayerMovement : MonoBehaviour
             Vector3.up * verticalVelocity * Time.deltaTime
         );
     }
+    public void CheckGround()
+    {
+        Vector3 origin = transform.position + characterController.center + Vector3.down * (characterController.height * 0.5f - characterController.radius);
+
+        IsGrounded = Physics.SphereCast(origin, groundCheckRadius, Vector3.down, out RaycastHit hit, groundCheckDistance, groundLayer, QueryTriggerInteraction.Ignore);
+    }
     public void Jump()
     {
         verticalVelocity = Mathf.Sqrt(
@@ -77,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MoveInternal(Vector2 input, float speed)
     {
-        if(cameraTransform == null)
+        if (cameraTransform == null)
         {
             return;
         }
@@ -92,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveDirection = forward * input.y + right * input.x;
 
-        if(moveDirection.sqrMagnitude > 1f)
+        if (moveDirection.sqrMagnitude > 1f)
         {
             moveDirection.Normalize();
         }
@@ -100,5 +113,22 @@ public class PlayerMovement : MonoBehaviour
         characterController.Move(moveDirection * speed * Time.deltaTime);
 
         Rotate(moveDirection);
+    }
+    private void OnDrawGizmosSelected()
+    {
+        CharacterController controller = GetComponent<CharacterController>();
+
+        if (controller == null)
+            return;
+
+        Vector3 origin =
+            transform.position +
+            controller.center +
+            Vector3.down * (controller.height * 0.5f - controller.radius);
+
+        Gizmos.DrawWireSphere(
+            origin + Vector3.down * groundCheckDistance,
+            groundCheckRadius
+        );
     }
 }

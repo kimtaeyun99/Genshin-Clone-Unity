@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        Movement.CheckGround();
+
         StateMachine.Update();
 
         Movement.ApplyGravity();
