@@ -49,5 +49,4 @@ public class PlayerStamina : MonoBehaviour
 
         CurrentStamina = Mathf.Min(CurrentStamina, maxStamina);
     }
-
 }

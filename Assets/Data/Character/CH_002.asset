@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df384907dd74b924d99a3e3c0eb8d12e, type: 3}
+  m_Name: CH_002
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
+  id: CH_002
+  characterName: Barbara
+  prefab: {fileID: 0}
+  elementType: 1
+  weaponType: 2
+  hp: 821
+  hpPerLevel: 80
+  atk: 13
+  atkPerLevel: 2
+  def: 56
+  defPerLevel: 7
+  elementalMastery: 0
+  ascensionStatType: 1
