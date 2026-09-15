@@ -1,4 +1,11 @@
 # ==========================================
+# Git Commit -> Obsidian Dev Log
+# ==========================================
+
+$ErrorActionPreference = "Continue"
+
+
+# ==========================================
 # UTF-8 Encoding
 # ==========================================
 
@@ -22,8 +29,32 @@ $vault = Join-Path $documents "Obsidian Vault\DevLog"
 
 $project = "Genshin-Clone-Unity"
 
-$date = Get-Date -Format "yyyy-MM-dd"
-$time = Get-Date -Format "HH:mm"
+
+# ==========================================
+# Development Day
+#
+# 06:00 ~ 다음날 05:59를
+# 하나의 개발일로 처리
+# ==========================================
+
+$now = Get-Date
+
+if ($now.Hour -lt 6) {
+
+    # 새벽 0시 ~ 5시 59분이면 전날 개발일
+    $devDate = $now.AddDays(-1)
+
+}
+else {
+
+    $devDate = $now
+}
+
+
+$date = $devDate.ToString("yyyy-MM-dd")
+
+# 실제 Commit 시간은 현재 시간 그대로 기록
+$time = $now.ToString("HH:mm")
 
 
 # ==========================================
@@ -47,6 +78,22 @@ if (!(Test-Path -LiteralPath $outputDir)) {
 
 
 # ==========================================
+# Git Repository Check
+# ==========================================
+
+$isGitRepo = git rev-parse --is-inside-work-tree 2>$null
+
+
+if ($LASTEXITCODE -ne 0 -or $isGitRepo -ne "true") {
+
+    Write-Host ""
+    Write-Host "현재 위치가 Git Repository가 아닙니다."
+
+    exit
+}
+
+
+# ==========================================
 # Git Information
 # ==========================================
 
@@ -62,7 +109,9 @@ $hash = git log -1 --pretty=format:"%h"
 $branch = git branch --show-current
 
 
-$files = git diff-tree `
+$files = git `
+    -c core.quotepath=false `
+    diff-tree `
     --no-commit-id `
     --name-only `
     -r HEAD
@@ -93,9 +142,19 @@ if (!(Test-Path -LiteralPath $outputFile)) {
 
 $fileList = ""
 
+
 foreach ($file in $files) {
 
-    $fileList += "- $file`r`n"
+    if (-not [string]::IsNullOrWhiteSpace($file)) {
+
+        $fileList += "- $file`r`n"
+    }
+}
+
+
+if ([string]::IsNullOrWhiteSpace($fileList)) {
+
+    $fileList = "- 변경 파일 없음`r`n"
 }
 
 
@@ -141,4 +200,5 @@ $fileList
 
 Write-Host ""
 Write-Host "Dev log created successfully."
+Write-Host "Development Day: $date"
 Write-Host "File: $outputFile"
