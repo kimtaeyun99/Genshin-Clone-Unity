@@ -6,7 +6,6 @@ public class CharacterRuntime
 {
     [Header("Data")]
     [SerializeField] private CharacterData data;
-    [SerializeField] private CharacterAscensionData ascensionData;
 
     [Header("Level")]
     [SerializeField] private int level;
@@ -17,25 +16,18 @@ public class CharacterRuntime
     [SerializeField] private float currentEnergy;
 
 
-    // Data
     public CharacterData Data => data;
-    public CharacterAscensionData AscensionData => ascensionData;
 
-    // Level
     public int Level => level;
     public int AscensionPhase => ascensionPhase;
 
-    // Current State
     public int CurrentHP => currentHP;
     public float CurrentEnergy => currentEnergy;
 
 
-    public CharacterRuntime(
-        CharacterData data,
-        CharacterAscensionData ascensionData)
+    public CharacterRuntime(CharacterData data)
     {
         this.data = data;
-        this.ascensionData = ascensionData;
 
         level = 1;
         ascensionPhase = 0;
@@ -61,17 +53,33 @@ public class CharacterRuntime
     }
 
 
+    public float GetAscensionBonus()
+    {
+        if (data.AscensionData == null)
+        {
+            return 0f;
+        }
+
+        return data.AscensionData.GetBonusValue(
+            ascensionPhase
+        );
+    }
+
+
     public int GetMaxLevel()
     {
-        return CharacterLevelRule.GetMaxLevel(ascensionPhase);
+        return CharacterLevelRule.GetMaxLevel(
+            ascensionPhase
+        );
     }
+
 
     public bool CanLevelUp()
     {
         return level < GetMaxLevel();
     }
 
-    // 레벨업
+
     public bool LevelUp()
     {
         if (!CanLevelUp())
@@ -84,25 +92,18 @@ public class CharacterRuntime
         return true;
     }
 
-    // 돌파 가능한지 확인
+
     public bool CanAscend()
     {
-        // 최종 돌파 단계
         if (ascensionPhase >= 6)
         {
             return false;
         }
 
-        // 현재 돌파 단계의 최대 레벨에 도달해야 돌파 가능
-        if (level < GetMaxLevel())
-        {
-            return false;
-        }
-
-        return true;
+        return level >= GetMaxLevel();
     }
 
-    // 돌파
+
     public bool Ascend()
     {
         if (!CanAscend())

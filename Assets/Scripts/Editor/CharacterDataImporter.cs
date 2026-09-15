@@ -6,19 +6,19 @@ using System.IO;
 
 public class CharacterDataImporter : EditorWindow
 {
-    private const string CharacterCsvPath =
+    [SerializeField] private const string CharacterCsvPath =
         "Assets/Scripts/Editor/CSV/Character.csv";
 
-    private const string CharacterDataFolder =
+    [SerializeField] private const string CharacterDataFolder =
         "Assets/Data/Character";
 
-    private const string CharacterPrefabFolder =
+    [SerializeField] private const string CharacterPrefabFolder =
         "Assets/Prefabs/Character";
 
-    private const string CharacterAscensionCsvPath =
+    [SerializeField] private const string CharacterAscensionCsvPath =
     "Assets/Scripts/Editor/CSV/CharacterAscension.csv";
 
-    private const string CharacterAscensionDataFolder =
+    [SerializeField] private const string CharacterAscensionDataFolder =
         "Assets/Data/CharacterAscension";
 
 
@@ -44,6 +44,14 @@ public class CharacterDataImporter : EditorWindow
             "Output",
             CharacterDataFolder
         );
+
+        GUILayout.Space(10);
+
+        if (GUILayout.Button("Import All Character Data"))
+        {
+            ImportCharacterAscensions();
+            ImportCharacters();
+        }
 
         GUILayout.Space(10);
 
@@ -173,7 +181,14 @@ public class CharacterDataImporter : EditorWindow
                 );
             }
 
+            CharacterAscensionData ascensionData = FindOrCreateCharacterAscensionData(id);
 
+            if (ascensionData == null)
+            {
+                Debug.LogWarning(
+                    $"[{id}] CharacterAscensionData를 찾을 수 없습니다."
+                );
+            }
             // CharacterData SO 생성 또는 기존 데이터 가져오기
             CharacterData characterData =
                 FindOrCreateCharacterData(id);
@@ -191,7 +206,8 @@ public class CharacterDataImporter : EditorWindow
                 def,
                 defPerLevel,
                 elementalMastery,
-                ascensionStatType
+                ascensionStatType,
+                ascensionData
             );
 
 
