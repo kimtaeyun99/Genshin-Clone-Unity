@@ -1,5 +1,5 @@
-﻿CharacterID,Phase0,Phase1,Phase2,Phase3,Phase4,Phase5,Phase6
-CH_001,0,0,4.8,9.6,9.6,14.4,19.2
-CH_002,0,0,6.0,12.0,12.0,18.0,24.0
-CH_003,0,0,6.7,13.3,13.3,20.0,26.7
-CH_004,0,0,24.0,48.0,48.0,72.0,96.0
+﻿CharacterID,AscensionStatType,Phase0,Phase1,Phase2,Phase3,Phase4,Phase5,Phase6
+CH_001,CritRate,0,2.4,4.8,9.6,12,14.4,19.2
+CH_002,HPPercent,0,3,6,12,15,18,24
+CH_003,EnergyRecharge,0,3.4,6.7,13.3,16,20,26.7
+CH_004,ElementalMastery,0,12,24,48,60,72,96

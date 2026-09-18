@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: CH_002
   m_EditorClassIdentifier: Assembly-CSharp::CharacterAscensionData
   characterId: CH_002
+  ascensionStatType: 1
   bonusValues:
   - 0
-  - 0
+  - 3
   - 6
   - 12
-  - 12
+  - 15
   - 18
   - 24

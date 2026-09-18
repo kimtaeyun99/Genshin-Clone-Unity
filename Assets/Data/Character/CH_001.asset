@@ -24,5 +24,4 @@ MonoBehaviour:
   def: 61
   defPerLevel: 8
   elementalMastery: 0
-  ascensionStatType: 6
   ascensionData: {fileID: 11400000, guid: 07ab7bf7dfdf45e45863f50362de892f, type: 2}
