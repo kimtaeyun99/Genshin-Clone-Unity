@@ -23,7 +23,7 @@ public class CharacterData : ScriptableObject
     [SerializeField] private int defPerLevel;
 
     [SerializeField] private int elementalMastery;
-
+    
     [Header("Ascension Stat")]
     [SerializeField] private StatType ascensionStatType;
     [SerializeField] private CharacterAscensionData ascensionData;
