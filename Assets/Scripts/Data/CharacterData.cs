@@ -23,9 +23,9 @@ public class CharacterData : ScriptableObject
     [SerializeField] private int defPerLevel;
 
     [SerializeField] private int elementalMastery;
-
+    
     [Header("Ascension Stat")]
-    [SerializeField] private StatType ascensionStatType;
+    [SerializeField] private CharacterAscensionData ascensionData;
 
     public string ID => id;
     public string CharacterName => characterName;
@@ -39,7 +39,7 @@ public class CharacterData : ScriptableObject
     public int DEF => def;
     public int DEFPerLevel => defPerLevel;
     public int ElementalMastery => elementalMastery;
-    public StatType AscensionStatType => ascensionStatType;
+    public CharacterAscensionData AscensionData => ascensionData;
 
     public void SetData(
     string id,
@@ -54,7 +54,8 @@ public class CharacterData : ScriptableObject
     int def,
     int defPerLevel,
     int elementalMastery,
-    StatType ascensionStatType)
+
+    CharacterAscensionData ascensionData)
     {
         this.id = id;
         this.characterName = characterName;
@@ -74,6 +75,6 @@ public class CharacterData : ScriptableObject
 
         this.elementalMastery = elementalMastery;
 
-        this.ascensionStatType = ascensionStatType;
+        this.ascensionData = ascensionData;
     }
 }

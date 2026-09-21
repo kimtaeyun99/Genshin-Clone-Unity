@@ -1,5 +1,5 @@
-﻿ID,Name,ElementType,WeaponType,PrefabName,HP,HPPerLevel,ATK,ATKPerLevel,DEF,DEFPerLevel,ElementalMastery,AscensionStatType
-CH_001,Diluc,Pyro,Claymore,Diluc,1011,100,26,3,61,8,0,CritRate
-CH_002,Barbara,Hydro,Catalyst,Barbara,821,80,13,2,56,7,0,HPPercent
-CH_003,Kaeya,Cryo,Sword,Kaeya,976,90,19,2,66,8,0,EnergyRecharge
-CH_004,Lisa,Electro,Catalyst,Lisa,802,75,19,2,48,6,0,ElementalMastery
+﻿ID,Name,ElementType,WeaponType,PrefabName,HP,HPPerLevel,ATK,ATKPerLevel,DEF,DEFPerLevel,ElementalMastery
+CH_001,Diluc,Pyro,Claymore,Diluc,1011,100,26,3,61,8,0
+CH_002,Barbara,Hydro,Catalyst,Barbara,821,80,13,2,56,7,0
+CH_003,Kaeya,Cryo,Sword,Kaeya,976,90,19,2,66,8,0
+CH_004,Lisa,Electro,Catalyst,Lisa,802,75,19,2,48,6,0

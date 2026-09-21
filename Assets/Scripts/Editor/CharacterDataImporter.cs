@@ -6,18 +6,23 @@ using System.IO;
 
 public class CharacterDataImporter : EditorWindow
 {
+    [SerializeField]
     private const string CharacterCsvPath =
         "Assets/Scripts/Editor/CSV/Character.csv";
 
+    [SerializeField]
     private const string CharacterDataFolder =
         "Assets/Data/Character";
 
+    [SerializeField]
     private const string CharacterPrefabFolder =
         "Assets/Prefabs/Character";
 
+    [SerializeField]
     private const string CharacterAscensionCsvPath =
     "Assets/Scripts/Editor/CSV/CharacterAscension.csv";
 
+    [SerializeField]
     private const string CharacterAscensionDataFolder =
         "Assets/Data/CharacterAscension";
 
@@ -44,6 +49,14 @@ public class CharacterDataImporter : EditorWindow
             "Output",
             CharacterDataFolder
         );
+
+        GUILayout.Space(10);
+
+        if (GUILayout.Button("Import All Character Data"))
+        {
+            ImportCharacterAscensions();
+            ImportCharacters();
+        }
 
         GUILayout.Space(10);
 
@@ -124,21 +137,6 @@ public class CharacterDataImporter : EditorWindow
                 continue;
             }
 
-
-            // Ascension StatType 변환
-            if (!Enum.TryParse(
-                    CSVParser.Get(row, "AscensionStatType"),
-                    true,
-                    out StatType ascensionStatType))
-            {
-                Debug.LogError(
-                    $"[{id}] AscensionStatType이 잘못되었습니다."
-                );
-
-                continue;
-            }
-
-
             // 기본 스탯
             int hp =
                 CSVParser.GetInt(row, "HP");
@@ -173,7 +171,14 @@ public class CharacterDataImporter : EditorWindow
                 );
             }
 
+            CharacterAscensionData ascensionData = FindOrCreateCharacterAscensionData(id);
 
+            if (ascensionData == null)
+            {
+                Debug.LogWarning(
+                    $"[{id}] CharacterAscensionData를 찾을 수 없습니다."
+                );
+            }
             // CharacterData SO 생성 또는 기존 데이터 가져오기
             CharacterData characterData =
                 FindOrCreateCharacterData(id);
@@ -191,7 +196,7 @@ public class CharacterDataImporter : EditorWindow
                 def,
                 defPerLevel,
                 elementalMastery,
-                ascensionStatType
+                ascensionData
             );
 
 
@@ -330,7 +335,10 @@ public class CharacterDataImporter : EditorWindow
 
         if (rows == null || rows.Count == 0)
         {
-            Debug.LogError("CharacterAscension CSV 데이터가 없습니다.");
+            Debug.LogError(
+                "CharacterAscension CSV 데이터가 없습니다."
+            );
+
             return;
         }
 
@@ -352,6 +360,20 @@ public class CharacterDataImporter : EditorWindow
                 continue;
             }
 
+            // 돌파 스탯 종류
+            if (!Enum.TryParse(
+                    CSVParser.Get(row, "AscensionStatType"),
+                    true,
+                    out StatType ascensionStatType))
+            {
+                Debug.LogError(
+                    $"[{characterId}] AscensionStatType이 잘못되었습니다."
+                );
+
+                continue;
+            }
+
+            // 돌파 단계별 수치
             float[] bonusValues = new float[7];
 
             for (int i = 0; i < bonusValues.Length; i++)
@@ -365,6 +387,7 @@ public class CharacterDataImporter : EditorWindow
 
             data.SetData(
                 characterId,
+                ascensionStatType,
                 bonusValues
             );
 

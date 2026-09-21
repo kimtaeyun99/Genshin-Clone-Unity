@@ -1,6 +1,6 @@
 public static class CharacterLevelRule
 {
-    private static readonly int[] MaxLevels =
+    public static readonly int[] MaxLevels =
     {
         20,
         40,

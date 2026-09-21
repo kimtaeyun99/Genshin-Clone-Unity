@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: CH_001
   characterName: Diluc
-  prefab: {fileID: 0}
+  prefab: {fileID: 5711198396278811957, guid: e00576d09d13f744c8bea040ad5b2950, type: 3}
   elementType: 0
   weaponType: 1
   hp: 1011
@@ -24,4 +24,4 @@ MonoBehaviour:
   def: 61
   defPerLevel: 8
   elementalMastery: 0
-  ascensionStatType: 6
+  ascensionData: {fileID: 11400000, guid: 07ab7bf7dfdf45e45863f50362de892f, type: 2}

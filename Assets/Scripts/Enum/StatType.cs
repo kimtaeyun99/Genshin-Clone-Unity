@@ -13,5 +13,17 @@ public enum StatType
     CritDamage,
 
     EnergyRecharge,
-    ElementalMastery
+    ElementalMastery,
+
+    PyroDamageBonus,
+    HydroDamageBonus,
+    CryoDamageBonus,
+    ElectroDamageBonus,
+    PhysicalDamageBonus,
+
+    PyroResistance,
+    HydroResistance,
+    CryoResistance,
+    ElectroResistance,
+    PhysicalResistance
 }

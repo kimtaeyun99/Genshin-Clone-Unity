@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: CH_003
   characterName: Kaeya
-  prefab: {fileID: 0}
+  prefab: {fileID: 901738335609459144, guid: 409e7e606b62e0d43ac9824a62c7130b, type: 3}
   elementType: 2
   weaponType: 0
   hp: 976
@@ -24,4 +24,4 @@ MonoBehaviour:
   def: 66
   defPerLevel: 8
   elementalMastery: 0
-  ascensionStatType: 8
+  ascensionData: {fileID: 11400000, guid: 26d390bccc7a2ae4b81dad3cbce81406, type: 2}
