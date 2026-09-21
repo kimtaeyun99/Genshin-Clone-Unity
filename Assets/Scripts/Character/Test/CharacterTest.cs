@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class CharacterTest : MonoBehaviour
 {
-    [SerializeField] private CharacterData dilucData;
-    [SerializeField] private CharacterData barbaraData;
     [SerializeField] private CharacterStatCalculator characterStatCalculator;
     [SerializeField] private CharacterManager characterManager;
-
+    [SerializeField] private CharacterParty characterParty;
     public void LevelUp()
     {
         CharacterRunTime runtime = characterManager.CurrentCharacter;
@@ -18,18 +16,6 @@ public class CharacterTest : MonoBehaviour
         DebugCharacter();
 
     }
-    public void SetDiluc()
-    {
-        characterManager.SetCurrentCharacter(dilucData);
-
-        DebugCharacter();
-    }
-    public void SetBarbara()
-    {
-        characterManager.SetCurrentCharacter(barbaraData);
-
-        DebugCharacter();
-    }
     public void Ascension()
     {
         CharacterRunTime runtime = characterManager.CurrentCharacter;
@@ -38,6 +24,26 @@ public class CharacterTest : MonoBehaviour
 
         characterStatCalculator.ApplyStat(runtime);
 
+        DebugCharacter();
+    }
+    public void ChangeCharacter0()
+    {
+        characterParty.SelectCharacter(0);
+        DebugCharacter();
+    }
+    public void ChangeCharacter1()
+    {
+        characterParty.SelectCharacter(1);
+        DebugCharacter();
+    }
+    public void ChangeCharacter2()
+    {
+        characterParty.SelectCharacter(2);
+        DebugCharacter();
+    }
+    public void ChangeCharacter3()
+    {
+        characterParty.SelectCharacter(3);
         DebugCharacter();
     }
     private void DebugCharacter()
