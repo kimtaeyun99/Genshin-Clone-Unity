@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: CH_004
   characterName: Lisa
-  prefab: {fileID: 3631975516492489444, guid: 76f134a9bbbc80248828191dfe5c6b36, type: 3}
+  prefab: {fileID: 919132149155446097, guid: 5b8243f70e60b5d4abcbbb59fb62bf4a, type: 3}
   elementType: 3
   weaponType: 2
   hp: 802

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: CH_003
   characterName: Kaeya
-  prefab: {fileID: 901738335609459144, guid: 409e7e606b62e0d43ac9824a62c7130b, type: 3}
+  prefab: {fileID: 919132149155446097, guid: cf839a825c0790649b323bc26171361d, type: 3}
   elementType: 2
   weaponType: 0
   hp: 976

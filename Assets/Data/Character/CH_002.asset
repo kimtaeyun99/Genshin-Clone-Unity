@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: CH_002
   characterName: Barbara
-  prefab: {fileID: 5380582941398961336, guid: edc165c5fca68ed4eb05a97b64e99b59, type: 3}
+  prefab: {fileID: 919132149155446097, guid: cde864d79aca5a744a0d17df3272dc53, type: 3}
   elementType: 1
   weaponType: 2
   hp: 821

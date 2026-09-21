@@ -247,45 +247,33 @@ public class CharacterDataImporter : EditorWindow
     private GameObject FindCharacterPrefab(string prefabName)
     {
         if (string.IsNullOrWhiteSpace(prefabName))
-        {
             return null;
-        }
 
+        prefabName = prefabName.Trim();
 
-        string[] guids =
-            AssetDatabase.FindAssets(
-                $"{prefabName} t:Prefab",
-                new[]
-                {
-                    CharacterPrefabFolder
-                }
-            );
-
-
-        if (guids.Length == 0)
-        {
-            return null;
-        }
-
-
-        // 같은 이름이 여러 개 있으면 경고
-        if (guids.Length > 1)
-        {
-            Debug.LogWarning(
-                $"Prefab '{prefabName}' 검색 결과가 여러 개입니다."
-            );
-        }
-
-
-        string path =
-            AssetDatabase.GUIDToAssetPath(
-                guids[0]
-            );
-
-
-        return AssetDatabase.LoadAssetAtPath<GameObject>(
-            path
+        // Character 폴더 및 모든 하위 폴더 검색
+        string[] guids = AssetDatabase.FindAssets(
+            "t:Model",
+            new[] { CharacterPrefabFolder }
         );
+
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            string fileName = Path.GetFileNameWithoutExtension(path);
+
+            // FBX 파일 이름과 PrefabName이 같은 경우
+            if (string.Equals(
+                fileName,
+                prefabName,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            }
+        }
+
+        Debug.LogWarning($"FBX를 찾을 수 없습니다: {prefabName}");
+        return null;
     }
 
 
