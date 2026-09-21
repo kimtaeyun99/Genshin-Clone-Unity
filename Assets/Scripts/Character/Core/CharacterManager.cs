@@ -9,6 +9,9 @@ public class CharacterManager : MonoBehaviour
     [Header("StatCalculator")]
     [SerializeField] private CharacterStatCalculator statCalculator;
 
+    [Header("View")]
+    [SerializeField] private CharacterView characterView;
+
     private CharacterRunTime currentCharacter;
 
     public CharacterRunTime CurrentCharacter => currentCharacter;
@@ -59,6 +62,8 @@ public class CharacterManager : MonoBehaviour
         currentCharacter = runTime;
 
         statCalculator.ApplyStat(currentCharacter);
+
+        characterView.ChangeView(data);
 
         return true;
     }
