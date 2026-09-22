@@ -26,6 +26,9 @@ public class CharacterDataImporter : EditorWindow
     private const string CharacterAscensionDataFolder =
         "Assets/Data/CharacterAscension";
 
+    [SerializeField]
+    private const string CharacterAnimatorControllerFolder =
+        "Assets/Animation/Controller";
 
     [MenuItem("Tools/Data Importer/Character")]
     public static void OpenWindow()
@@ -171,7 +174,7 @@ public class CharacterDataImporter : EditorWindow
                 );
             }
 
-            CharacterAscensionData ascensionData = FindOrCreateCharacterAscensionData(id);
+            CharacterAscensionData ascensionData = FindOrCreateCharacterAscensionData(characterName);
 
             if (ascensionData == null)
             {
@@ -179,9 +182,12 @@ public class CharacterDataImporter : EditorWindow
                     $"[{id}] CharacterAscensionData를 찾을 수 없습니다."
                 );
             }
+
+            RuntimeAnimatorController animatorController = FindRunTimeAnimatorController(characterName);
+
             // CharacterData SO 생성 또는 기존 데이터 가져오기
             CharacterData characterData =
-                FindOrCreateCharacterData(id);
+                FindOrCreateCharacterData(characterName);
 
             characterData.SetData(
                 id,
@@ -196,7 +202,8 @@ public class CharacterDataImporter : EditorWindow
                 def,
                 defPerLevel,
                 elementalMastery,
-                ascensionData
+                ascensionData,
+                animatorController
             );
 
 
@@ -214,10 +221,10 @@ public class CharacterDataImporter : EditorWindow
         );
     }
 
-    private CharacterData FindOrCreateCharacterData(string id)
+    private CharacterData FindOrCreateCharacterData(string characterName)
     {
         string assetPath =
-            $"{CharacterDataFolder}/{id}.asset";
+            $"{CharacterDataFolder}/{characterName}.asset";
 
         CharacterData data =
             AssetDatabase.LoadAssetAtPath<CharacterData>(
@@ -347,6 +354,16 @@ public class CharacterDataImporter : EditorWindow
 
                 continue;
             }
+            string characterName = CSVParser.Get(row, "CharacterName");
+
+            if (string.IsNullOrWhiteSpace(characterName))
+            {
+                Debug.LogWarning(
+                    "CharacterName가 비어있는 행을 건너뜁니다."
+                );
+
+                continue;
+            }
 
             // 돌파 스탯 종류
             if (!Enum.TryParse(
@@ -371,10 +388,11 @@ public class CharacterDataImporter : EditorWindow
             }
 
             CharacterAscensionData data =
-                FindOrCreateCharacterAscensionData(characterId);
+                FindOrCreateCharacterAscensionData(characterName);
 
             data.SetData(
                 characterId,
+                characterName,
                 ascensionStatType,
                 bonusValues
             );
@@ -393,10 +411,10 @@ public class CharacterDataImporter : EditorWindow
     }
 
     private CharacterAscensionData FindOrCreateCharacterAscensionData(
-    string characterId)
+     string characterName)
     {
         string assetPath =
-            $"{CharacterAscensionDataFolder}/{characterId}.asset";
+            $"{CharacterAscensionDataFolder}/{characterName}.asset";
 
         CharacterAscensionData data =
             AssetDatabase.LoadAssetAtPath<CharacterAscensionData>(
@@ -408,8 +426,7 @@ public class CharacterDataImporter : EditorWindow
             return data;
         }
 
-        data =
-            CreateInstance<CharacterAscensionData>();
+        data = CreateInstance<CharacterAscensionData>();
 
         AssetDatabase.CreateAsset(
             data,
@@ -417,5 +434,20 @@ public class CharacterDataImporter : EditorWindow
         );
 
         return data;
+    }
+    private RuntimeAnimatorController FindRunTimeAnimatorController(string characterName)
+    {
+        string assetPath =
+            $"{CharacterAnimatorControllerFolder}/{characterName}.controller";
+
+        RuntimeAnimatorController animatorController =
+            AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(assetPath);
+
+        if (animatorController != null)
+        {
+            return animatorController;
+        }
+
+        return null;
     }
 }

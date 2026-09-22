@@ -5,6 +5,8 @@ public class CharacterView : MonoBehaviour
     [Header("Model")]
     [SerializeField] private Transform modelRoot;
 
+    [Header("Animation")]
+    [SerializeField] private PlayerAnimation playerAnimation;
     private GameObject currentView;
 
     public void ChangeView(CharacterData data)
@@ -26,5 +28,14 @@ public class CharacterView : MonoBehaviour
         currentView.transform.localPosition = Vector3.zero;
         currentView.transform.localRotation = Quaternion.identity;
         currentView.transform.localScale = Vector3.one;
+
+        Animator animator = currentView.GetComponentInChildren<Animator>();
+
+        if (animator != null)
+        {
+            animator.runtimeAnimatorController = data.AnimatorController;
+
+            playerAnimation.SetAnimator(animator);
+        }
     }
 }

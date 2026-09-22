@@ -10,18 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df384907dd74b924d99a3e3c0eb8d12e, type: 3}
-  m_Name: CH_004
+  m_Name: Diluc
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  id: CH_004
-  characterName: Lisa
-  prefab: {fileID: 919132149155446097, guid: 5b8243f70e60b5d4abcbbb59fb62bf4a, type: 3}
-  elementType: 3
-  weaponType: 2
-  hp: 802
-  hpPerLevel: 75
-  atk: 19
-  atkPerLevel: 2
-  def: 48
-  defPerLevel: 6
+  id: CH_001
+  characterName: Diluc
+  prefab: {fileID: 919132149155446097, guid: 20c39768f16ae1142ab922af633f03c3, type: 3}
+  elementType: 0
+  weaponType: 1
+  hp: 1011
+  hpPerLevel: 100
+  atk: 26
+  atkPerLevel: 3
+  def: 61
+  defPerLevel: 8
   elementalMastery: 0
-  ascensionData: {fileID: 11400000, guid: 0f7b1dcf3e2ba94418cc8bfe658f184d, type: 2}
+  ascensionData: {fileID: 11400000, guid: b7c21aca96e966b479307ac09cc367f0, type: 2}
+  animatorController: {fileID: 9100000, guid: 3e79cffa401254946bc1e35e38320ac4, type: 2}

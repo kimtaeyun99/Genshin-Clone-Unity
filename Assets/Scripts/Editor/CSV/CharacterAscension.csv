@@ -1,5 +1,5 @@
-﻿CharacterID,AscensionStatType,Phase0,Phase1,Phase2,Phase3,Phase4,Phase5,Phase6
-CH_001,CritRate,0,2.4,4.8,9.6,12,14.4,19.2
-CH_002,HPPercent,0,3,6,12,15,18,24
-CH_003,EnergyRecharge,0,3.4,6.7,13.3,16,20,26.7
-CH_004,ElementalMastery,0,12,24,48,60,72,96
+﻿CharacterID,CharacterName,AscensionStatType,Phase0,Phase1,Phase2,Phase3,Phase4,Phase5,Phase6
+CH_001,Diluc,CritRate,0,2.4,4.8,9.6,12,14.4,19.2
+CH_002,Barbara,HPPercent,0,3,6,12,15,18,24
+CH_003,Kaeya,EnergyRecharge,0,3.4,6.7,13.3,16,20,26.7
+CH_004,Lisa,ElementalMastery,0,12,24,48,60,72,96
