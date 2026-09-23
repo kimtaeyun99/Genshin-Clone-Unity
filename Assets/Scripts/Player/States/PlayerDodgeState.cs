@@ -18,15 +18,11 @@ public class PlayerDodgeState : PlayerStateBase
 
         Vector2 input = InputManager.Instance.MoveInput;
 
-        // 방향키 + Shift
-        // → 방향키 방향으로 Dodge
         if (input.sqrMagnitude > 0.01f)
         {
             dodgeDirection =
                 player.Movement.GetMoveDirection(input);
         }
-        // Shift만 입력
-        // → 캐릭터가 바라보는 방향으로 Dodge
         else
         {
             dodgeDirection = player.transform.forward;
@@ -47,12 +43,10 @@ public class PlayerDodgeState : PlayerStateBase
 
     private void ChangeNextState()
     {
-        // Dodge 종료 시 방향키를 누르고 있으면 Move
         if (InputManager.Instance.MoveInput.sqrMagnitude > 0.01f)
         {
             stateMachine.ChangeState(PlayerStateType.Move);
         }
-        // 방향키가 없으면 Idle
         else
         {
             stateMachine.ChangeState(PlayerStateType.Idle);

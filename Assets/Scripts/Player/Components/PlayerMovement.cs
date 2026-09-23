@@ -69,9 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Dodge(Vector3 direction)
     {
-        characterController.Move(
-            direction * dodgeSpeed * Time.deltaTime
-        );
+        characterController.Move(direction * dodgeSpeed * Time.deltaTime);
     }
 
     public void EnterDashMode()
@@ -100,9 +98,7 @@ public class PlayerMovement : MonoBehaviour
         forward.Normalize();
         right.Normalize();
 
-        Vector3 moveDirection =
-            forward * input.y +
-            right * input.x;
+        Vector3 moveDirection = forward * input.y + right * input.x;
 
         if (moveDirection.sqrMagnitude > 1f)
         {
@@ -116,9 +112,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 moveDirection = GetMoveDirection(input);
 
-        characterController.Move(
-            moveDirection * speed * Time.deltaTime
-        );
+        characterController.Move(moveDirection * speed * Time.deltaTime);
 
         Rotate(moveDirection);
     }
@@ -129,15 +123,10 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
+        
+        Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
 
-        Quaternion targetRotation =
-            Quaternion.LookRotation(moveDirection);
-
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRotation,
-            rotationSpeed * Time.deltaTime
-        );
+        transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,rotationSpeed * Time.deltaTime);
     }
 
     public void ApplyGravity()
@@ -151,56 +140,32 @@ public class PlayerMovement : MonoBehaviour
             verticalVelocity += gravity * Time.deltaTime;
         }
 
-        characterController.Move(
-            Vector3.up * verticalVelocity * Time.deltaTime
-        );
+        characterController.Move(Vector3.up * verticalVelocity * Time.deltaTime);
     }
 
     public void CheckGround()
     {
-        Vector3 origin =
-            transform.position +
-            characterController.center +
-            Vector3.down *
-            (characterController.height * 0.5f - characterController.radius);
+        Vector3 origin = transform.position + characterController.center + Vector3.down * (characterController.height * 0.5f - characterController.radius);
 
-        IsGrounded = Physics.SphereCast(
-            origin,
-            groundCheckRadius,
-            Vector3.down,
-            out RaycastHit hit,
-            groundCheckDistance,
-            groundLayer,
-            QueryTriggerInteraction.Ignore
-        );
+        IsGrounded = Physics.SphereCast(origin,groundCheckRadius,Vector3.down,out RaycastHit hit,groundCheckDistance,groundLayer);
     }
 
     public void Jump()
     {
-        verticalVelocity = Mathf.Sqrt(
-            jumpHeight * -2f * gravity
-        );
+        verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
 
     private void OnDrawGizmosSelected()
     {
-        CharacterController controller =
-            GetComponent<CharacterController>();
+        CharacterController controller = GetComponent<CharacterController>();
 
         if (controller == null)
         {
             return;
         }
 
-        Vector3 origin =
-            transform.position +
-            controller.center +
-            Vector3.down *
-            (controller.height * 0.5f - controller.radius);
+        Vector3 origin = transform.position + controller.center + Vector3.down * (controller.height * 0.5f - controller.radius);
 
-        Gizmos.DrawWireSphere(
-            origin + Vector3.down * groundCheckDistance,
-            groundCheckRadius
-        );
+        Gizmos.DrawWireSphere(origin + Vector3.down * groundCheckDistance, groundCheckRadius);
     }
 }

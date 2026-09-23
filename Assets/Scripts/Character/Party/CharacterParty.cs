@@ -16,7 +16,7 @@ public class CharacterParty : MonoBehaviour
     public IReadOnlyList<CharacterData> PartyMembers => partyMembers;
     public int Count => partyMembers.Count;
 
-    public bool AddCharacter(CharacterData data)
+    public bool AddPartyMember(CharacterData data)
     {
         if(data == null)
         {
@@ -35,7 +35,7 @@ public class CharacterParty : MonoBehaviour
 
         return true;
     }
-    public bool RemoveCharacter(CharacterData data)
+    public bool RemovePartyMember(CharacterData data)
     {
         if(data == null)
         {
@@ -46,24 +46,24 @@ public class CharacterParty : MonoBehaviour
 
         return true;
     }
-    public bool ChangeCharacter(int index, CharacterData data)
+    public bool ChangePartyMember(int index, CharacterData data)
     {
-        if(data == null)
+        if (data == null)
         {
             return false;
         }
-        if(index < 0 || index >= partyMembers.Count)
+        if (index < 0 || index >= partyMembers.Count)
         {
             return false;
         }
-        if(partyMembers.Contains(data))
+        if (partyMembers.Contains(data))
         {
             return false;
         }
 
         partyMembers[index] = data;
 
-        return true;        
+        return true;
     }
     public CharacterData GetCharacterData(int index)
     {

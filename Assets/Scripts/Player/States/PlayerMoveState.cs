@@ -4,10 +4,7 @@ public class PlayerMoveState : PlayerStateBase
 {
     private float sprintHoldTimer;
 
-    public PlayerMoveState(
-        PlayerController player,
-        PlayerStateMachine stateMachine)
-        : base(player, stateMachine)
+    public PlayerMoveState(PlayerController player,PlayerStateMachine stateMachine) : base(player, stateMachine)
     {
     }
 
@@ -29,7 +26,6 @@ public class PlayerMoveState : PlayerStateBase
 
         Vector2 moveInput = InputManager.Instance.MoveInput;
 
-        // 방향키를 놓으면 Idle + DashMode 종료
         if (moveInput.sqrMagnitude <= 0.01f)
         {
             player.Movement.ExitDashMode();
@@ -43,6 +39,7 @@ public class PlayerMoveState : PlayerStateBase
         if (player.Movement.IsDashMode)
         {
             player.Movement.DashMove(moveInput);
+
             player.Stamina.ConsumeStamina(player.Stamina.DashStaminaCostPerSecond * Time.deltaTime);
 
             if (player.Stamina.IsEmpty)
@@ -65,8 +62,6 @@ public class PlayerMoveState : PlayerStateBase
 
     private void UpdateDashMode()
     {
-        // 이미 대시 모드에 들어갔다면
-        // Shift를 떼어도 계속 유지
         if (player.Movement.IsDashMode)
         {
             return;
@@ -76,9 +71,6 @@ public class PlayerMoveState : PlayerStateBase
             sprintHoldTimer = 0f;
 
         }
-
-        // 아직 대시 모드가 아니라면
-        // Shift 유지 시간 측정
         if (InputManager.Instance.IsSprintHeld)
         {
             sprintHoldTimer += Time.deltaTime;

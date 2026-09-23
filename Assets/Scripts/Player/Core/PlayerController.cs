@@ -33,29 +33,14 @@ public class PlayerController : MonoBehaviour
 
     private void InitializeStates()
     {
-        StateMachine.AddState(
-            PlayerStateType.Idle,
-            new PlayerIdleState(this, StateMachine)
-        );
+        StateMachine.AddState(PlayerStateType.Idle,new PlayerIdleState(this, StateMachine));
 
-        StateMachine.AddState(
-            PlayerStateType.Move,
-            new PlayerMoveState(this, StateMachine)
-        );
+        StateMachine.AddState(PlayerStateType.Move,new PlayerMoveState(this, StateMachine));
 
-        StateMachine.AddState(
-            PlayerStateType.Jump,
-            new PlayerJumpState(this, StateMachine)
-        );
+        StateMachine.AddState(PlayerStateType.Jump,new PlayerJumpState(this, StateMachine));
 
-        StateMachine.AddState(
-            PlayerStateType.Fall,
-            new PlayerFallState(this, StateMachine)
-        );
+        StateMachine.AddState(PlayerStateType.Fall,new PlayerFallState(this, StateMachine));
 
-        StateMachine.AddState(
-            PlayerStateType.Dodge,
-            new PlayerDodgeState(this, StateMachine)
-        );
+        StateMachine.AddState(PlayerStateType.Dodge,new PlayerDodgeState(this, StateMachine));
     }
 }

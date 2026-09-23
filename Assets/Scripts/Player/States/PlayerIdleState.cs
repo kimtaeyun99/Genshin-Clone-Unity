@@ -9,8 +9,6 @@ public class PlayerIdleState : PlayerStateBase
 
     public override void Enter()
     {
-        // Idle에 들어왔다는 것은 이동이 끊긴 것이므로
-        // DashMode 종료
         player.Movement.ExitDashMode();
 
         InputManager.Instance.OnJump += HandleJump;
