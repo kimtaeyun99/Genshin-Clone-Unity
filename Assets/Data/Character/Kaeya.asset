@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df384907dd74b924d99a3e3c0eb8d12e, type: 3}
-  m_Name: CH_003
+  m_Name: Kaeya
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: CH_003
   characterName: Kaeya
@@ -24,4 +24,5 @@ MonoBehaviour:
   def: 66
   defPerLevel: 8
   elementalMastery: 0
-  ascensionData: {fileID: 11400000, guid: 26d390bccc7a2ae4b81dad3cbce81406, type: 2}
+  ascensionData: {fileID: 11400000, guid: 5b76e3a7215b0e646877240db2cdae34, type: 2}
+  animatorController: {fileID: 9100000, guid: e53d039585724fe4696e2dce97d43055, type: 2}

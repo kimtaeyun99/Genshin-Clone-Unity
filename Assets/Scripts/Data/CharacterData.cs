@@ -27,6 +27,8 @@ public class CharacterData : ScriptableObject
     [Header("Ascension Stat")]
     [SerializeField] private CharacterAscensionData ascensionData;
 
+    [Header("Animation")]
+    [SerializeField] private RuntimeAnimatorController animatorController;
     public string ID => id;
     public string CharacterName => characterName;
     public GameObject Prefab => prefab;
@@ -41,6 +43,8 @@ public class CharacterData : ScriptableObject
     public int ElementalMastery => elementalMastery;
     public CharacterAscensionData AscensionData => ascensionData;
 
+    public RuntimeAnimatorController AnimatorController => animatorController;
+
     public void SetData(
     string id,
     string characterName,
@@ -54,8 +58,8 @@ public class CharacterData : ScriptableObject
     int def,
     int defPerLevel,
     int elementalMastery,
-
-    CharacterAscensionData ascensionData)
+    CharacterAscensionData ascensionData,
+    RuntimeAnimatorController animatorController)
     {
         this.id = id;
         this.characterName = characterName;
@@ -76,5 +80,6 @@ public class CharacterData : ScriptableObject
         this.elementalMastery = elementalMastery;
 
         this.ascensionData = ascensionData;
+        this.animatorController = animatorController;
     }
 }

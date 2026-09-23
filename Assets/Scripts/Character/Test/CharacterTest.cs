@@ -5,6 +5,10 @@ public class CharacterTest : MonoBehaviour
     [SerializeField] private CharacterStatCalculator characterStatCalculator;
     [SerializeField] private CharacterManager characterManager;
     [SerializeField] private CharacterParty characterParty;
+    private void Awake()
+    {
+        InputManager.Instance.OnSwitchCharacter += OnSwitchCharacter;
+    }
     public void LevelUp()
     {
         CharacterRunTime runtime = characterManager.CurrentCharacter;
@@ -26,28 +30,15 @@ public class CharacterTest : MonoBehaviour
 
         DebugCharacter();
     }
-    public void ChangeCharacter0()
+    public void OnSwitchCharacter(int index)
     {
-        characterParty.SelectCharacter(0);
-        DebugCharacter();
-    }
-    public void ChangeCharacter1()
-    {
-        characterParty.SelectCharacter(1);
-        DebugCharacter();
-    }
-    public void ChangeCharacter2()
-    {
-        characterParty.SelectCharacter(2);
-        DebugCharacter();
-    }
-    public void ChangeCharacter3()
-    {
-        characterParty.SelectCharacter(3);
+        characterParty.SelectCharacter(index-1);
         DebugCharacter();
     }
     private void DebugCharacter()
     {
+        Debug.ClearDeveloperConsole();
+
         CharacterRunTime runtime = characterManager.CurrentCharacter;
 
         Debug.Log($"캐릭터 : {runtime.Data.CharacterName}");
@@ -55,5 +46,6 @@ public class CharacterTest : MonoBehaviour
         Debug.Log($"레벨 : {runtime.Level}");
         Debug.Log($"최대 체력 : {runtime.MaxHP}");
         Debug.Log($"현재 체력 : {runtime.CurrentHP}");
+        
     }
 }

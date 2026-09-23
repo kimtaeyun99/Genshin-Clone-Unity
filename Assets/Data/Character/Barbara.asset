@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df384907dd74b924d99a3e3c0eb8d12e, type: 3}
-  m_Name: CH_002
+  m_Name: Barbara
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: CH_002
   characterName: Barbara
@@ -24,4 +24,5 @@ MonoBehaviour:
   def: 56
   defPerLevel: 7
   elementalMastery: 0
-  ascensionData: {fileID: 11400000, guid: 990a04ad59a06404c93e959ee584c4ac, type: 2}
+  ascensionData: {fileID: 11400000, guid: 26b5a32ffbcd6484699cadd8ef225eaf, type: 2}
+  animatorController: {fileID: 9100000, guid: 4130be72d5c493943ad558dd34d88514, type: 2}

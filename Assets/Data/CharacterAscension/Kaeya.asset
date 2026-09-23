@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 772268b4b79b90a44bed07c86f9eeac7, type: 3}
-  m_Name: CH_002
+  m_Name: Kaeya
   m_EditorClassIdentifier: Assembly-CSharp::CharacterAscensionData
-  characterId: CH_002
-  ascensionStatType: 1
+  characterId: CH_003
+  characterName: Kaeya
+  ascensionStatType: 8
   bonusValues:
   - 0
-  - 3
-  - 6
-  - 12
-  - 15
-  - 18
-  - 24
+  - 3.4
+  - 6.7
+  - 13.3
+  - 16
+  - 20
+  - 26.7

@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 772268b4b79b90a44bed07c86f9eeac7, type: 3}
-  m_Name: CH_003
+  m_Name: Barbara
   m_EditorClassIdentifier: Assembly-CSharp::CharacterAscensionData
-  characterId: CH_003
-  ascensionStatType: 8
+  characterId: CH_002
+  characterName: Barbara
+  ascensionStatType: 1
   bonusValues:
   - 0
-  - 3.4
-  - 6.7
-  - 13.3
-  - 16
-  - 20
-  - 26.7
+  - 3
+  - 6
+  - 12
+  - 15
+  - 18
+  - 24

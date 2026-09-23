@@ -11,6 +11,7 @@ public class PlayerFallState : PlayerStateBase
     public override void Update()
     {
         player.Movement.AirMove(InputManager.Instance.MoveInput);
+
         if(player.Movement.IsGrounded)
         {
             if(InputManager.Instance.MoveInput.sqrMagnitude >= 0.01f)
