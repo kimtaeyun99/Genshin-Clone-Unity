@@ -37,6 +37,8 @@ public class CharacterTest : MonoBehaviour
     }
     private void DebugCharacter()
     {
+        Debug.ClearDeveloperConsole();
+
         CharacterRunTime runtime = characterManager.CurrentCharacter;
 
         Debug.Log($"캐릭터 : {runtime.Data.CharacterName}");
@@ -44,5 +46,6 @@ public class CharacterTest : MonoBehaviour
         Debug.Log($"레벨 : {runtime.Level}");
         Debug.Log($"최대 체력 : {runtime.MaxHP}");
         Debug.Log($"현재 체력 : {runtime.CurrentHP}");
+        
     }
 }
