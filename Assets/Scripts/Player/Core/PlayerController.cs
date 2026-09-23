@@ -27,8 +27,11 @@ public class PlayerController : MonoBehaviour
         Movement.CheckGround();
 
         StateMachine.Update();
-
-        Movement.ApplyGravity();
+        
+        if(StateMachine.CurrentState is not PlayerClimbState)
+        {
+            Movement.ApplyGravity();
+        }
     }
 
     private void InitializeStates()
@@ -42,5 +45,7 @@ public class PlayerController : MonoBehaviour
         StateMachine.AddState(PlayerStateType.Fall,new PlayerFallState(this, StateMachine));
 
         StateMachine.AddState(PlayerStateType.Dodge,new PlayerDodgeState(this, StateMachine));
+
+        StateMachine.AddState(PlayerStateType.Climb, new PlayerClimbState(this, StateMachine));
     }
 }

@@ -2764,6 +2764,12 @@ MonoBehaviour:
   dodgeDuration: 0.3
   dashMoveSpeed: 8
   dashHoldTime: 0.5
+  climbCheckDistance: 0.7
+  climbCheckRadius: 0.3
+  climbSpeed: 5
+  climbableLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &2097096005
 MonoBehaviour:
   m_ObjectHideFlags: 0

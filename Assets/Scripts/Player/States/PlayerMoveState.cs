@@ -18,6 +18,12 @@ public class PlayerMoveState : PlayerStateBase
 
     public override void Update()
     {
+        if(player.Movement.CheckClimbableWall(out _) && InputManager.Instance.MoveInput.y > 0f)
+        {
+            stateMachine.ChangeState(PlayerStateType.Climb);
+            return;
+        }
+
         if (!player.Movement.IsGrounded)
         {
             stateMachine.ChangeState(PlayerStateType.Fall);
@@ -40,7 +46,7 @@ public class PlayerMoveState : PlayerStateBase
         {
             player.Movement.DashMove(moveInput);
 
-            player.Stamina.ConsumeStamina(player.Stamina.DashStaminaCostPerSecond * Time.deltaTime);
+            player.Stamina.ConsumeStamina(player.Stamina.DashStaminaCostPerSecond);
 
             if (player.Stamina.IsEmpty)
             {
