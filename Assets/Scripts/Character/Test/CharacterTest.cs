@@ -9,6 +9,10 @@ public class CharacterTest : MonoBehaviour
     {
         InputManager.Instance.OnSwitchCharacter += OnSwitchCharacter;
     }
+    private void Start()
+    {
+        OnSwitchCharacter(1);
+    }
     public void LevelUp()
     {
         CharacterRunTime runtime = characterManager.CurrentCharacter;
