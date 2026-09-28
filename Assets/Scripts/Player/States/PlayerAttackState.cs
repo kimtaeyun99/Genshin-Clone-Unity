@@ -3,13 +3,19 @@ using UnityEngine;
 public class PlayerAttackState : PlayerStateBase
 {
     private int normalAttackIndex;
+    private Animator animator;
+    private AnimatorStateInfo stateInfo;
+    private bool nextAttackInput;
     public PlayerAttackState(PlayerController player, PlayerStateMachine stateMachine) : base(player, stateMachine)
     {
 
     }
     public override void Enter()
     {
+        animator = player.CharacterManager.CurrentAnimator;
+
         normalAttackIndex = 1;
+        nextAttackInput = false;
 
         player.Movement.ExitDashMode();
 
@@ -22,13 +28,33 @@ public class PlayerAttackState : PlayerStateBase
     }
     public override void Update()
     {
-        Animator animator = player.CharacterManager.CurrentAnimator;
+        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-        if (stateInfo.normalizedTime >= 1f && stateInfo.IsTag("NormalAttack"))
+        if (!stateInfo.IsTag("NormalAttack"))
         {
-            ChangeNextState();
+            return;
+        }
+
+        if (animator.IsInTransition(0))
+        {
+            return;
+        }
+
+        if (stateInfo.normalizedTime >= 1f)
+        {
+            if (nextAttackInput && normalAttackIndex < 3)
+            {
+                normalAttackIndex++;
+                nextAttackInput = false;
+
+                animator.SetInteger("NormalAttackIndex", normalAttackIndex);
+
+                Debug.Log($"{normalAttackIndex}타 시작");
+            }
+            else
+            {
+                ChangeNextState();
+            }
         }
     }
     public override void Exit()
@@ -50,15 +76,13 @@ public class PlayerAttackState : PlayerStateBase
     }
     private void OnAttack()
     {
-        if(normalAttackIndex >= 3)
+        if (normalAttackIndex >= 3)
         {
             return;
         }
 
-        normalAttackIndex++;
+        nextAttackInput = true;
 
-        player.CharacterManager.CurrentAnimator.SetInteger("NormalAttackIndex", normalAttackIndex);
-
-        Debug.Log($"{normalAttackIndex} 타입력");
+        Debug.Log("다음 평타 입력 저장");
     }
 }
