@@ -26,7 +26,7 @@ public class PlayerAttackState : PlayerStateBase
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if(stateInfo.normalizedTime >= 1f)
+        if (stateInfo.normalizedTime >= 1f && stateInfo.IsTag("NormalAttack"))
         {
             ChangeNextState();
         }
