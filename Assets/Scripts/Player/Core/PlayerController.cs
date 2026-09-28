@@ -1,3 +1,4 @@
+using Polyart;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -6,6 +7,10 @@ public class PlayerController : MonoBehaviour
     public PlayerMovement Movement { get; private set; }
 
     public PlayerStamina Stamina { get; private set; }
+
+    [SerializeField] private CharacterManager characterManager;
+
+    public CharacterManager CharacterManager => characterManager;
     private void Awake()
     {
         Movement = GetComponent<PlayerMovement>();
@@ -47,5 +52,7 @@ public class PlayerController : MonoBehaviour
         StateMachine.AddState(PlayerStateType.Dodge,new PlayerDodgeState(this, StateMachine));
 
         StateMachine.AddState(PlayerStateType.Climb, new PlayerClimbState(this, StateMachine));
+
+        StateMachine.AddState(PlayerStateType.Attack, new PlayerAttackState(this, StateMachine));
     }
 }

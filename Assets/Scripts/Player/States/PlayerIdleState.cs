@@ -13,6 +13,7 @@ public class PlayerIdleState : PlayerStateBase
 
         InputManager.Instance.OnJump += HandleJump;
         InputManager.Instance.OnDodge += HandleDodge;
+        InputManager.Instance.OnAttack += HandleAttack;
     }
 
     public override void Update()
@@ -33,6 +34,7 @@ public class PlayerIdleState : PlayerStateBase
     {
         InputManager.Instance.OnJump -= HandleJump;
         InputManager.Instance.OnDodge -= HandleDodge;
+        InputManager.Instance.OnAttack -= HandleAttack;
     }
 
     private void HandleJump()
@@ -48,6 +50,13 @@ public class PlayerIdleState : PlayerStateBase
         if (player.Movement.IsGrounded)
         {
             stateMachine.ChangeState(PlayerStateType.Dodge);
+        }
+    }
+    private void HandleAttack()
+    {
+        if(player.Movement.IsGrounded)
+        {
+            stateMachine.ChangeState(PlayerStateType.Attack);
         }
     }
 }

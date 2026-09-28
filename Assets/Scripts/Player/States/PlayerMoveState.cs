@@ -12,6 +12,7 @@ public class PlayerMoveState : PlayerStateBase
     {
         InputManager.Instance.OnJump += HandleJump;
         InputManager.Instance.OnDodge += HandleDodge;
+        InputManager.Instance.OnAttack += HandleAttack;
 
         sprintHoldTimer = 0f;
     }
@@ -64,6 +65,7 @@ public class PlayerMoveState : PlayerStateBase
     {
         InputManager.Instance.OnJump -= HandleJump;
         InputManager.Instance.OnDodge -= HandleDodge;
+        InputManager.Instance.OnAttack -= HandleAttack;
     }
 
     private void UpdateDashMode()
@@ -105,6 +107,14 @@ public class PlayerMoveState : PlayerStateBase
         if (player.Movement.IsGrounded)
         {
             stateMachine.ChangeState(PlayerStateType.Dodge);
+        }
+    }
+
+    private void HandleAttack()
+    {
+        if(player.Movement.IsGrounded)
+        {
+            stateMachine.ChangeState(PlayerStateType.Attack);
         }
     }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: CH_001
   characterName: Diluc
-  prefab: {fileID: 919132149155446097, guid: 20c39768f16ae1142ab922af633f03c3, type: 3}
+  prefab: {fileID: 919132149155446097, guid: e3a4a110ea89e59478f9dfa28c707d52, type: 3}
   elementType: 0
   weaponType: 1
   hp: 1011

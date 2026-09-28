@@ -12,6 +12,9 @@ public class CharacterManager : MonoBehaviour
     [Header("View")]
     [SerializeField] private CharacterView characterView;
 
+    [Header("Animator")]
+    public Animator CurrentAnimator => characterView.CurrentAnimator;
+
     private CharacterRunTime currentCharacter;
 
     public CharacterRunTime CurrentCharacter => currentCharacter;

@@ -14,6 +14,8 @@ public class PlayerDodgeState : PlayerStateBase
 
     public override void Enter()
     {
+        InputManager.Instance.OnAttack += HandleAttack;
+
         timer = 0f;
 
         Vector2 input = InputManager.Instance.MoveInput;
@@ -41,6 +43,11 @@ public class PlayerDodgeState : PlayerStateBase
         }
     }
 
+    public override void Exit()
+    {
+        InputManager.Instance.OnAttack -= HandleAttack;
+    }
+
     private void ChangeNextState()
     {
         if (InputManager.Instance.MoveInput.sqrMagnitude > 0.01f)
@@ -50,6 +57,13 @@ public class PlayerDodgeState : PlayerStateBase
         else
         {
             stateMachine.ChangeState(PlayerStateType.Idle);
+        }
+    }
+    private void HandleAttack()
+    {
+        if(player.Movement.IsGrounded)
+        {
+            stateMachine.ChangeState(PlayerStateType.Attack);
         }
     }
 }

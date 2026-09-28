@@ -7,6 +7,10 @@ public class CharacterView : MonoBehaviour
 
     private GameObject currentView;
 
+    private Animator currentAnimator;
+
+    public Animator CurrentAnimator => currentAnimator;
+
     public void ChangeView(CharacterData data)
     {
         if (data == null || data.Prefab == null)
@@ -26,5 +30,12 @@ public class CharacterView : MonoBehaviour
         currentView.transform.localPosition = Vector3.zero;
         currentView.transform.localRotation = Quaternion.identity;
         currentView.transform.localScale = Vector3.one;
+
+        currentAnimator = currentView.GetComponentInChildren<Animator>();
+
+        if(currentAnimator != null)
+        {
+            currentAnimator.runtimeAnimatorController = data.AnimatorController;
+        }
     }
 }
