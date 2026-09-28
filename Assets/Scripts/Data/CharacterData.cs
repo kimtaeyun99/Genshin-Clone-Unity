@@ -28,6 +28,7 @@ public class CharacterData : ScriptableObject
     [SerializeField] private CharacterAscensionData ascensionData;
 
     [Header("Animation")]
+    [SerializeField] private Avatar avatar;
     [SerializeField] private RuntimeAnimatorController animatorController;
     public string ID => id;
     public string CharacterName => characterName;
@@ -42,7 +43,7 @@ public class CharacterData : ScriptableObject
     public int DEFPerLevel => defPerLevel;
     public int ElementalMastery => elementalMastery;
     public CharacterAscensionData AscensionData => ascensionData;
-
+    public Avatar Avatar => avatar;
     public RuntimeAnimatorController AnimatorController => animatorController;
 
     public void SetData(

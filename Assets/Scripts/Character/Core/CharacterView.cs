@@ -6,7 +6,6 @@ public class CharacterView : MonoBehaviour
     [SerializeField] private Transform modelRoot;
 
     private GameObject currentView;
-
     private Animator currentAnimator;
 
     public Animator CurrentAnimator => currentAnimator;
@@ -18,24 +17,27 @@ public class CharacterView : MonoBehaviour
             return;
         }
 
-        // 기존 캐릭터 View 제거
         if (currentView != null)
         {
             Destroy(currentView);
         }
 
-        // 새로운 캐릭터 View 생성
-        currentView = Instantiate(data.Prefab,modelRoot);
+        currentView = Instantiate(data.Prefab, modelRoot);
 
         currentView.transform.localPosition = Vector3.zero;
         currentView.transform.localRotation = Quaternion.identity;
         currentView.transform.localScale = Vector3.one;
 
+        // 생성된 캐릭터에 Animator가 있는지 먼저 찾기
         currentAnimator = currentView.GetComponentInChildren<Animator>();
 
-        if(currentAnimator != null)
+        // 없으면 추가
+        if (currentAnimator == null)
         {
-            currentAnimator.runtimeAnimatorController = data.AnimatorController;
+            currentAnimator = currentView.AddComponent<Animator>();
         }
+
+        currentAnimator.avatar = data.Avatar;
+        currentAnimator.runtimeAnimatorController = data.AnimatorController;
     }
 }

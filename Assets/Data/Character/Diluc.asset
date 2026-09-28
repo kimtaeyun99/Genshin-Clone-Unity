@@ -25,4 +25,5 @@ MonoBehaviour:
   defPerLevel: 8
   elementalMastery: 0
   ascensionData: {fileID: 11400000, guid: b7c21aca96e966b479307ac09cc367f0, type: 2}
+  avatar: {fileID: 9000000, guid: d49c65de9fce66146b5d0e164b1f9d2d, type: 3}
   animatorController: {fileID: 9100000, guid: 3e79cffa401254946bc1e35e38320ac4, type: 2}
