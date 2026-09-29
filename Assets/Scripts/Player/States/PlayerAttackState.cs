@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerAttackState : PlayerStateBase
 {
     private int normalAttackIndex;
-    private Animator animator;
     private AnimatorStateInfo stateInfo;
     private bool nextAttackInput;
     public PlayerAttackState(PlayerController player, PlayerStateMachine stateMachine) : base(player, stateMachine)
@@ -12,15 +11,13 @@ public class PlayerAttackState : PlayerStateBase
     }
     public override void Enter()
     {
-        animator = player.CharacterManager.CurrentAnimator;
-
         normalAttackIndex = 1;
         nextAttackInput = false;
 
         player.Movement.ExitDashMode();
 
-        player.CharacterManager.CurrentAnimator.SetTrigger("NormalAttack");
-        player.CharacterManager.CurrentAnimator.SetInteger("NormalAttackIndex", normalAttackIndex);
+        player.Animation.PlayNormalAttack();
+        player.Animation.SetNormalAttackIndex(normalAttackIndex);
 
         InputManager.Instance.OnAttack += OnAttack;
 
@@ -28,14 +25,14 @@ public class PlayerAttackState : PlayerStateBase
     }
     public override void Update()
     {
-        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        stateInfo = player.Animation.GetCurrentStateInfo();
 
         if (!stateInfo.IsTag("NormalAttack"))
         {
             return;
         }
 
-        if (animator.IsInTransition(0))
+        if (player.Animation.IsTransition())
         {
             return;
         }
@@ -47,7 +44,7 @@ public class PlayerAttackState : PlayerStateBase
                 normalAttackIndex++;
                 nextAttackInput = false;
 
-                animator.SetInteger("NormalAttackIndex", normalAttackIndex);
+                player.Animation.SetNormalAttackIndex(normalAttackIndex);
 
                 Debug.Log($"{normalAttackIndex}≈∏ Ω√¿€");
             }

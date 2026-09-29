@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public PlayerMovement Movement { get; private set; }
 
     public PlayerStamina Stamina { get; private set; }
+    public PlayerAnimationController Animation { get; private set; }
 
     [SerializeField] private CharacterManager characterManager;
 
@@ -16,6 +17,8 @@ public class PlayerController : MonoBehaviour
         Movement = GetComponent<PlayerMovement>();
 
         Stamina = GetComponent<PlayerStamina>();
+
+        Animation = GetComponent<PlayerAnimationController>();
 
         StateMachine = new PlayerStateMachine();
 

@@ -14,6 +14,7 @@ public class PlayerDodgeState : PlayerStateBase
 
     public override void Enter()
     {
+        player.Animation.PlayDodge();
         InputManager.Instance.OnAttack += HandleAttack;
 
         timer = 0f;

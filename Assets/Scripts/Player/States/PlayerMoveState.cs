@@ -9,17 +9,18 @@ public class PlayerMoveState : PlayerStateBase
     }
 
     public override void Enter()
-    {
+    {        
         InputManager.Instance.OnJump += HandleJump;
         InputManager.Instance.OnDodge += HandleDodge;
         InputManager.Instance.OnAttack += HandleAttack;
 
+        player.Animation.PlayMove();
         sprintHoldTimer = 0f;
     }
 
     public override void Update()
     {
-        if(player.Movement.CheckClimbableWall(out _) && InputManager.Instance.MoveInput.y > 0f)
+        if (player.Movement.CheckClimbableWall(out _) && InputManager.Instance.MoveInput.y > 0f)
         {
             stateMachine.ChangeState(PlayerStateType.Climb);
             return;

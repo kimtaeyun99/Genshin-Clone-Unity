@@ -2870,6 +2870,7 @@ GameObject:
   - component: {fileID: 2097096009}
   - component: {fileID: 2097096008}
   - component: {fileID: 2097096012}
+  - component: {fileID: 2097096013}
   m_Layer: 0
   m_Name: PlayerRoot
   m_TagString: Untagged
@@ -3068,6 +3069,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterView
   modelRoot: {fileID: 56570497}
+--- !u!114 &2097096013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097096002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfaefc5dec5d0104e8601a81fa8b1846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
+  characterManager: {fileID: 63624474}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class PlayerIdleState : PlayerStateBase
 
     public override void Enter()
     {
+        player.Animation.PlayIdle();
         player.Movement.ExitDashMode();
 
         InputManager.Instance.OnJump += HandleJump;
