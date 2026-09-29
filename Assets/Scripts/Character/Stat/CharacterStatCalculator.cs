@@ -1,18 +1,11 @@
-using System.Collections;
 using UnityEngine;
-
-public class CharacterStatCalculator : MonoBehaviour
+public class CharacterStatCalculator
 {
-    [Header("Stat")]
-    [SerializeField] private CharacterAttackStat characterAttackStat;
-    [SerializeField] private CharacterDefenseStat characterDefenseStat;
-
-    [Header("Base Stat")]
-    [SerializeField] private float baseCriticalRate = 5.0f;
-    [SerializeField] private float baseCriticalDamage = 50.0f;
-    [SerializeField] private float baseEnergyRecharge = 100f;
-    [SerializeField] private float baseElementalDamageBonus = 0f;
-    [SerializeField] private float baseElementalResistance = 0f;
+    private float baseCriticalRate = 5.0f;
+    private float baseCriticalDamage = 50.0f;
+    private float baseEnergyRecharge = 100f;
+    private float baseElementalDamageBonus = 0f;
+    private float baseElementalResistance = 0f;
 
     private int level;
 
@@ -38,9 +31,8 @@ public class CharacterStatCalculator : MonoBehaviour
     private float electroResistance;
     private float physicalResistance;
 
-    public void ApplyStat(CharacterRunTime character)
+    public CharacterStat ApplyStat(CharacterRunTime character)
     {
-        //기본 스탯값 적용
         criticalRate = baseCriticalRate;
         criticalDamage = baseCriticalDamage;
         energyRecharge = baseEnergyRecharge;
@@ -57,10 +49,8 @@ public class CharacterStatCalculator : MonoBehaviour
         electroResistance = baseElementalResistance;
         physicalResistance = baseElementalResistance;
 
-        //데이터 적용
         CharacterData data = character.Data;
 
-        //레벨 스탯
         level = character.Level;
 
         maxHP = data.HP + data.HPPerLevel * (level - 1);
@@ -68,41 +58,63 @@ public class CharacterStatCalculator : MonoBehaviour
         def = data.DEF + data.DEFPerLevel * (level - 1);
         elementalMastery = data.ElementalMastery;
 
-        //돌파 스탯
         CharacterAscensionData characterAscensionData = data.AscensionData;
+
         if (characterAscensionData != null)
         {
             StatType ascensionStatType = characterAscensionData.AscensionStatType;
             float bonusValue = characterAscensionData.GetBonusValue(character.AscensionPhase);
 
-            switch(ascensionStatType)
+            switch (ascensionStatType)
             {
                 case StatType.CritRate:
                     criticalRate += bonusValue;
                     break;
+
                 case StatType.CritDamage:
                     criticalDamage += bonusValue;
                     break;
+
                 case StatType.EnergyRecharge:
                     energyRecharge += bonusValue;
                     break;
+
                 case StatType.ElementalMastery:
                     elementalMastery += (int)bonusValue;
                     break;
+
                 case StatType.HPPercent:
                     maxHP = CalculatePercent(maxHP, bonusValue);
                     break;
             }
         }
 
-        //최종 적용
         character.SetMaxHP(maxHP);
 
-        characterAttackStat.SetData(atk, elementalMastery, criticalRate, criticalDamage, energyRecharge,
-            pyroDamageBonus, hydroDamageBonus, cryoDamageBonus, electroDamageBonus, physicalDamageBonus);
+        CharacterStat stat = new CharacterStat();
 
-        characterDefenseStat.SetData(maxHP,character.CurrentHP,def,pyroResistance,hydroResistance,cryoResistance,
-            electroResistance,physicalResistance);
+        stat.SetData(
+            atk,
+            elementalMastery,
+            criticalRate,
+            criticalDamage,
+            energyRecharge,
+            pyroDamageBonus,
+            hydroDamageBonus,
+            cryoDamageBonus,
+            electroDamageBonus,
+            physicalDamageBonus,
+            maxHP,
+            character.CurrentHP,
+            def,
+            pyroResistance,
+            hydroResistance,
+            cryoResistance,
+            electroResistance,
+            physicalResistance
+        );
+
+        return stat;
     }
     private int CalculatePercent(int value, float percent)
     {

@@ -6,9 +6,6 @@ public class CharacterManager : MonoBehaviour
     [Header("Character Data")]
     [SerializeField] private List<CharacterData> characterDatas;
 
-    [Header("StatCalculator")]
-    [SerializeField] private CharacterStatCalculator statCalculator;
-
     [Header("View")]
     [SerializeField] private CharacterView characterView;
 
@@ -16,13 +13,14 @@ public class CharacterManager : MonoBehaviour
     public Animator CurrentAnimator => characterView.CurrentAnimator;
 
     private CharacterRunTime currentCharacter;
-
+    private CharacterStatCalculator statCalculator;
     public CharacterRunTime CurrentCharacter => currentCharacter;
 
     private Dictionary<CharacterData, CharacterRunTime> characterRunTimes;
 
     private void Awake()
     {
+        statCalculator = new CharacterStatCalculator();
         InitializeCharacters();
     }
     private void InitializeCharacters()
@@ -64,7 +62,8 @@ public class CharacterManager : MonoBehaviour
 
         currentCharacter = runTime;
 
-        statCalculator.ApplyStat(currentCharacter);
+        CharacterStat stat = statCalculator.ApplyStat(currentCharacter);
+        currentCharacter.SetStat(stat);
 
         characterView.ChangeView(data);
 

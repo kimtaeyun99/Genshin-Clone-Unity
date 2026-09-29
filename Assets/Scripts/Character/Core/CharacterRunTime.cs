@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterRunTime
 {
     private CharacterData data;
+    private CharacterStat stat;
 
     private int level;
     private int ascensionPhase;
@@ -39,6 +40,10 @@ public class CharacterRunTime
 
         skillCoolDown = 0f;
         burstCoolDown = 0f;
+    }
+    public void SetStat(CharacterStat stat)
+    {
+        this.stat = stat;
     }
     
     public bool LevelUp()

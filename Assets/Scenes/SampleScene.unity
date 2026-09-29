@@ -199,7 +199,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a2990ebf092e8eb4481cf677a1c65a66, type: 2}
   - {fileID: 11400000, guid: 216f34f5d97c3db4c99b9439bc44d5aa, type: 2}
   - {fileID: 11400000, guid: ca4abe074adf2bf49a764e150e855adc, type: 2}
-  statCalculator: {fileID: 2097096010}
   characterView: {fileID: 2097096012}
 --- !u!1 &73982192
 GameObject:
@@ -2866,9 +2865,6 @@ GameObject:
   - component: {fileID: 2097096004}
   - component: {fileID: 2097096003}
   - component: {fileID: 2097096011}
-  - component: {fileID: 2097096010}
-  - component: {fileID: 2097096009}
-  - component: {fileID: 2097096008}
   - component: {fileID: 2097096012}
   - component: {fileID: 2097096013}
   m_Layer: 0
@@ -2921,11 +2917,6 @@ MonoBehaviour:
   dodgeDuration: 0.3
   dashMoveSpeed: 8
   dashHoldTime: 0.5
-  climbCheckDistance: 0.7
-  climbSpeed: 5
-  climbableLayer:
-    serializedVersion: 2
-    m_Bits: 128
 --- !u!114 &2097096005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2981,67 +2972,6 @@ Transform:
   - {fileID: 56570497}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2097096008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2097096002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aee4794bc40ee3f4d9a2892148dfbee3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterDefenseStat
-  maxHP: 0
-  currentHP: 0
-  def: 0
-  pyroResistance: 0
-  hydroResistance: 0
-  cryoResistance: 0
-  electroResistance: 0
-  physicalResistance: 0
---- !u!114 &2097096009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2097096002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4017abe4732b7041835e958a8a7740e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterAttackStat
-  atk: 0
-  elementalMastery: 0
-  criticalRate: 0
-  criticalDamage: 0
-  energyRecharge: 0
-  pyroDamageBonus: 0
-  hydroDamageBonus: 0
-  cryoDamageBonus: 0
-  electroDamageBonus: 0
-  physicalDamageBonus: 0
---- !u!114 &2097096010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2097096002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e17c8179324ab134f854c68d193811aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterStatCalculator
-  characterAttackStat: {fileID: 2097096009}
-  characterDefenseStat: {fileID: 2097096008}
-  baseCriticalRate: 5
-  baseCriticalDamage: 50
-  baseEnergyRecharge: 100
-  baseElementalDamageBonus: 0
-  baseElementalResistance: 0
 --- !u!114 &2097096011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3054,7 +2984,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc1e6c26d075c9d41a91b4f6cd1dd32e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterTest
-  characterStatCalculator: {fileID: 2097096010}
   characterManager: {fileID: 63624474}
   characterParty: {fileID: 814247880}
 --- !u!114 &2097096012
