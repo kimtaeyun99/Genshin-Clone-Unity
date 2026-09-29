@@ -28,12 +28,22 @@ public class PlayerAnimationController : MonoBehaviour
 
     public void PlayNormalAttack()
     {
+        Animator.SetInteger("State", 0);
         Animator.SetTrigger("NormalAttack");
     }
 
     public void SetNormalAttackIndex(int index)
     {
         Animator.SetInteger("NormalAttackIndex", index);
+    }
+    public void PlaySkill()
+    {
+        Animator.SetInteger("State", 0);
+        Animator.SetTrigger("Skill");
+    }
+    public void SetSkillIndex(int index)
+    {
+        Animator.SetInteger("SkillIndex", index);
     }
     public AnimatorStateInfo GetCurrentStateInfo()
     {

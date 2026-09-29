@@ -14,10 +14,10 @@ public class PlayerAttackState : PlayerStateBase
         normalAttackIndex = 1;
         nextAttackInput = false;
 
-        player.Movement.ExitDashMode();
-
-        player.Animation.PlayNormalAttack();
+        Debug.Log($"대시 해제 확인 : {player.Movement.IsDashMode}");
         player.Animation.SetNormalAttackIndex(normalAttackIndex);
+        player.Animation.PlayNormalAttack();
+       
 
         InputManager.Instance.OnAttack += OnAttack;
 

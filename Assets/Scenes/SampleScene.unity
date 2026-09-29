@@ -2938,6 +2938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6554556fd3f28349bbf9d58ad87da96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  characterParty: {fileID: 814247880}
   characterManager: {fileID: 63624474}
 --- !u!143 &2097096006
 CharacterController:

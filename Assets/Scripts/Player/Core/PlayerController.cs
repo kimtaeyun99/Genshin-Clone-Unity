@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 
     public PlayerStamina Stamina { get; private set; }
     public PlayerAnimationController Animation { get; private set; }
+    [SerializeField] private CharacterParty characterParty;
 
     [SerializeField] private CharacterManager characterManager;
 
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        characterParty.SelectCharacter(0);
         StateMachine.Initialize(PlayerStateType.Idle);
     }
 
@@ -35,11 +37,6 @@ public class PlayerController : MonoBehaviour
         Movement.CheckGround();
 
         StateMachine.Update();
-        
-        if(StateMachine.CurrentState is not PlayerClimbState)
-        {
-            Movement.ApplyGravity();
-        }
     }
 
     private void InitializeStates()
@@ -54,8 +51,10 @@ public class PlayerController : MonoBehaviour
 
         StateMachine.AddState(PlayerStateType.Dodge,new PlayerDodgeState(this, StateMachine));
 
-        StateMachine.AddState(PlayerStateType.Climb, new PlayerClimbState(this, StateMachine));
+        //StateMachine.AddState(PlayerStateType.Climb, new PlayerClimbState(this, StateMachine));
 
         StateMachine.AddState(PlayerStateType.Attack, new PlayerAttackState(this, StateMachine));
+
+        StateMachine.AddState(PlayerStateType.Skill, new PlayerSkillState(this, StateMachine));
     }
 }

@@ -20,11 +20,11 @@ public class PlayerMoveState : PlayerStateBase
 
     public override void Update()
     {
-        if (player.Movement.CheckClimbableWall(out _) && InputManager.Instance.MoveInput.y > 0f)
-        {
-            stateMachine.ChangeState(PlayerStateType.Climb);
-            return;
-        }
+        //if (player.Movement.CheckClimbableWall(out _) && InputManager.Instance.MoveInput.y > 0f)
+        //{
+        //    stateMachine.ChangeState(PlayerStateType.Climb);
+        //    return;
+        //}
 
         if (!player.Movement.IsGrounded)
         {
@@ -64,6 +64,7 @@ public class PlayerMoveState : PlayerStateBase
 
     public override void Exit()
     {
+        player.Movement.ExitDashMode();
         InputManager.Instance.OnJump -= HandleJump;
         InputManager.Instance.OnDodge -= HandleDodge;
         InputManager.Instance.OnAttack -= HandleAttack;

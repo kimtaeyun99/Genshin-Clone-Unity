@@ -31,10 +31,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float dashMoveSpeed = 8f;
     [SerializeField] private float dashHoldTime = 0.5f;
 
-    [Header("Climb")]
-    [SerializeField] private float climbCheckDistance = 0.7f;
-    [SerializeField] private float climbSpeed = 5f;
-    [SerializeField] private LayerMask climbableLayer;
+    //[Header("Climb")]
+    //[SerializeField] private float climbCheckDistance = 0.7f;
+    //[SerializeField] private float climbSpeed = 5f;
+    //[SerializeField] private LayerMask climbableLayer;
 
     public bool IsGrounded { get; private set; }
     public bool IsDashMode { get; private set; }
@@ -160,17 +160,17 @@ public class PlayerMovement : MonoBehaviour
     {
         verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
-    public bool CheckClimbableWall(out RaycastHit hit)
-    {
-        return Physics.Raycast(transform.position, transform.forward, out hit, climbCheckDistance, climbableLayer);
-    }
+    //public bool CheckClimbableWall(out RaycastHit hit)
+    //{
+    //    return Physics.Raycast(transform.position, transform.forward, out hit, climbCheckDistance, climbableLayer);
+    //}
 
-    public void ClimbVertical(float inputY)
-    {
-        Vector3 moveDirection = Vector3.up * inputY;
+    //public void ClimbVertical(float inputY)
+    //{
+    //    Vector3 moveDirection = Vector3.up * inputY;
 
-        characterController.Move(moveDirection * climbSpeed * Time.deltaTime);
-    }
+    //    characterController.Move(moveDirection * climbSpeed * Time.deltaTime);
+    //}
 
     private void OnDrawGizmosSelected()
     {
@@ -184,11 +184,5 @@ public class PlayerMovement : MonoBehaviour
         Vector3 origin = transform.position + controller.center + Vector3.down * (controller.height * 0.5f - controller.radius);
 
         Gizmos.DrawWireSphere(origin + Vector3.down * groundCheckDistance, groundCheckRadius);
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-
-        Gizmos.DrawRay(transform.position,transform.forward * climbCheckDistance);
     }
 }
