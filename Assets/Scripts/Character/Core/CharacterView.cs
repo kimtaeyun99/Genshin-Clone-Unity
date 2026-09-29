@@ -31,7 +31,7 @@ public class CharacterView : MonoBehaviour
         currentView.transform.localScale = Vector3.one;
 
 
-        currentAttackHitbox = currentView.GetComponentInChildren<AttackHitbox>();
+        currentAttackHitbox = currentView.GetComponentInChildren<AttackHitbox>(true);
 
         currentAnimator = currentView.GetComponentInChildren<Animator>();
 

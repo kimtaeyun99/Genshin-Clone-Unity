@@ -5,12 +5,16 @@ public class PlayerAttackState : PlayerStateBase
     private int normalAttackIndex;
     private AnimatorStateInfo stateInfo;
     private bool nextAttackInput;
+    private AttackHitbox attackHitbox;
     public PlayerAttackState(PlayerController player, PlayerStateMachine stateMachine) : base(player, stateMachine)
     {
 
     }
     public override void Enter()
     {
+        attackHitbox = player.CharacterManager.CurrentAttackHitbox;
+        attackHitbox.gameObject.SetActive(true);
+
         normalAttackIndex = 1;
         nextAttackInput = false;
 
@@ -25,6 +29,11 @@ public class PlayerAttackState : PlayerStateBase
         InputManager.Instance.OnAttack += OnAttack;
 
         Debug.Log("Attack 진입");
+        Debug.Log($"{normalAttackIndex}타 시작");
+        Debug.Log($"공격력 : {player.CharacterManager.CurrentCharacter.Stat.ATK} ");
+        Debug.Log($"배율 : {player.CharacterManager.CurrentCharacter.Data.CharacterCombatData.GetNormalAttackMultipliers(normalAttackIndex - 1)}");
+        Debug.Log($"데미지 : {player.CharacterManager.CurrentAttackHitbox.Damage}");
+        Debug.Log($"속성 : {player.CharacterManager.CurrentAttackHitbox.Element}");
     }
     public override void Update()
     {
@@ -46,6 +55,7 @@ public class PlayerAttackState : PlayerStateBase
             {
                 normalAttackIndex++;
                 nextAttackInput = false;
+                attackHitbox.ClearHitbox();
 
                 player.Animation.SetNormalAttackIndex(normalAttackIndex);
 
@@ -65,6 +75,9 @@ public class PlayerAttackState : PlayerStateBase
     }
     public override void Exit()
     {
+        attackHitbox.ClearHitbox();
+        attackHitbox.gameObject.SetActive(false);
+
         InputManager.Instance.OnAttack -= OnAttack;
 
         Debug.Log("Attack 퇴장");
