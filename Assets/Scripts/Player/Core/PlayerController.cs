@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     {
         Movement.CheckGround();
 
+        Movement.ApplyGravity();
+
         StateMachine.Update();
     }
 
