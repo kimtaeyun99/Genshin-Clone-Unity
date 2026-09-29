@@ -58,5 +58,7 @@ public class PlayerController : MonoBehaviour
         StateMachine.AddState(PlayerStateType.Attack, new PlayerAttackState(this, StateMachine));
 
         StateMachine.AddState(PlayerStateType.Skill, new PlayerSkillState(this, StateMachine));
+
+        StateMachine.AddState(PlayerStateType.Burst, new PlayerBurstState(this, StateMachine));
     }
 }

@@ -45,6 +45,11 @@ public class PlayerAnimationController : MonoBehaviour
     {
         Animator.SetInteger("SkillIndex", index);
     }
+    public void PlayBurst()
+    {
+        Animator.SetInteger("State", 0);
+        Animator.SetTrigger("Burst");
+    }
     public AnimatorStateInfo GetCurrentStateInfo()
     {
         return Animator.GetCurrentAnimatorStateInfo(0);
