@@ -7,8 +7,10 @@ public class CharacterView : MonoBehaviour
 
     private GameObject currentView;
     private Animator currentAnimator;
+    private AttackHitbox currentAttackHitbox;
 
     public Animator CurrentAnimator => currentAnimator;
+    public AttackHitbox CurrentAttackHitbox => currentAttackHitbox;
 
     public void ChangeView(CharacterData data)
     {
@@ -28,10 +30,12 @@ public class CharacterView : MonoBehaviour
         currentView.transform.localRotation = Quaternion.identity;
         currentView.transform.localScale = Vector3.one;
 
-        // 생성된 캐릭터에 Animator가 있는지 먼저 찾기
+
+        currentAttackHitbox = currentView.GetComponentInChildren<AttackHitbox>();
+
         currentAnimator = currentView.GetComponentInChildren<Animator>();
 
-        // 없으면 추가
+        
         if (currentAnimator == null)
         {
             currentAnimator = currentView.AddComponent<Animator>();

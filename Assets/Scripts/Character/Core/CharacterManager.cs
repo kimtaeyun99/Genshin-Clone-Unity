@@ -11,6 +11,8 @@ public class CharacterManager : MonoBehaviour
 
     [Header("Animator")]
     public Animator CurrentAnimator => characterView.CurrentAnimator;
+    [Header("AttackHitbox")]
+    public AttackHitbox CurrentAttackHitbox => characterView.CurrentAttackHitbox;
 
     private CharacterRunTime currentCharacter;
     private CharacterStatCalculator statCalculator;

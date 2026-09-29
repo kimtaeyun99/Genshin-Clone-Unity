@@ -16,6 +16,9 @@ public class PlayerAttackState : PlayerStateBase
 
         Debug.Log($"대시 해제 확인 : {player.Movement.IsDashMode}");
         player.Animation.SetNormalAttackIndex(normalAttackIndex);
+
+        SetAttackData();
+
         player.Animation.PlayNormalAttack();
        
 
@@ -46,7 +49,13 @@ public class PlayerAttackState : PlayerStateBase
 
                 player.Animation.SetNormalAttackIndex(normalAttackIndex);
 
+                SetAttackData();
+
                 Debug.Log($"{normalAttackIndex}타 시작");
+                Debug.Log($"공격력 : {player.CharacterManager.CurrentCharacter.Stat.ATK} ");
+                Debug.Log($"배율 : {player.CharacterManager.CurrentCharacter.Data.CharacterCombatData.GetNormalAttackMultipliers(normalAttackIndex -1)}");
+                Debug.Log($"데미지 : {player.CharacterManager.CurrentAttackHitbox.Damage}");
+                Debug.Log($"속성 : {player.CharacterManager.CurrentAttackHitbox.Element}");
             }
             else
             {
@@ -81,5 +90,15 @@ public class PlayerAttackState : PlayerStateBase
         nextAttackInput = true;
 
         Debug.Log("다음 평타 입력 저장");
+    }
+    private void SetAttackData()
+    {
+        CharacterRunTime character = player.CharacterManager.CurrentCharacter;
+
+        float atk = character.Stat.ATK;
+
+        float multiplier = character.Data.CharacterCombatData.GetNormalAttackMultipliers(normalAttackIndex - 1);
+
+        player.CharacterManager.CurrentAttackHitbox.SetAttack(atk, multiplier, ElementType.Physical);
     }
 }

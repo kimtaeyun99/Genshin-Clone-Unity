@@ -2,7 +2,7 @@ using UnityEngine;
 
 [CreateAssetMenu(
     fileName = "CharacterAscensionData",
-    menuName = "GameData/Character Ascension"
+    menuName = "GameData/CharacterAscension"
 )]
 public class CharacterAscensionData : ScriptableObject
 {

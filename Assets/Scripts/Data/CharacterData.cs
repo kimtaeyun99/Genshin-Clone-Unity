@@ -30,6 +30,9 @@ public class CharacterData : ScriptableObject
     [Header("Animation")]
     [SerializeField] private Avatar avatar;
     [SerializeField] private RuntimeAnimatorController animatorController;
+
+    [Header("Combat")]
+    [SerializeField] private CharacterCombatData characterCombatData;
     public string ID => id;
     public string CharacterName => characterName;
     public GameObject Prefab => prefab;
@@ -45,6 +48,7 @@ public class CharacterData : ScriptableObject
     public CharacterAscensionData AscensionData => ascensionData;
     public Avatar Avatar => avatar;
     public RuntimeAnimatorController AnimatorController => animatorController;
+    public CharacterCombatData CharacterCombatData => characterCombatData;
 
     public void SetData(
     string id,

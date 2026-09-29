@@ -18,6 +18,7 @@ public class CharacterRunTime
     private float burstCoolDown;
 
     public CharacterData Data => data;
+    public CharacterStat Stat => stat;
     public int Level => level;
     public int AscensionPhase => ascensionPhase;
     public int MaxHP => maxHP;
