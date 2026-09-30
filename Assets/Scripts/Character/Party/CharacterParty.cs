@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class CharacterParty : MonoBehaviour
 {
+    public static CharacterParty Instance { get; private set; }
+
     private const int MaxPartyCount = 4;
 
     [Header("Party")]
@@ -15,7 +17,16 @@ public class CharacterParty : MonoBehaviour
     public int CurrentIndex => currentIndex;
     public IReadOnlyList<CharacterData> PartyMembers => partyMembers;
     public int Count => partyMembers.Count;
+    private void Awake()
+    {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(Instance);
+            return;
+        }
 
+        Instance = this;
+    }
     public bool AddPartyMember(CharacterData data)
     {
         if(data == null)
