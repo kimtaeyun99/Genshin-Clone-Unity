@@ -17,23 +17,13 @@ public class PlayerAttackState : PlayerStateBase
 
         normalAttackIndex = 1;
         nextAttackInput = false;
-
-        Debug.Log($"대시 해제 확인 : {player.Movement.IsDashMode}");
-        player.Animation.SetNormalAttackIndex(normalAttackIndex);
-
         SetAttackData();
+        player.Animation.SetNormalAttackIndex(normalAttackIndex);
 
         player.Animation.PlayNormalAttack();
        
 
         InputManager.Instance.OnAttack += OnAttack;
-
-        Debug.Log("Attack 진입");
-        Debug.Log($"{normalAttackIndex}타 시작");
-        Debug.Log($"공격력 : {player.CharacterManager.CurrentCharacter.Stat.ATK} ");
-        Debug.Log($"배율 : {player.CharacterManager.CurrentCharacter.Data.CharacterCombatData.GetNormalAttackMultipliers(normalAttackIndex - 1)}");
-        Debug.Log($"데미지 : {player.CharacterManager.CurrentAttackHitbox.Damage}");
-        Debug.Log($"속성 : {player.CharacterManager.CurrentAttackHitbox.Element}");
     }
     public override void Update()
     {
@@ -56,16 +46,8 @@ public class PlayerAttackState : PlayerStateBase
                 normalAttackIndex++;
                 nextAttackInput = false;
                 attackHitbox.ClearHitbox();
-
-                player.Animation.SetNormalAttackIndex(normalAttackIndex);
-
                 SetAttackData();
-
-                Debug.Log($"{normalAttackIndex}타 시작");
-                Debug.Log($"공격력 : {player.CharacterManager.CurrentCharacter.Stat.ATK} ");
-                Debug.Log($"배율 : {player.CharacterManager.CurrentCharacter.Data.CharacterCombatData.GetNormalAttackMultipliers(normalAttackIndex -1)}");
-                Debug.Log($"데미지 : {player.CharacterManager.CurrentAttackHitbox.Damage}");
-                Debug.Log($"속성 : {player.CharacterManager.CurrentAttackHitbox.Element}");
+                player.Animation.SetNormalAttackIndex(normalAttackIndex);
             }
             else
             {
@@ -79,8 +61,6 @@ public class PlayerAttackState : PlayerStateBase
         attackHitbox.gameObject.SetActive(false);
 
         InputManager.Instance.OnAttack -= OnAttack;
-
-        Debug.Log("Attack 퇴장");
     }
     private void ChangeNextState()
     {
@@ -101,8 +81,6 @@ public class PlayerAttackState : PlayerStateBase
         }
 
         nextAttackInput = true;
-
-        Debug.Log("다음 평타 입력 저장");
     }
     private void SetAttackData()
     {
