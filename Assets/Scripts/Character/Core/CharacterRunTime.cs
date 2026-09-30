@@ -90,4 +90,18 @@ public class CharacterRunTime
             currentHP = maxHP;
         }
     }
+    public void Heal(int amount)
+    {
+        if (amount <= 0)
+        {
+            return;
+        }
+
+        currentHP += amount;
+
+        if(currentHP > maxHP)
+        {
+            currentHP = maxHP;
+        }
+    }
 }

@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 644911094672426904}
   - component: {fileID: 2519755266724258782}
   - component: {fileID: 6074144376362231865}
+  - component: {fileID: 4050773339568321605}
   m_Layer: 0
   m_Name: Barara
   m_TagString: Untagged
@@ -102,6 +103,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BarbaraAttack
   projectilePrefab: {fileID: 6059027659825163303, guid: c6cc8ae038dd2fb47ac8eb2353e21eac, type: 3}
   spawnPoint: {fileID: 7212688460561430507}
+--- !u!114 &4050773339568321605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597103609839366899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa96733472db67459bdd1a11a38e59a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BarbaraSkill
+  waterRingPrefab: {fileID: 4962693958474384062, guid: e261b920f0f503c4e9deec2b44e938bb, type: 3}
 --- !u!1001 &3321093801075807124
 PrefabInstance:
   m_ObjectHideFlags: 0

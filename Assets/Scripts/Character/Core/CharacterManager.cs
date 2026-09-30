@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 public class CharacterManager : MonoBehaviour
 {
+    public static CharacterManager Instance { get; private set; }
+
+
     [Header("Character Data")]
     [SerializeField] private List<CharacterData> characterDatas;
 
@@ -19,11 +22,21 @@ public class CharacterManager : MonoBehaviour
     public CharacterRunTime CurrentCharacter => currentCharacter;
 
     private Dictionary<CharacterData, CharacterRunTime> characterRunTimes;
+
+    public CharacterView CharacterView => characterView;
     public ICharacterAttack CurrentAttack => characterView.CurrentAttack;
     public ICharacterSkill CurrentSkill => characterView.CurrentSkill;
     public ICharacterBurst CurrentBurst => characterView.CurrentBurst;
     private void Awake()
     {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(Instance);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         statCalculator = new CharacterStatCalculator();
         InitializeCharacters();
     }

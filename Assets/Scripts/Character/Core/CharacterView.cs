@@ -11,6 +11,8 @@ public class CharacterView : MonoBehaviour
     private ICharacterAttack currentAttack;
     private ICharacterSkill currentSkill;
     private ICharacterBurst currentBurst;
+
+    public GameObject CurrentView => currentView;
     public Animator CurrentAnimator => currentAnimator;
     public AttackHitbox CurrentAttackHitbox => currentAttackHitbox;
     public ICharacterAttack CurrentAttack => currentAttack;
