@@ -25,6 +25,18 @@ public class PlayerController : MonoBehaviour
 
         InitializeStates();
     }
+    private void OnEnable()
+    {
+        InputManager.Instance.OnSwitchCharacter += SwitchCharacter;
+    }
+
+    private void OnDisable()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.OnSwitchCharacter -= SwitchCharacter;
+        }
+    }
 
     private void Start()
     {
@@ -60,5 +72,23 @@ public class PlayerController : MonoBehaviour
         StateMachine.AddState(PlayerStateType.Skill, new PlayerSkillState(this, StateMachine));
 
         StateMachine.AddState(PlayerStateType.Burst, new PlayerBurstState(this, StateMachine));
+    }
+
+    private void SwitchCharacter(int index)
+    {
+        int partyIndex = index - 1;
+
+        if (partyIndex < 0 || partyIndex >= characterParty.Count)
+        {
+            return;
+        }
+
+        if (partyIndex == characterParty.CurrentIndex)
+        {
+            return;
+        }
+        StateMachine.ChangeState(PlayerStateType.Idle);
+
+        characterParty.SelectCharacter(partyIndex);
     }
 }

@@ -283,7 +283,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2097096011}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CharacterTest, Assembly-CSharp
         m_MethodName: ChangeCharacter2
         m_Mode: 1
@@ -1016,7 +1016,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2097096011}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CharacterTest, Assembly-CSharp
         m_MethodName: ChangeCharacter1
         m_Mode: 1
@@ -1915,7 +1915,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2097096011}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CharacterTest, Assembly-CSharp
         m_MethodName: ChangeCharacter0
         m_Mode: 1
@@ -2048,7 +2048,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2097096011}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CharacterTest, Assembly-CSharp
         m_MethodName: Ascension
         m_Mode: 1
@@ -2181,7 +2181,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2097096011}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CharacterTest, Assembly-CSharp
         m_MethodName: ChangeCharacter3
         m_Mode: 1
@@ -2711,7 +2711,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2097096011}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CharacterTest, Assembly-CSharp
         m_MethodName: LevelUp
         m_Mode: 1
@@ -2774,7 +2774,6 @@ GameObject:
   - component: {fileID: 2097096005}
   - component: {fileID: 2097096004}
   - component: {fileID: 2097096003}
-  - component: {fileID: 2097096011}
   - component: {fileID: 2097096012}
   - component: {fileID: 2097096013}
   m_Layer: 0
@@ -2882,20 +2881,6 @@ Transform:
   - {fileID: 56570497}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2097096011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2097096002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1e6c26d075c9d41a91b4f6cd1dd32e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterTest
-  characterManager: {fileID: 63624474}
-  characterParty: {fileID: 814247880}
 --- !u!114 &2097096012
 MonoBehaviour:
   m_ObjectHideFlags: 0
