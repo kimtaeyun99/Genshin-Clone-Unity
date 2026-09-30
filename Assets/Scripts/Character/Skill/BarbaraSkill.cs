@@ -21,7 +21,6 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 
         isFinished = false;
 
-        playerAnimationController.SetSkillIndex(1);
         playerAnimationController.PlaySkill();
 
         SpawnWaterRing();
@@ -60,12 +59,16 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
             character.Data.CharacterCombatData
                 .GetSkillMultipliers(0);
 
+        int healAmount = Mathf.RoundToInt(
+            character.MaxHP * (healPercent / 100f)
+        );
+
         WaterRing waterRing = Instantiate(
             waterRingPrefab,
             CharacterManager.Instance.CharacterView.CurrentView.transform.position,
             Quaternion.identity
         );
 
-        waterRing.Initialize(healPercent);
+        waterRing.Initialize(healAmount);
     }
 }

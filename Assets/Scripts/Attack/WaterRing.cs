@@ -6,13 +6,14 @@ public class WaterRing : MonoBehaviour
     [SerializeField] private float duration = 10f;
     [SerializeField] private float healInterval = 1f;
 
-    private float healPercent;
+    private int healAmount;
+
     private float durationTimer;
     private float healTimer;
 
-    public void Initialize(float healPercent)
+    public void Initialize(int healAmount)
     {
-        this.healPercent = healPercent;
+        this.healAmount = healAmount;
 
         durationTimer = duration;
         healTimer = healInterval;
@@ -27,7 +28,8 @@ public class WaterRing : MonoBehaviour
 
     private void FollowCharacter()
     {
-        transform.position = CharacterManager.Instance.CharacterView.CurrentView.transform.position;
+        transform.position =
+            CharacterManager.Instance.CharacterView.CurrentView.transform.position;
     }
 
     private void UpdateDuration()
@@ -49,11 +51,8 @@ public class WaterRing : MonoBehaviour
             return;
         }
 
-        CharacterRunTime currentCharacter = CharacterManager.Instance.CurrentCharacter;
-
-        int healAmount = Mathf.RoundToInt(
-            currentCharacter.MaxHP * (healPercent / 100f)
-        );
+        CharacterRunTime currentCharacter =
+            CharacterManager.Instance.CurrentCharacter;
 
         currentCharacter.Heal(healAmount);
 
