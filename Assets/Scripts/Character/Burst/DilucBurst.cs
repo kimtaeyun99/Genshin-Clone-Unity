@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class DilucBurst : MonoBehaviour, ICharacterBurst
 {
+    [Header("Projectile")]
+    [SerializeField] private AttackProjectile projectilePrefab;
+    [SerializeField] private Transform spawnPoint;
+
     private bool isFinished;
 
     private CharacterRunTime character;
@@ -19,6 +23,8 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
         isFinished = false;
 
         playerAnimationController.PlayBurst();
+
+        SpawnProjectile();
 
         Debug.Log("Diluc Burst 시작");
     }
@@ -42,5 +48,16 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
     public void Exit()
     {
         Debug.Log("Diluc Burst 종료");
+    }
+    private void SpawnProjectile()
+    {
+        float atk = character.Stat.ATK;
+        float multiplier = character.Data.CharacterCombatData.GetBurstMultipliers(0);
+
+        float damage = atk * multiplier;
+
+        AttackProjectile attackProjectile = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
+
+        attackProjectile.Initialize(damage, character.Data.ElementType);
     }
 }
