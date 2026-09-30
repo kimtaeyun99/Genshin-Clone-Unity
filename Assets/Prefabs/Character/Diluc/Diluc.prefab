@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 8618318513242797846}
   - component: {fileID: 2423656405578836663}
   - component: {fileID: 342967359088688157}
+  - component: {fileID: -3422375988742012437}
   m_Layer: 0
   m_Name: Diluc
   m_TagString: Untagged
@@ -162,6 +163,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91553eab07babb84aa51a09614bb082c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DilucSkill
+--- !u!114 &-3422375988742012437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8196238054752762640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b45cc40dfd1ff8a46b585966049d8ef1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DilucBurst
 --- !u!1001 &9077915125074618861
 PrefabInstance:
   m_ObjectHideFlags: 0

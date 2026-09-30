@@ -9,10 +9,12 @@ public class CharacterView : MonoBehaviour
     private Animator currentAnimator;
     private AttackHitbox currentAttackHitbox;
     private ICharacterSkill currentSkill;
+    private ICharacterBurst currentBurst;
     public Animator CurrentAnimator => currentAnimator;
     public AttackHitbox CurrentAttackHitbox => currentAttackHitbox;
 
     public ICharacterSkill CurrentSkill => currentSkill;
+    public ICharacterBurst CurrentBurst => currentBurst;
     public void ChangeView(CharacterData data)
     {
         if (data == null || data.Prefab == null)
@@ -36,6 +38,7 @@ public class CharacterView : MonoBehaviour
 
         currentAnimator = currentView.GetComponentInChildren<Animator>();
         currentSkill = currentView.GetComponentInChildren<ICharacterSkill>();
+        currentBurst = currentView.GetComponentInChildren<ICharacterBurst>();
         
         if (currentAnimator == null)
         {

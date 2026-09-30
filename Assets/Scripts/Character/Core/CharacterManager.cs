@@ -20,6 +20,7 @@ public class CharacterManager : MonoBehaviour
 
     private Dictionary<CharacterData, CharacterRunTime> characterRunTimes;
     public ICharacterSkill CurrentSkill => characterView.CurrentSkill;
+    public ICharacterBurst CurrentBurst => characterView.CurrentBurst;
     private void Awake()
     {
         statCalculator = new CharacterStatCalculator();
