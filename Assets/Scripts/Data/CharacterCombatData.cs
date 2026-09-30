@@ -4,6 +4,7 @@ using UnityEngine;
 public class CharacterCombatData : ScriptableObject
 {
     [Header("Normal Attack")]
+    [SerializeField] private int normalAttackCombo;
     [SerializeField] private float[] normalAttackMultipliers;
 
     [Header("Skill")]
@@ -11,6 +12,8 @@ public class CharacterCombatData : ScriptableObject
 
     [Header("Burst")]
     [SerializeField] private float[] burstMultipliers;
+
+    public int NormalAttackCombo => normalAttackCombo; 
 
     public float GetNormalAttackMultipliers(int index)
     {

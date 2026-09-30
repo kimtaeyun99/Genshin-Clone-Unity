@@ -19,6 +19,7 @@ public class CharacterManager : MonoBehaviour
     public CharacterRunTime CurrentCharacter => currentCharacter;
 
     private Dictionary<CharacterData, CharacterRunTime> characterRunTimes;
+    public ICharacterAttack CurrentAttack => characterView.CurrentAttack;
     public ICharacterSkill CurrentSkill => characterView.CurrentSkill;
     public ICharacterBurst CurrentBurst => characterView.CurrentBurst;
     private void Awake()

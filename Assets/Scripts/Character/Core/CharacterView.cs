@@ -8,11 +8,12 @@ public class CharacterView : MonoBehaviour
     private GameObject currentView;
     private Animator currentAnimator;
     private AttackHitbox currentAttackHitbox;
+    private ICharacterAttack currentAttack;
     private ICharacterSkill currentSkill;
     private ICharacterBurst currentBurst;
     public Animator CurrentAnimator => currentAnimator;
     public AttackHitbox CurrentAttackHitbox => currentAttackHitbox;
-
+    public ICharacterAttack CurrentAttack => currentAttack;
     public ICharacterSkill CurrentSkill => currentSkill;
     public ICharacterBurst CurrentBurst => currentBurst;
     public void ChangeView(CharacterData data)
@@ -37,6 +38,7 @@ public class CharacterView : MonoBehaviour
         currentAttackHitbox = currentView.GetComponentInChildren<AttackHitbox>(true);
 
         currentAnimator = currentView.GetComponentInChildren<Animator>();
+        currentAttack = currentView.GetComponentInChildren<ICharacterAttack>();
         currentSkill = currentView.GetComponentInChildren<ICharacterSkill>();
         currentBurst = currentView.GetComponentInChildren<ICharacterBurst>();
         
