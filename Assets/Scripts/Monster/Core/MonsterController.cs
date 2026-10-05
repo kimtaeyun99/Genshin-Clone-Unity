@@ -41,6 +41,7 @@ public class MonsterController : MonoBehaviour
     public MonsterAnimationController Animation { get; private set; }
     public AttackHitbox Hitbox { get; private set; }
     public MonsterHealth monsterHealth { get; private set; }
+    public IMonsterAttack MonsterAttack { get; private set; }
 
     private void Awake()
     {
@@ -53,6 +54,7 @@ public class MonsterController : MonoBehaviour
         Hitbox = GetComponentInChildren<AttackHitbox>(true);
 
         monsterHealth = GetComponent<MonsterHealth>();
+        MonsterAttack = GetComponent<IMonsterAttack>();
 
         InitializeStates();
     }

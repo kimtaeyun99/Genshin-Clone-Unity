@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5782852195278055333}
   - component: {fileID: 2889792630340957570}
   - component: {fileID: 2919467549087267131}
+  - component: {fileID: 6149224736650130267}
   m_Layer: 9
   m_Name: MeleeMonster
   m_TagString: Untagged
@@ -191,6 +192,8 @@ MonoBehaviour:
   chaseRange: 15
   attack: 100
   attackMultiplier: 1
+  deadDestroyDelay: 3
+  elementType: -1
 --- !u!114 &2919467549087267131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +207,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterAnimationController
   animator: {fileID: 8429367336866885560}
+--- !u!114 &6149224736650130267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6522937743671018849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6e5f0f4baed9a478c1d3cd12d431a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeleeMonsterAttack
 --- !u!1 &7623811628097655393
 GameObject:
   m_ObjectHideFlags: 0
