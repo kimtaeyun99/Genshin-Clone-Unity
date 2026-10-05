@@ -25,7 +25,7 @@ public class MonsterAttackState : MonsterStateBase
         monster.Hitbox.SetAttack(
             monster.Attack,
             monster.AttackMultiplier,
-            ElementType.Physical
+            monster.ElementType
         );
 
         int attackIndex = Random.Range(0, 2);

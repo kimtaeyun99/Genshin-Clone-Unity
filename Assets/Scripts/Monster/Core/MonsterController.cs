@@ -21,6 +21,9 @@ public class MonsterController : MonoBehaviour
     [Header("Dead")]
     [SerializeField] private float deadDestroyDelay = 3f;
 
+    [Header("Element")]
+    [SerializeField] private ElementType elementType;
+
     public float IdleTime => idleTime;
     public float PatrolRadius => patrolRadius;
     public float DetectionRadius => detectionRadius;
@@ -29,6 +32,7 @@ public class MonsterController : MonoBehaviour
     public float Attack => attack;
     public float AttackMultiplier => attackMultiplier;
     public float DeadDestroyDelay => deadDestroyDelay;
+    public ElementType ElementType => elementType;
 
     public Vector3 SpawnPosition { get; private set; }
     public NavMeshAgent Agent { get; private set; }
