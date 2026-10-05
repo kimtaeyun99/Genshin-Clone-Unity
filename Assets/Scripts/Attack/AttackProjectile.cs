@@ -59,4 +59,13 @@ public class AttackProjectile : MonoBehaviour
 
         attackable.TakeAttack(attackData);
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+
+        Gizmos.DrawRay(
+            transform.position,
+            transform.forward * 3f
+        );
+    }
 }

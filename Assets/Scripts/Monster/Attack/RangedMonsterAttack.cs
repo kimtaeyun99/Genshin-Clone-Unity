@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
 {
+    [SerializeField] private AttackProjectile arrowPrefab;
+    [SerializeField] private Transform spawnPoint;
+
     private MonsterController monster;
 
     private int attackStep;
@@ -17,8 +20,6 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
         isFinished = false;
 
         LookTarget();
-
-        // Attack1 : 화살 준비
         monster.Animation.PlayAttack(0);
     }
 
@@ -34,10 +35,8 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
             return;
         }
 
-        AnimatorStateInfo stateInfo =
-            monster.Animation.GetCurrentStateInfo();
+        AnimatorStateInfo stateInfo = monster.Animation.GetCurrentStateInfo();
 
-        // Attack1
         if (attackStep == 0)
         {
             if (!stateInfo.IsName("Attack1"))
@@ -49,9 +48,9 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
             {
                 attackStep = 1;
 
-                //LookTarget();
+                AttackProjectile arrow = Instantiate(arrowPrefab, spawnPoint.position, spawnPoint.rotation);
+                arrow.Initialize(monster.Attack, monster.ElementType);
 
-                // Attack2 : 화살 발사
                 monster.Animation.PlayAttack(1);
             }
 
