@@ -15,6 +15,8 @@ public class MonsterIdleState : MonsterStateBase
     {
         idleTimer = monster.IdleTime;
 
+        monster.Animation.PlayIdle();
+
         Debug.Log("Monster Idle ¡¯¿‘");
     }
 

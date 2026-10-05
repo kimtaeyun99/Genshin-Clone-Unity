@@ -13,6 +13,8 @@ public class MonsterAttackState : MonsterStateBase
     {
         monster.Agent.ResetPath();
 
+        monster.Animation.PlayAttack();
+
         Debug.Log("Monster Attack ÁøÀÔ");
     }
 

@@ -11,6 +11,7 @@ public class MonsterChaseState : MonsterStateBase
 
     public override void Enter()
     {
+        monster.Animation.PlayChase();
         Debug.Log("Monster Chase ÁøÀÔ");
     }
 

@@ -23,12 +23,15 @@ public class MonsterController : MonoBehaviour
     public NavMeshAgent Agent { get; private set; }
     public MonsterStateMachine StateMachine { get; private set; }
     public Transform Target { get; private set; }
+    public MonsterAnimationController Animation { get; private set; }
 
     private void Awake()
     {
         Agent = GetComponent<NavMeshAgent>();
 
         StateMachine = new MonsterStateMachine();
+
+        Animation = GetComponent<MonsterAnimationController>();
 
         InitializeStates();
     }

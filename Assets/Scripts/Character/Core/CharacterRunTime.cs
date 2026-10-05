@@ -104,4 +104,18 @@ public class CharacterRunTime
             currentHP = maxHP;
         }
     }
+    public void TakeDamage(float damage)
+    {
+        if(damage <= 0)
+        {
+            return;
+        }
+
+        currentHP -= Mathf.RoundToInt(damage);
+
+        if(currentHP < 0)
+        {
+            currentHP = 0;
+        }
+    }
 }

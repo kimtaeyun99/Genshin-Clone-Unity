@@ -9,6 +9,8 @@ public class MonsterPatrolState : MonsterStateBase
 
     public override void Enter()
     {
+        monster.Animation.PlayPatrol();
+
         SetRandomDestination();
         Debug.Log("Patrol ÁøÀÔ");
     }
