@@ -21,6 +21,7 @@ public class MonsterAnimationController : MonoBehaviour
 
     public void PlayAttack(int attackIndex)
     {
+        animator.SetInteger("State", 3);
         animator.SetInteger("AttackIndex", attackIndex);
         animator.SetTrigger("Attack");
     }
