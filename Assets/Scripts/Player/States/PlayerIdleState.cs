@@ -37,6 +37,7 @@ public class PlayerIdleState : PlayerStateBase
         InputManager.Instance.OnJump -= HandleJump;
         InputManager.Instance.OnDodge -= HandleDodge;
         InputManager.Instance.OnAttack -= HandleAttack;
+        InputManager.Instance.OnSkill -= HandleSkill;
         InputManager.Instance.OnBurst -= HandleBurst;
     }
 

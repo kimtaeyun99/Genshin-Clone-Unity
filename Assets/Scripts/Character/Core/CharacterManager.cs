@@ -76,7 +76,10 @@ public class CharacterManager : MonoBehaviour
         {
             return false;
         }
-
+        if(runTime.IsDead)
+        {
+            return false;
+        }
         currentCharacter = runTime;
 
         CharacterStat stat = statCalculator.ApplyStat(currentCharacter);

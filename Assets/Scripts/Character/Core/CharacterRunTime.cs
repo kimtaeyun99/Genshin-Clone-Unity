@@ -27,6 +27,7 @@ public class CharacterRunTime
     public float SkillCoolDown => skillCoolDown;
     public float BurstCoolDown => burstCoolDown;
 
+    public bool IsDead;
     public CharacterRunTime(CharacterData data)
     {
         this.data = data;
@@ -92,6 +93,10 @@ public class CharacterRunTime
     }
     public void Heal(int amount)
     {
+        if (IsDead)
+        {
+            return;
+        }
         if (amount <= 0)
         {
             return;
@@ -106,7 +111,7 @@ public class CharacterRunTime
     }
     public void TakeDamage(float damage)
     {
-        if(damage <= 0)
+        if(IsDead || damage <= 0)
         {
             return;
         }
@@ -116,6 +121,11 @@ public class CharacterRunTime
         if(currentHP < 0)
         {
             currentHP = 0;
+            IsDead = true;
         }
+    }
+    public void Revive()
+    {
+        IsDead = false;
     }
 }

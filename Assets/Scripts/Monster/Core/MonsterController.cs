@@ -18,6 +18,9 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private float attack = 100f;
     [SerializeField] private float attackMultiplier = 1f;
 
+    [Header("Dead")]
+    [SerializeField] private float deadDestroyDelay = 3f;
+
     public float IdleTime => idleTime;
     public float PatrolRadius => patrolRadius;
     public float DetectionRadius => detectionRadius;
@@ -25,6 +28,7 @@ public class MonsterController : MonoBehaviour
     public float ChaseRange => chaseRange;
     public float Attack => attack;
     public float AttackMultiplier => attackMultiplier;
+    public float DeadDestroyDelay => deadDestroyDelay;
 
     public Vector3 SpawnPosition { get; private set; }
     public NavMeshAgent Agent { get; private set; }
@@ -32,6 +36,7 @@ public class MonsterController : MonoBehaviour
     public Transform Target { get; private set; }
     public MonsterAnimationController Animation { get; private set; }
     public AttackHitbox Hitbox { get; private set; }
+    public MonsterHealth monsterHealth { get; private set; }
 
     private void Awake()
     {
@@ -43,7 +48,17 @@ public class MonsterController : MonoBehaviour
 
         Hitbox = GetComponentInChildren<AttackHitbox>(true);
 
+        monsterHealth = GetComponent<MonsterHealth>();
+
         InitializeStates();
+    }
+    private void OnEnable()
+    {
+        monsterHealth.OnDead += HandleDead;
+    }
+    private void OnDisable()
+    {
+        monsterHealth.OnDead -= HandleDead;
     }
 
     private void Start()
@@ -91,5 +106,9 @@ public class MonsterController : MonoBehaviour
     public void ClearTarget()
     {
         Target = null;
+    }
+    private void HandleDead()
+    {
+        StateMachine.ChangeState(MonsterStateType.Dead);
     }
 }
