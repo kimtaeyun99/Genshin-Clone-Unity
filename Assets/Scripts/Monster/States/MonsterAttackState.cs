@@ -1,3 +1,4 @@
+using UnityEngine;
 public class MonsterAttackState : MonsterStateBase
 {
     private IMonsterAttack currentAttack;
@@ -11,18 +12,24 @@ public class MonsterAttackState : MonsterStateBase
 
     public override void Enter()
     {
+        Debug.Log("Monster Attack State Enter 시작");
+
         monster.Agent.ResetPath();
 
         currentAttack = monster.MonsterAttack;
 
+        Debug.Log($"MonsterAttack : {currentAttack}");
+
         currentAttack.Enter(monster);
+
+        Debug.Log("Monster Attack 진입");
     }
 
     public override void Update()
     {
         if (monster.Target == null)
         {
-            stateMachine.ChangeState(MonsterStateType.Idle);
+            stateMachine.ChangeState(MonsterStateType.Patrol);
             return;
         }
 
@@ -36,6 +43,7 @@ public class MonsterAttackState : MonsterStateBase
 
     public override void Exit()
     {
+        Debug.Log("Monster Attack 종료");
         currentAttack?.Exit();
         currentAttack = null;
     }

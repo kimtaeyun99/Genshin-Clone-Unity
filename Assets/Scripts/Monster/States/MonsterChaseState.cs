@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class MonsterChaseState : MonsterStateBase
 {
+    private float attackTimer;
     public MonsterChaseState(
         MonsterController monster,
         MonsterStateMachine stateMachine)
@@ -13,43 +14,42 @@ public class MonsterChaseState : MonsterStateBase
     {
         monster.Animation.PlayChase();
 
+        attackTimer = 0f;
+
+        monster.Agent.isStopped = false;
+
         if (monster.Target != null)
         {
             monster.Agent.SetDestination(monster.Target.position);
         }
 
-        Debug.Log("Monster Chase 진입");
     }
 
     public override void Update()
     {
+        attackTimer += Time.deltaTime;
+
         if (monster.Target == null)
         {
-            stateMachine.ChangeState(MonsterStateType.Idle);
+            stateMachine.ChangeState(MonsterStateType.Patrol);
             return;
         }
-
         float distance = Vector3.Distance(
             monster.transform.position,
             monster.Target.position
         );
-
-        // 추적 포기
         if (distance > monster.ChaseRange)
         {
             monster.ClearTarget();
-            stateMachine.ChangeState(MonsterStateType.Idle);
+            stateMachine.ChangeState(MonsterStateType.Patrol);
             return;
         }
-
-        // 공격 범위 진입
-        if (distance <= monster.AttackRange)
+        if (distance <= monster.AttackRange && attackTimer >= monster.AttackDelay)
         {
+            Debug.Log("Chase → Attack 전환");
             stateMachine.ChangeState(MonsterStateType.Attack);
             return;
         }
-
-        // 플레이어 추적
         monster.Agent.SetDestination(monster.Target.position);
     }
 

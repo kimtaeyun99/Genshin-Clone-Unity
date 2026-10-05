@@ -11,11 +11,12 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private float detectionRadius = 8f;
 
     [Header("Chase")]
-    [SerializeField] private float attackRange = 2f;
     [SerializeField] private float chaseRange = 15f;
 
     [Header("Attack")]
     [SerializeField] private float attack = 100f;
+    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float attackDelay = 3f;
     [SerializeField] private float attackMultiplier = 1f;
 
     [Header("Dead")]
@@ -27,9 +28,10 @@ public class MonsterController : MonoBehaviour
     public float IdleTime => idleTime;
     public float PatrolRadius => patrolRadius;
     public float DetectionRadius => detectionRadius;
-    public float AttackRange => attackRange;
     public float ChaseRange => chaseRange;
     public float Attack => attack;
+    public float AttackRange => attackRange;
+    public float AttackDelay => attackDelay;
     public float AttackMultiplier => attackMultiplier;
     public float DeadDestroyDelay => deadDestroyDelay;
     public ElementType ElementType => elementType;
