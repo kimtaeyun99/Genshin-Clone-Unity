@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public abstract class PlayerStateBase
 {
     protected PlayerController player;

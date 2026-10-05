@@ -50,6 +50,11 @@ public class PlayerAnimationController : MonoBehaviour
         Animator.SetInteger("State", 0);
         Animator.SetTrigger("Burst");
     }
+    public void PlayDead()
+    {
+        Animator.SetInteger("State", 0);
+        Animator.SetTrigger("Dead");
+    }
     public AnimatorStateInfo GetCurrentStateInfo()
     {
         return Animator.GetCurrentAnimatorStateInfo(0);

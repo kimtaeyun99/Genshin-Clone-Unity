@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public class AttackHitbox : MonoBehaviour
 {
+    [SerializeField] private LayerMask targetLayer;
+
     private float damage;
     private ElementType element;
 
@@ -20,6 +22,11 @@ public class AttackHitbox : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        if ((targetLayer.value & (1 << other.gameObject.layer)) == 0)
+        {
+            return;
+        }
+
         if (other.TryGetComponent<IAttackable>(out IAttackable attackable))
         {
             if(hitTargets.Contains(attackable))

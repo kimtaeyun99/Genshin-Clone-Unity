@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class MonsterHealth : MonoBehaviour, IDamageable, IElementApplicable, IAttackable
@@ -9,6 +10,9 @@ public class MonsterHealth : MonoBehaviour, IDamageable, IElementApplicable, IAt
     [Header("Element")]
     [SerializeField] private ElementType hostElement;
 
+    public event Action OnDead;
+    public bool IsDead { get; private set; }
+
     private void Awake()
     {
         currentHP = maxHP;
@@ -18,9 +22,8 @@ public class MonsterHealth : MonoBehaviour, IDamageable, IElementApplicable, IAt
     public void TakeDamage(float damage)
     {
         Debug.Log($"{damage} 데미지받음");
-        currentHP -= damage;
 
-        currentHP = Mathf.Clamp(currentHP, 0, maxHP);
+        currentHP = Mathf.Clamp(currentHP - damage, 0, maxHP);
 
         if(currentHP <= 0f)
         {
@@ -30,7 +33,8 @@ public class MonsterHealth : MonoBehaviour, IDamageable, IElementApplicable, IAt
     }
     private void Die()
     {
-        Debug.Log("사망");
+        IsDead = true;
+        OnDead?.Invoke();
     }
     public ElementReactionType ApplyElement(ElementType guestElement)
     {

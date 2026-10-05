@@ -103,4 +103,17 @@ public class CharacterParty : MonoBehaviour
 
         return true;
     }
+    public bool SelectNextAlive()
+    {
+        for (int i=0; i< partyMembers.Count; i++)
+        {
+            CharacterRunTime runTime = characterManager.GetCharacter(partyMembers[i]);
+            if(runTime == null || runTime.IsDead)
+            {
+                continue;
+            }
+            return SelectCharacter(i);
+        }
+        return false;
+    }
 }
