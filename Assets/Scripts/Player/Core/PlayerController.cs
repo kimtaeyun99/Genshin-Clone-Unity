@@ -1,3 +1,4 @@
+using Polyart;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -6,19 +7,40 @@ public class PlayerController : MonoBehaviour
     public PlayerMovement Movement { get; private set; }
 
     public PlayerStamina Stamina { get; private set; }
+    public PlayerAnimationController Animation { get; private set; }
+    [SerializeField] private CharacterParty characterParty;
+
+    [SerializeField] private CharacterManager characterManager;
+
+    public CharacterManager CharacterManager => characterManager;
     private void Awake()
     {
         Movement = GetComponent<PlayerMovement>();
 
         Stamina = GetComponent<PlayerStamina>();
 
+        Animation = GetComponent<PlayerAnimationController>();
+
         StateMachine = new PlayerStateMachine();
 
         InitializeStates();
     }
+    private void OnEnable()
+    {
+        InputManager.Instance.OnSwitchCharacter += SwitchCharacter;
+    }
+
+    private void OnDisable()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.OnSwitchCharacter -= SwitchCharacter;
+        }
+    }
 
     private void Start()
     {
+        characterParty.SelectCharacter(0);
         StateMachine.Initialize(PlayerStateType.Idle);
     }
 
@@ -26,12 +48,9 @@ public class PlayerController : MonoBehaviour
     {
         Movement.CheckGround();
 
+        Movement.ApplyGravity();
+
         StateMachine.Update();
-        
-        if(StateMachine.CurrentState is not PlayerClimbState)
-        {
-            Movement.ApplyGravity();
-        }
     }
 
     private void InitializeStates()
@@ -46,6 +65,30 @@ public class PlayerController : MonoBehaviour
 
         StateMachine.AddState(PlayerStateType.Dodge,new PlayerDodgeState(this, StateMachine));
 
-        StateMachine.AddState(PlayerStateType.Climb, new PlayerClimbState(this, StateMachine));
+        //StateMachine.AddState(PlayerStateType.Climb, new PlayerClimbState(this, StateMachine));
+
+        StateMachine.AddState(PlayerStateType.Attack, new PlayerAttackState(this, StateMachine));
+
+        StateMachine.AddState(PlayerStateType.Skill, new PlayerSkillState(this, StateMachine));
+
+        StateMachine.AddState(PlayerStateType.Burst, new PlayerBurstState(this, StateMachine));
+    }
+
+    private void SwitchCharacter(int index)
+    {
+        int partyIndex = index - 1;
+
+        if (partyIndex < 0 || partyIndex >= characterParty.Count)
+        {
+            return;
+        }
+
+        if (partyIndex == characterParty.CurrentIndex)
+        {
+            return;
+        }
+        StateMachine.ChangeState(PlayerStateType.Idle);
+
+        characterParty.SelectCharacter(partyIndex);
     }
 }

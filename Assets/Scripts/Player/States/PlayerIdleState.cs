@@ -9,10 +9,13 @@ public class PlayerIdleState : PlayerStateBase
 
     public override void Enter()
     {
-        player.Movement.ExitDashMode();
+        player.Animation.PlayIdle();
 
         InputManager.Instance.OnJump += HandleJump;
         InputManager.Instance.OnDodge += HandleDodge;
+        InputManager.Instance.OnAttack += HandleAttack;
+        InputManager.Instance.OnSkill += HandleSkill;
+        InputManager.Instance.OnBurst += HandleBurst;
     }
 
     public override void Update()
@@ -33,6 +36,8 @@ public class PlayerIdleState : PlayerStateBase
     {
         InputManager.Instance.OnJump -= HandleJump;
         InputManager.Instance.OnDodge -= HandleDodge;
+        InputManager.Instance.OnAttack -= HandleAttack;
+        InputManager.Instance.OnBurst -= HandleBurst;
     }
 
     private void HandleJump()
@@ -48,6 +53,27 @@ public class PlayerIdleState : PlayerStateBase
         if (player.Movement.IsGrounded)
         {
             stateMachine.ChangeState(PlayerStateType.Dodge);
+        }
+    }
+    private void HandleAttack()
+    {
+        if(player.Movement.IsGrounded)
+        {
+            stateMachine.ChangeState(PlayerStateType.Attack);
+        }
+    }
+    private void HandleSkill()
+    {
+        if(player.Movement.IsGrounded)
+        {
+            stateMachine.ChangeState(PlayerStateType.Skill);
+        }
+    }
+    private void HandleBurst()
+    {
+        if(player.Movement.IsGrounded)
+        {
+            stateMachine.ChangeState(PlayerStateType.Burst);
         }
     }
 }

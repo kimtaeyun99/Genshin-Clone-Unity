@@ -9,20 +9,22 @@ public class PlayerMoveState : PlayerStateBase
     }
 
     public override void Enter()
-    {
+    {        
         InputManager.Instance.OnJump += HandleJump;
         InputManager.Instance.OnDodge += HandleDodge;
+        InputManager.Instance.OnAttack += HandleAttack;
 
+        player.Animation.PlayMove();
         sprintHoldTimer = 0f;
     }
 
     public override void Update()
     {
-        if(player.Movement.CheckClimbableWall(out _) && InputManager.Instance.MoveInput.y > 0f)
-        {
-            stateMachine.ChangeState(PlayerStateType.Climb);
-            return;
-        }
+        //if (player.Movement.CheckClimbableWall(out _) && InputManager.Instance.MoveInput.y > 0f)
+        //{
+        //    stateMachine.ChangeState(PlayerStateType.Climb);
+        //    return;
+        //}
 
         if (!player.Movement.IsGrounded)
         {
@@ -62,8 +64,10 @@ public class PlayerMoveState : PlayerStateBase
 
     public override void Exit()
     {
+        player.Movement.ExitDashMode();
         InputManager.Instance.OnJump -= HandleJump;
         InputManager.Instance.OnDodge -= HandleDodge;
+        InputManager.Instance.OnAttack -= HandleAttack;
     }
 
     private void UpdateDashMode()
@@ -105,6 +109,14 @@ public class PlayerMoveState : PlayerStateBase
         if (player.Movement.IsGrounded)
         {
             stateMachine.ChangeState(PlayerStateType.Dodge);
+        }
+    }
+
+    private void HandleAttack()
+    {
+        if(player.Movement.IsGrounded)
+        {
+            stateMachine.ChangeState(PlayerStateType.Attack);
         }
     }
 }

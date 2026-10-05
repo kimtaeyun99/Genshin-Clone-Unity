@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterRunTime
 {
     private CharacterData data;
+    private CharacterStat stat;
 
     private int level;
     private int ascensionPhase;
@@ -17,6 +18,7 @@ public class CharacterRunTime
     private float burstCoolDown;
 
     public CharacterData Data => data;
+    public CharacterStat Stat => stat;
     public int Level => level;
     public int AscensionPhase => ascensionPhase;
     public int MaxHP => maxHP;
@@ -33,12 +35,16 @@ public class CharacterRunTime
         ascensionPhase = 0;
 
         maxHP = data.HP;
-        currentHP = maxHP;
+        currentHP = 1;
 
         currentEnergy = 0f;
 
         skillCoolDown = 0f;
         burstCoolDown = 0f;
+    }
+    public void SetStat(CharacterStat stat)
+    {
+        this.stat = stat;
     }
     
     public bool LevelUp()
@@ -78,6 +84,20 @@ public class CharacterRunTime
 
         maxHP = newMaxHP;
         currentHP += hpShift;
+
+        if(currentHP > maxHP)
+        {
+            currentHP = maxHP;
+        }
+    }
+    public void Heal(int amount)
+    {
+        if (amount <= 0)
+        {
+            return;
+        }
+
+        currentHP += amount;
 
         if(currentHP > maxHP)
         {

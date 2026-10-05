@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   id: CH_002
   characterName: Barbara
-  prefab: {fileID: 919132149155446097, guid: cde864d79aca5a744a0d17df3272dc53, type: 3}
+  prefab: {fileID: 1597103609839366899, guid: 99ffa1ffc9ff5a4419ca97aabb00bd30, type: 3}
   elementType: 1
   weaponType: 2
   hp: 821
@@ -25,4 +25,6 @@ MonoBehaviour:
   defPerLevel: 7
   elementalMastery: 0
   ascensionData: {fileID: 11400000, guid: 26b5a32ffbcd6484699cadd8ef225eaf, type: 2}
-  animatorController: {fileID: 9100000, guid: 4130be72d5c493943ad558dd34d88514, type: 2}
+  avatar: {fileID: 9000000, guid: d49c65de9fce66146b5d0e164b1f9d2d, type: 3}
+  animatorController: {fileID: 9100000, guid: 6dd1f4d03e1b15e4b8176c99b2963aad, type: 2}
+  characterCombatData: {fileID: 11400000, guid: 7288198d32bcf2f48ab79ac4f607214f, type: 2}

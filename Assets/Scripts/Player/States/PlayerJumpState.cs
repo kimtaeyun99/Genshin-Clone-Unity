@@ -9,6 +9,7 @@ public class PlayerJumpState : PlayerStateBase
     public override void Enter()
     {
         player.Movement.Jump();
+        player.Animation.PlayJump();
     }
     public override void Update()
     {

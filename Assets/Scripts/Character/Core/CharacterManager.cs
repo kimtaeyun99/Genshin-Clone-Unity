@@ -3,23 +3,41 @@ using System.Collections.Generic;
 
 public class CharacterManager : MonoBehaviour
 {
+    public static CharacterManager Instance { get; private set; }
+
+
     [Header("Character Data")]
     [SerializeField] private List<CharacterData> characterDatas;
-
-    [Header("StatCalculator")]
-    [SerializeField] private CharacterStatCalculator statCalculator;
 
     [Header("View")]
     [SerializeField] private CharacterView characterView;
 
-    private CharacterRunTime currentCharacter;
+    [Header("Animator")]
+    public Animator CurrentAnimator => characterView.CurrentAnimator;
+    [Header("AttackHitbox")]
+    public AttackHitbox CurrentAttackHitbox => characterView.CurrentAttackHitbox;
 
+    private CharacterRunTime currentCharacter;
+    private CharacterStatCalculator statCalculator;
     public CharacterRunTime CurrentCharacter => currentCharacter;
 
     private Dictionary<CharacterData, CharacterRunTime> characterRunTimes;
 
+    public CharacterView CharacterView => characterView;
+    public ICharacterAttack CurrentAttack => characterView.CurrentAttack;
+    public ICharacterSkill CurrentSkill => characterView.CurrentSkill;
+    public ICharacterBurst CurrentBurst => characterView.CurrentBurst;
     private void Awake()
     {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(Instance);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        statCalculator = new CharacterStatCalculator();
         InitializeCharacters();
     }
     private void InitializeCharacters()
@@ -61,7 +79,8 @@ public class CharacterManager : MonoBehaviour
 
         currentCharacter = runTime;
 
-        statCalculator.ApplyStat(currentCharacter);
+        CharacterStat stat = statCalculator.ApplyStat(currentCharacter);
+        currentCharacter.SetStat(stat);
 
         characterView.ChangeView(data);
 
