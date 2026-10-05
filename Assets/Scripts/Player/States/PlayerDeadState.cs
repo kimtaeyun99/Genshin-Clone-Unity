@@ -10,7 +10,7 @@ public class PlayerDeadState : PlayerStateBase
     public override void Enter()
     {
         finished = false;
-
+        player.Health.ResetElement();
         player.Animation.PlayDead();
     }
 
