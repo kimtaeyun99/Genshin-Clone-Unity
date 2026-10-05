@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0245e03633aa4be41aea0e8f020df16a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackHitbox
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!65 &1718935741325599187
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -127,3 +127,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttackProjectile
   moveSpeed: 10
   lifeTime: 5
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 512

@@ -19,6 +19,15 @@ public class MonsterAttackState : MonsterStateBase
 
         LookTarget();
 
+        monster.Hitbox.ClearHitbox();
+        monster.Hitbox.gameObject.SetActive(true);
+
+        monster.Hitbox.SetAttack(
+            monster.Attack,
+            monster.AttackMultiplier,
+            ElementType.Physical
+        );
+
         int attackIndex = Random.Range(0, 2);
 
         monster.Animation.PlayAttack(attackIndex);
@@ -34,13 +43,11 @@ public class MonsterAttackState : MonsterStateBase
             return;
         }
 
-        // Animator가 Attack으로 전환되는 동안 기다림
         if (monster.Animation.IsTransition())
         {
             return;
         }
 
-        // 전환이 끝났으면 Attack 애니메이션 시작된 것으로 처리
         if (!attackStarted)
         {
             attackStarted = true;
@@ -50,7 +57,6 @@ public class MonsterAttackState : MonsterStateBase
         AnimatorStateInfo stateInfo =
             monster.Animation.GetCurrentStateInfo();
 
-        // 현재 공격 애니메이션이 끝남
         if (stateInfo.normalizedTime >= 1f)
         {
             stateMachine.ChangeState(MonsterStateType.Chase);
@@ -59,6 +65,9 @@ public class MonsterAttackState : MonsterStateBase
 
     public override void Exit()
     {
+        monster.Hitbox.ClearHitbox();
+        monster.Hitbox.gameObject.SetActive(false);
+
         Debug.Log("Monster Attack 종료");
     }
 

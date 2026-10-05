@@ -13,17 +13,25 @@ public class MonsterController : MonoBehaviour
     [Header("Chase")]
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float chaseRange = 15f;
+
+    [Header("Attack")]
+    [SerializeField] private float attack = 100f;
+    [SerializeField] private float attackMultiplier = 1f;
+
     public float IdleTime => idleTime;
     public float PatrolRadius => patrolRadius;
     public float DetectionRadius => detectionRadius;
     public float AttackRange => attackRange;
     public float ChaseRange => chaseRange;
+    public float Attack => attack;
+    public float AttackMultiplier => attackMultiplier;
 
     public Vector3 SpawnPosition { get; private set; }
     public NavMeshAgent Agent { get; private set; }
     public MonsterStateMachine StateMachine { get; private set; }
     public Transform Target { get; private set; }
     public MonsterAnimationController Animation { get; private set; }
+    public AttackHitbox Hitbox { get; private set; }
 
     private void Awake()
     {
@@ -32,6 +40,8 @@ public class MonsterController : MonoBehaviour
         StateMachine = new MonsterStateMachine();
 
         Animation = GetComponent<MonsterAnimationController>();
+
+        Hitbox = GetComponentInChildren<AttackHitbox>(true);
 
         InitializeStates();
     }

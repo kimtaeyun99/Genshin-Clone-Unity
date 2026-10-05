@@ -6,6 +6,7 @@ public class AttackProjectile : MonoBehaviour
     [Header("Projectile")]
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float lifeTime = 5f;
+    [SerializeField] private LayerMask targetLayer;
 
     private float damage;
     private ElementType elementType;
@@ -37,6 +38,10 @@ public class AttackProjectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if ((targetLayer.value & (1 << other.gameObject.layer)) == 0)
+        {
+            return;
+        }
         if (!other.TryGetComponent<IAttackable>(out IAttackable attackable))
         {
             return;
