@@ -12,6 +12,12 @@ public class MonsterChaseState : MonsterStateBase
     public override void Enter()
     {
         monster.Animation.PlayChase();
+
+        if (monster.Target != null)
+        {
+            monster.Agent.SetDestination(monster.Target.position);
+        }
+
         Debug.Log("Monster Chase 진입");
     }
 
@@ -49,8 +55,6 @@ public class MonsterChaseState : MonsterStateBase
 
     public override void Exit()
     {
-        monster.Agent.ResetPath();
-
         Debug.Log("Monster Chase 종료");
     }
 }

@@ -19,10 +19,8 @@ public class MonsterAnimationController : MonoBehaviour
         animator.SetInteger("State", 2);
     }
 
-    public void PlayAttack()
+    public void PlayAttack(int attackIndex)
     {
-        int attackIndex = Random.Range(0, 2);
-
         animator.SetInteger("AttackIndex", attackIndex);
         animator.SetTrigger("Attack");
     }
@@ -35,5 +33,9 @@ public class MonsterAnimationController : MonoBehaviour
     public AnimatorStateInfo GetCurrentStateInfo()
     {
         return animator.GetCurrentAnimatorStateInfo(0);
+    }
+    public bool IsTransition()
+    {
+        return animator.IsInTransition(0);
     }
 }

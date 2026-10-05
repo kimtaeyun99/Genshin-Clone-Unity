@@ -1705,6 +1705,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MeleeMonster
       objectReference: {fileID: 0}
+    - target: {fileID: 7489830860510488701, guid: d4cc8833c90f1b54d865485c6d49fbfb, type: 3}
+      propertyPath: m_Acceleration
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

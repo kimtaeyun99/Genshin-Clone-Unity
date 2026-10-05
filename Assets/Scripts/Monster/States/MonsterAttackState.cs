@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class MonsterAttackState : MonsterStateBase
 {
+    private bool attackStarted;
+
     public MonsterAttackState(
         MonsterController monster,
         MonsterStateMachine stateMachine)
@@ -13,7 +15,13 @@ public class MonsterAttackState : MonsterStateBase
     {
         monster.Agent.ResetPath();
 
-        monster.Animation.PlayAttack();
+        attackStarted = false;
+
+        LookTarget();
+
+        int attackIndex = Random.Range(0, 2);
+
+        monster.Animation.PlayAttack(attackIndex);
 
         Debug.Log("Monster Attack 진입");
     }
@@ -26,19 +34,27 @@ public class MonsterAttackState : MonsterStateBase
             return;
         }
 
-        float distance = Vector3.Distance(
-            monster.transform.position,
-            monster.Target.position
-        );
-
-        // 공격 범위에서 벗어나면 다시 추적
-        if (distance > monster.AttackRange)
+        // Animator가 Attack으로 전환되는 동안 기다림
+        if (monster.Animation.IsTransition())
         {
-            stateMachine.ChangeState(MonsterStateType.Chase);
             return;
         }
 
-        LookTarget();
+        // 전환이 끝났으면 Attack 애니메이션 시작된 것으로 처리
+        if (!attackStarted)
+        {
+            attackStarted = true;
+            return;
+        }
+
+        AnimatorStateInfo stateInfo =
+            monster.Animation.GetCurrentStateInfo();
+
+        // 현재 공격 애니메이션이 끝남
+        if (stateInfo.normalizedTime >= 1f)
+        {
+            stateMachine.ChangeState(MonsterStateType.Chase);
+        }
     }
 
     public override void Exit()
