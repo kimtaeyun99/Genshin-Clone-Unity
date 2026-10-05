@@ -49,7 +49,7 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
             {
                 attackStep = 1;
 
-                LookTarget();
+                //LookTarget();
 
                 // Attack2 : 화살 발사
                 monster.Animation.PlayAttack(1);
@@ -89,8 +89,7 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
             return;
         }
 
-        Vector3 direction =
-            monster.Target.position - monster.transform.position;
+        Vector3 direction = monster.Target.position - monster.transform.position;
 
         direction.y = 0f;
 
@@ -99,7 +98,9 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
             return;
         }
 
-        monster.transform.rotation =
-            Quaternion.LookRotation(direction);
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
+        Quaternion offsetRotation = Quaternion.Euler(0f, -230f, 0f);
+
+        monster.transform.rotation = lookRotation * offsetRotation;
     }
 }
