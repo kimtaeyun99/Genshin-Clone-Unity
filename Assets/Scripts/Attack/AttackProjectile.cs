@@ -8,6 +8,7 @@ public class AttackProjectile : MonoBehaviour
     [SerializeField] private float lifeTime = 5f;
     [SerializeField] private LayerMask targetLayer;
 
+    private Vector3 direction;
     private float damage;
     private ElementType elementType;
 
@@ -15,10 +16,12 @@ public class AttackProjectile : MonoBehaviour
 
     public void Initialize(
         float damage,
-        ElementType elementType)
+        ElementType elementType,
+        Vector3 direction)
     {
         this.damage = damage;
         this.elementType = elementType;
+        this.direction = direction;
 
         hitTargets.Clear();
 
@@ -33,7 +36,7 @@ public class AttackProjectile : MonoBehaviour
     private void Move()
     {
         transform.position +=
-            transform.forward * moveSpeed * Time.deltaTime;
+            direction * moveSpeed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -54,8 +57,7 @@ public class AttackProjectile : MonoBehaviour
 
         hitTargets.Add(attackable);
 
-        AttackData attackData =
-            new AttackData(damage, elementType);
+        AttackData attackData = new AttackData(damage, elementType);
 
         attackable.TakeAttack(attackData);
     }

@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RangedMonsterAttack
   arrowPrefab: {fileID: 8589489347176659774, guid: 04c028c0a07fb2c42a0c24aba141ddf5, type: 3}
-  spawnPoint: {fileID: 6416666914805460379}
+  spawnPoint: {fileID: 6401640750938739436}
 --- !u!1001 &9024372171672537719
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -279,9 +279,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc976eb2eaa5bf046bac916a8db11e9e, type: 3}
---- !u!4 &6416666914805460379 stripped
+--- !u!4 &6401640750938739436 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -6615341301912213524, guid: dc976eb2eaa5bf046bac916a8db11e9e, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2732049953687345307, guid: dc976eb2eaa5bf046bac916a8db11e9e, type: 3}
   m_PrefabInstance: {fileID: 9024372171672537719}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8842742896261803420 stripped

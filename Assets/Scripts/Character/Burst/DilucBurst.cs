@@ -58,6 +58,6 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
 
         AttackProjectile attackProjectile = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
 
-        attackProjectile.Initialize(damage, character.Data.ElementType);
+        attackProjectile.Initialize(damage, character.Data.ElementType,transform.forward);
     }
 }
