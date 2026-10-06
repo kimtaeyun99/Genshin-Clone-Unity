@@ -48,8 +48,14 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
             {
                 attackStep = 1;
 
-                AttackProjectile arrow = Instantiate(arrowPrefab, spawnPoint.position, spawnPoint.rotation);
-                arrow.Initialize(monster.Attack, monster.ElementType);
+                Vector3 targetPosition = monster.Target.position;
+
+                targetPosition.y = spawnPoint.position.y;
+
+                Vector3 direction = targetPosition - spawnPoint.position;
+
+                AttackProjectile arrow = Instantiate(arrowPrefab, spawnPoint.position, Quaternion.LookRotation(direction));
+                arrow.Initialize(monster.Attack, monster.ElementType,direction);
 
                 monster.Animation.PlayAttack(1);
             }

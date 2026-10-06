@@ -105,7 +105,8 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
 
         projectile.Initialize(
             damage,
-            character.Data.ElementType
+            character.Data.ElementType,
+            transform.forward
         );
     }
 }
