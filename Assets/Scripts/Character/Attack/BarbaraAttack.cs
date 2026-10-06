@@ -83,7 +83,7 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
         Debug.Log("Barbara 평타 종료");
     }
 
-    private void SpawnProjectile()
+    private void SpawnNormalAttackProjectile()
     {
         float atk = character.Stat.ATK;
 

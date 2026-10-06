@@ -55,8 +55,8 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.4714192
-        functionName: SpawnWaterRing
+      - time: 0.3723201
+        functionName: SpawnSkillProjectile
         data: 
         objectReferenceParameter: {fileID: 1597103609839366899, guid: 99ffa1ffc9ff5a4419ca97aabb00bd30, type: 3}
         floatParameter: 0

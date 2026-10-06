@@ -51,7 +51,7 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
         Debug.Log("Barbara Skill Á¾·á");
     }
 
-    private void SpawnWaterRing()
+    private void SpawnSkillProjectile()
     {
         float healPercent = character.Data.CharacterCombatData.GetSkillMultipliers(0);
 

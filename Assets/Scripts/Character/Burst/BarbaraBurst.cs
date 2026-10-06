@@ -20,8 +20,6 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
         isFinished = false;
         enteredBurstAnimation = false;
 
-        HealParty();
-
         playerAnimationController.PlayBurst();
 
         Debug.Log("Barbara Burst Ω√¿€");
