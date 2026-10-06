@@ -1,10 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
+public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
 {
     private MonsterController monster;
+
     private bool attackStarted;
     private bool isFinished;
+
+    private readonly HashSet<IAttackable> hitTargets = new();
 
     public bool IsFinished => isFinished;
 
@@ -15,16 +19,27 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
         attackStarted = false;
         isFinished = false;
 
+        // 이번 공격의 피격 기록 초기화
+        hitTargets.Clear();
+
         LookTarget();
 
-        foreach(AttackHitbox hitbox in monster.Hitbox)
+        foreach (AttackHitbox attackHitbox in monster.Hitbox)
         {
-            hitbox.ClearHitbox();
-            hitbox.gameObject.SetActive(true);
-            hitbox.SetAttack(monster.Attack, monster.AttackMultiplier, monster.ElementType);
+            attackHitbox.ClearHitbox();
+
+            attackHitbox.SetSharedHitTargets(hitTargets);
+
+            attackHitbox.SetAttack(
+                monster.Attack,
+                monster.AttackMultiplier,
+                monster.ElementType
+            );
+
+            attackHitbox.gameObject.SetActive(true);
         }
 
-        int attackIndex = Random.Range(0, 2);
+        int attackIndex = Random.Range(0, 3);
 
         monster.Animation.PlayAttack(attackIndex);
     }
@@ -53,11 +68,17 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
 
     public void Exit()
     {
-        foreach (AttackHitbox hitbox in monster.Hitbox)
+        foreach (AttackHitbox attackHitbox in monster.Hitbox)
         {
-            hitbox.ClearHitbox();
-            hitbox.gameObject.SetActive(false);
+            attackHitbox.ClearHitbox();
+            attackHitbox.ClearSharedHitTargets();
+
+            attackHitbox.gameObject.SetActive(false);
         }
+
+        hitTargets.Clear();
+
+        Debug.Log("Attack 퇴장");
     }
 
     private void LookTarget()

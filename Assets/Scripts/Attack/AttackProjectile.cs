@@ -57,8 +57,7 @@ public class AttackProjectile : MonoBehaviour
 
         hitTargets.Add(attackable);
 
-        AttackData attackData =
-            new AttackData(damage, elementType);
+        AttackData attackData = new AttackData(damage, elementType);
 
         attackable.TakeAttack(attackData);
     }
