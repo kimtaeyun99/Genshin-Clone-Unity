@@ -25,8 +25,6 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
 
         attackHitbox = GetComponentInChildren<AttackHitbox>(true);
 
-        attackHitbox.ClearHitbox();
-        attackHitbox.gameObject.SetActive(true);
         playerAnimationController.SetSkillIndex(skillIndex);
 
         SetSkillData();
@@ -55,8 +53,6 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
                 skillIndex++;
                 nextSkillInput = false;
 
-                attackHitbox.ClearHitbox();
-
                 playerAnimationController.SetSkillIndex(skillIndex);
 
                 SetSkillData();
@@ -81,8 +77,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
     public void Exit()
     {
         nextSkillInput = false;
-        attackHitbox.ClearHitbox();
-        attackHitbox.gameObject.SetActive(false);
+        DisableSkillHitbox();
     }
 
     private void SetSkillData()
@@ -98,5 +93,14 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
             multiplier,
             character.Data.ElementType
         );
+    }
+    private void EnableSkillHitbox()
+    {
+        attackHitbox.gameObject.SetActive(true);
+    }
+    private void DisableSkillHitbox()
+    {
+        attackHitbox.gameObject.SetActive(false);
+        attackHitbox.ClearHitbox();
     }
 }

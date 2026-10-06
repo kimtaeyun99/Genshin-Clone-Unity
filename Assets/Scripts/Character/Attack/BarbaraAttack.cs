@@ -30,8 +30,6 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
 
         playerAnimationController.PlayNormalAttack();
 
-        SpawnProjectile();
-
         Debug.Log("Barbara 평타 시작");
     }
 
@@ -60,8 +58,6 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
                 playerAnimationController.SetNormalAttackIndex(
                     normalAttackIndex
                 );
-
-                SpawnProjectile();
             }
             else
             {
@@ -87,7 +83,7 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
         Debug.Log("Barbara 평타 종료");
     }
 
-    private void SpawnProjectile()
+    private void SpawnNormalAttackProjectile()
     {
         float atk = character.Stat.ATK;
 

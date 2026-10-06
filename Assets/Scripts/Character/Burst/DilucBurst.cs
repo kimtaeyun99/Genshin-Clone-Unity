@@ -24,8 +24,6 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
 
         playerAnimationController.PlayBurst();
 
-        SpawnProjectile();
-
         Debug.Log("Diluc Burst 시작");
     }
 
@@ -49,7 +47,7 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
     {
         Debug.Log("Diluc Burst 종료");
     }
-    private void SpawnProjectile()
+    private void SpawnBurstProjectile()
     {
         float atk = character.Stat.ATK;
         float multiplier = character.Data.CharacterCombatData.GetBurstMultipliers(0);

@@ -23,8 +23,6 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 
         playerAnimationController.PlaySkill();
 
-        SpawnWaterRing();
-
         Debug.Log("Barbara Skill 시작");
     }
 
@@ -53,11 +51,9 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
         Debug.Log("Barbara Skill 종료");
     }
 
-    private void SpawnWaterRing()
+    private void SpawnSkillProjectile()
     {
-        float healPercent =
-            character.Data.CharacterCombatData
-                .GetSkillMultipliers(0);
+        float healPercent = character.Data.CharacterCombatData.GetSkillMultipliers(0);
 
         int healAmount = Mathf.RoundToInt(
             character.MaxHP * (healPercent / 100f)

@@ -40,7 +40,7 @@ public class AttackHitbox : MonoBehaviour
         hitTargets.Clear();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if ((targetLayer.value & (1 << other.gameObject.layer)) == 0)
         {
