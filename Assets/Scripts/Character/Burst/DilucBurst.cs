@@ -24,8 +24,6 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
 
         playerAnimationController.PlayBurst();
 
-        SpawnProjectile();
-
         Debug.Log("Diluc Burst Ω√¿€");
     }
 
