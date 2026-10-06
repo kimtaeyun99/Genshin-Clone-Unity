@@ -47,7 +47,7 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
     {
         Debug.Log("Diluc Burst Á¾·á");
     }
-    private void SpawnProjectile()
+    private void SpawnBurstProjectile()
     {
         float atk = character.Stat.ATK;
         float multiplier = character.Data.CharacterCombatData.GetBurstMultipliers(0);

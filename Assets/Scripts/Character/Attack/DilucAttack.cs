@@ -25,9 +25,6 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
 
         attackHitbox = GetComponentInChildren<AttackHitbox>(true);
 
-        attackHitbox.ClearHitbox();
-        attackHitbox.gameObject.SetActive(true);
-
         playerAnimationController.SetNormalAttackIndex(normalAttackIndex);
 
         SetAttackData();
@@ -59,8 +56,6 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
                 normalAttackIndex++;
                 nextAttackInput = false;
 
-                attackHitbox.ClearHitbox();
-
                 playerAnimationController.SetNormalAttackIndex(
                     normalAttackIndex
                 );
@@ -86,8 +81,7 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
 
     public void Exit()
     {
-        attackHitbox.ClearHitbox();
-        attackHitbox.gameObject.SetActive(false);
+        DisableNormalAttackHitbox();
 
         nextAttackInput = false;
 
@@ -107,5 +101,14 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
             multiplier,
             ElementType.Physical
         );
+    }
+    private void EnableNormalAttackHitbox()
+    {
+        attackHitbox.gameObject.SetActive(true);
+    }
+    private void DisableNormalAttackHitbox()
+    {
+        attackHitbox.gameObject.SetActive(false);
+        attackHitbox.ClearHitbox();
     }
 }

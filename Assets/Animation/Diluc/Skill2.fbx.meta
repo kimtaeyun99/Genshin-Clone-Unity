@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b5b99c26f48e6284f92999fd333a9fa6
+guid: 98a69a8e600ad9246b6d10bb671045df
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -56,14 +56,14 @@ ModelImporter:
       curves: []
       events:
       - time: 0.2211619
-        functionName: EnableNormalAttackHitbox
+        functionName: EnableSkillHitbox
         data: 
         objectReferenceParameter: {fileID: 8196238054752762640, guid: 606bfc1c3720bcc40ac4709c350287cb, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.68916833
-        functionName: DisableNormalAttackHitbox
+        functionName: DisableSkillHitbox
         data: 
         objectReferenceParameter: {fileID: 8196238054752762640, guid: 606bfc1c3720bcc40ac4709c350287cb, type: 3}
         floatParameter: 0
