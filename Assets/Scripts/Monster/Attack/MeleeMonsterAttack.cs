@@ -5,11 +5,14 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
     private MonsterController monster;
     private bool attackStarted;
     private bool isFinished;
+    private AttackHitbox attackHitbox;
 
     public bool IsFinished => isFinished;
 
     public void Enter(MonsterController monster)
     {
+        attackHitbox = GetComponentInChildren<AttackHitbox>(true);
+
         this.monster = monster;
 
         attackStarted = false;
@@ -17,12 +20,7 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
 
         LookTarget();
 
-        foreach(AttackHitbox hitbox in monster.Hitbox)
-        {
-            hitbox.ClearHitbox();
-            hitbox.gameObject.SetActive(true);
-            hitbox.SetAttack(monster.Attack, monster.AttackMultiplier, monster.ElementType);
-        }
+        attackHitbox.SetAttack(monster.Attack, monster.AttackMultiplier, monster.ElementType);
 
         int attackIndex = Random.Range(0, 2);
 
@@ -42,8 +40,7 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
             return;
         }
 
-        AnimatorStateInfo stateInfo =
-            monster.Animation.GetCurrentStateInfo();
+        AnimatorStateInfo stateInfo = monster.Animation.GetCurrentStateInfo();
 
         if (stateInfo.normalizedTime >= 1f)
         {
@@ -53,11 +50,7 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
 
     public void Exit()
     {
-        foreach (AttackHitbox hitbox in monster.Hitbox)
-        {
-            hitbox.ClearHitbox();
-            hitbox.gameObject.SetActive(false);
-        }
+        DisableAttackHitbox();
     }
 
     private void LookTarget()
@@ -79,5 +72,14 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
 
         monster.transform.rotation =
             Quaternion.LookRotation(direction);
+    }
+    private void EnableAttackHitbox()
+    {
+        attackHitbox.gameObject.SetActive(true);
+    }
+    private void DisableAttackHitbox()
+    {
+        attackHitbox.gameObject.SetActive(false);
+        attackHitbox.ClearHitbox();
     }
 }

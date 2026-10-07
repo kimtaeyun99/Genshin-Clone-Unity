@@ -48,15 +48,6 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
             {
                 attackStep = 1;
 
-                Vector3 targetPosition = monster.Target.position;
-
-                targetPosition.y = spawnPoint.position.y;
-
-                Vector3 direction = targetPosition - spawnPoint.position;
-
-                AttackProjectile arrow = Instantiate(arrowPrefab, spawnPoint.position, Quaternion.LookRotation(direction));
-                arrow.Initialize(monster.Attack, monster.ElementType,direction);
-
                 monster.Animation.PlayAttack(1);
             }
 
@@ -107,5 +98,16 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
         Quaternion offsetRotation = Quaternion.Euler(0f, -230f, 0f);
 
         monster.transform.rotation = lookRotation * offsetRotation;
+    }
+    private void SpawnAttackProjectile()
+    {
+        Vector3 targetPosition = monster.Target.position;
+
+        targetPosition.y = spawnPoint.position.y;
+
+        Vector3 direction = targetPosition - spawnPoint.position;
+
+        AttackProjectile arrow = Instantiate(arrowPrefab, spawnPoint.position, Quaternion.LookRotation(direction));
+        arrow.Initialize(monster.Attack, monster.ElementType, direction);
     }
 }

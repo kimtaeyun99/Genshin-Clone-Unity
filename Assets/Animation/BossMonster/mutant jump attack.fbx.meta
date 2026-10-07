@@ -54,7 +54,35 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.14103569
+        functionName: EnableHitboxes
+        data: 
+        objectReferenceParameter: {fileID: 1047092964744365345, guid: 4a37cf644c241cf40b90c4740e215309, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.29152837
+        functionName: DisableHitboxes
+        data: 
+        objectReferenceParameter: {fileID: 1047092964744365345, guid: 4a37cf644c241cf40b90c4740e215309, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.45960504
+        functionName: EnableHitboxes
+        data: 
+        objectReferenceParameter: {fileID: 1047092964744365345, guid: 4a37cf644c241cf40b90c4740e215309, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.77569586
+        functionName: DisableHitboxes
+        data: 
+        objectReferenceParameter: {fileID: 1047092964744365345, guid: 4a37cf644c241cf40b90c4740e215309, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
