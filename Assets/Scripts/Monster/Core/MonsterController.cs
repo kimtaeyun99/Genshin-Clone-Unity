@@ -41,7 +41,6 @@ public class MonsterController : MonoBehaviour
     public MonsterStateMachine StateMachine { get; private set; }
     public Transform Target { get; private set; }
     public MonsterAnimationController Animation { get; private set; }
-    public AttackHitbox[] Hitbox { get; private set; }
     public MonsterHealth monsterHealth { get; private set; }
     public IMonsterAttack MonsterAttack { get; private set; }
 
@@ -52,8 +51,6 @@ public class MonsterController : MonoBehaviour
         StateMachine = new MonsterStateMachine();
 
         Animation = GetComponent<MonsterAnimationController>();
-
-        Hitbox = GetComponentsInChildren<AttackHitbox>(true);
 
         monsterHealth = GetComponent<MonsterHealth>();
         MonsterAttack = GetComponent<IMonsterAttack>();

@@ -7,37 +7,33 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
 
     private bool attackStarted;
     private bool isFinished;
-
-    private readonly HashSet<IAttackable> hitTargets = new();
-
     public bool IsFinished => isFinished;
+    private AttackHitbox[] hitboxes;
+    private readonly HashSet<IAttackable> hitTargets = new();
 
     public void Enter(MonsterController monster)
     {
         this.monster = monster;
 
+        hitboxes = GetComponentsInChildren<AttackHitbox>(true);
+
         attackStarted = false;
         isFinished = false;
 
-        // 이번 공격의 피격 기록 초기화
         hitTargets.Clear();
 
-        LookTarget();
-
-        foreach (AttackHitbox attackHitbox in monster.Hitbox)
+        foreach (AttackHitbox hitbox in hitboxes)
         {
-            attackHitbox.ClearHitbox();
+            hitbox.SetSharedHitTargets(hitTargets);
 
-            attackHitbox.SetSharedHitTargets(hitTargets);
-
-            attackHitbox.SetAttack(
+            hitbox.SetAttack(
                 monster.Attack,
                 monster.AttackMultiplier,
                 monster.ElementType
             );
-
-            attackHitbox.gameObject.SetActive(true);
         }
+
+        LookTarget();
 
         int attackIndex = Random.Range(0, 3);
 
@@ -68,17 +64,15 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
 
     public void Exit()
     {
-        foreach (AttackHitbox attackHitbox in monster.Hitbox)
-        {
-            attackHitbox.ClearHitbox();
-            attackHitbox.ClearSharedHitTargets();
+        DisableHitboxes();
 
-            attackHitbox.gameObject.SetActive(false);
+        foreach(AttackHitbox hitbox in hitboxes)
+        {
+            hitbox.ClearSharedHitTargets();
         }
 
         hitTargets.Clear();
-
-        Debug.Log("Attack 퇴장");
+        Debug.Log("Attack퇴장");
     }
 
     private void LookTarget()
@@ -100,5 +94,20 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
 
         monster.transform.rotation =
             Quaternion.LookRotation(direction);
+    }
+    private void EnableHitboxes()
+    {
+        foreach(AttackHitbox hitbox in hitboxes)
+        {
+            hitbox.gameObject.SetActive(true);
+        }
+    }
+    private void DisableHitboxes()
+    {
+        foreach(AttackHitbox hitbox in hitboxes)
+        {
+            hitbox.gameObject.SetActive(false);
+            hitbox.ClearHitbox();
+        }
     }
 }
