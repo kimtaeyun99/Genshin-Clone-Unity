@@ -20,7 +20,9 @@ MonoBehaviour:
   weaponType: 1
   skillCooldown: 5
   burstCooldown: 15
-  burstEnergy: 100
+  maxEnergy: 100
+  skillIcon: {fileID: 21300000, guid: a8dccdfd17ac5c949b9382d46bc844c4, type: 3}
+  burstIcon: {fileID: 21300000, guid: efed3ea9f434e0f41a81c667bb88a29d, type: 3}
   hp: 1011
   hpPerLevel: 100
   atk: 26
