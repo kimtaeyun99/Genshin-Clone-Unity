@@ -117,7 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aa96733472db67459bdd1a11a38e59a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BarbaraSkill
-  waterRingPrefab: {fileID: 4962693958474384062, guid: e261b920f0f503c4e9deec2b44e938bb, type: 3}
+  waterAuraPrefab: {fileID: -4135819851444712456, guid: 3617daedb686d924e991bdfa4d71b4c5, type: 3}
+  waterAuraDuration: 5
+  waterAuraRadius: 1
 --- !u!114 &1332487744848707196
 MonoBehaviour:
   m_ObjectHideFlags: 0

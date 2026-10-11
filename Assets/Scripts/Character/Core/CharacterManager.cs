@@ -16,6 +16,9 @@ public class CharacterManager : MonoBehaviour
     public Animator CurrentAnimator => characterView.CurrentAnimator;
     [Header("AttackHitbox")]
     public AttackHitbox CurrentAttackHitbox => characterView.CurrentAttackHitbox;
+    [Header("Effect Root")]
+    [SerializeField] private Transform effectRoot;
+    public Transform EffectRoot => effectRoot;
 
     private CharacterRunTime currentCharacter;
     private CharacterStatCalculator statCalculator;
