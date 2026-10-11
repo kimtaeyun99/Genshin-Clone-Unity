@@ -132,6 +132,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c690aa06e2dde764eb6bd243ec621c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BarbaraBurst
+  burstVfxPrefab: {fileID: 3842567802355953820, guid: 08551b82c5312134999733f261705527, type: 3}
+  burstVfxDuration: 3
+  burstVfxRadius: 1
 --- !u!1001 &3321093801075807124
 PrefabInstance:
   m_ObjectHideFlags: 0

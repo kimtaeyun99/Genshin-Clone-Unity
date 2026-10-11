@@ -4858,7 +4858,7 @@ GameObject:
   - component: {fileID: -6320966296925528365}
   - component: {fileID: 3258723542469767159}
   m_Layer: 0
-  m_Name: WaterAura
+  m_Name: WaterRing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
