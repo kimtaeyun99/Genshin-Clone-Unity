@@ -50,12 +50,27 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
     private void SpawnBurstProjectile()
     {
         float atk = character.Stat.ATK;
-        float multiplier = character.Data.CharacterCombatData.GetBurstMultipliers(0);
+        float multiplier =
+            character.Data.CharacterCombatData.GetBurstMultipliers(0);
 
         float damage = atk * multiplier;
 
-        AttackProjectile attackProjectile = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
+        Transform characterTransform =
+            CharacterManager.Instance.CharacterView.CurrentView.transform;
 
-        attackProjectile.Initialize(damage, character.Data.ElementType,transform.forward);
+        Vector3 direction = characterTransform.forward;
+
+        AttackProjectile attackProjectile =
+            Instantiate(
+                projectilePrefab,
+                spawnPoint.position,
+                Quaternion.LookRotation(direction)
+            );
+
+        attackProjectile.Initialize(
+            damage,
+            character.Data.ElementType,
+            direction
+        );
     }
 }
