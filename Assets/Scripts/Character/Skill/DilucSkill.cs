@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class DilucSkill : MonoBehaviour, ICharacterSkill
 {
+    [SerializeField] private GameObject fireVFX;
+
     private int skillIndex;
     private bool nextSkillInput;
     private bool isFinished;
@@ -19,7 +21,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
     {
         character = characterRunTime;
         this.playerAnimationController = playerAnimationController;
-
+        fireVFX.gameObject.SetActive(true);
         skillIndex = 1;
         nextSkillInput = false;
         isFinished = false;
@@ -81,6 +83,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
         attackHitbox.OnHit -= HandleSkillHit;
         nextSkillInput = false;
         DisableSkillHitbox();
+        fireVFX.gameObject.SetActive(false);
     }
 
     private void SetSkillData()
@@ -114,7 +117,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
             return;
         }
 
-        character.AddEnergy(17f);
+        character.AddEnergy(170f);
         gainedEnergyThisHit = true;
     }
 }

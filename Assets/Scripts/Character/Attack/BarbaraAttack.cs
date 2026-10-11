@@ -1,10 +1,12 @@
 using UnityEngine;
+using PixPlays.ElementalVFX;
 
 public class BarbaraAttack : MonoBehaviour, ICharacterAttack
 {
-    [Header("Projectile")]
-    [SerializeField] private AttackProjectile projectilePrefab;
+    [Header("Projectile VFX")]
+    [SerializeField] private ProjectileVfx waterBulletPrefab;
     [SerializeField] private Transform spawnPoint;
+    [SerializeField] private float projectileRange = 10f;
 
     private int normalAttackIndex;
     private bool nextAttackInput;
@@ -27,7 +29,6 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
         isFinished = false;
 
         playerAnimationController.SetNormalAttackIndex(normalAttackIndex);
-
         playerAnimationController.PlayNormalAttack();
 
         Debug.Log("Barbara 평타 시작");
@@ -93,16 +94,32 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
 
         float damage = atk * multiplier;
 
-        AttackProjectile projectile = Instantiate(
-            projectilePrefab,
-            spawnPoint.position,
-            spawnPoint.rotation
+        Vector3 source = spawnPoint.position;
+
+        Transform characterTransform =
+            CharacterManager.Instance.CharacterView.CurrentView.transform;
+
+        Vector3 direction = characterTransform.forward;
+
+        Vector3 target =
+            source + direction * 10f;
+
+        ProjectileVfx waterBullet =
+            Instantiate(waterBulletPrefab);
+
+        waterBullet.SetAttack(
+            damage,
+            character.Data.ElementType
         );
 
-        projectile.Initialize(
-            damage,
-            character.Data.ElementType,
-            transform.forward
-        );
+        VfxData data =
+            new VfxData(
+                source,
+                target,
+                5f,
+                0f
+            );
+
+        waterBullet.Play(data);
     }
 }

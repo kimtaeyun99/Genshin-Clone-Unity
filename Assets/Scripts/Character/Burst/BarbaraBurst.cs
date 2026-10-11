@@ -1,7 +1,13 @@
 using UnityEngine;
+using PixPlays.ElementalVFX;
 
 public class BarbaraBurst : MonoBehaviour, ICharacterBurst
 {
+    [Header("Burst VFX")]
+    [SerializeField] private LocationVfx burstVfxPrefab;
+    [SerializeField] private float burstVfxDuration = 3f;
+    [SerializeField] private float burstVfxRadius = 1f;
+
     private bool isFinished;
     private bool enteredBurstAnimation;
 
@@ -47,6 +53,7 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
         Debug.Log("Barbara Burst 종료");
     }
 
+    // Animation Event
     private void HealParty()
     {
         float healPercent =
@@ -74,5 +81,32 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
                 $"현재 HP : {runTime.CurrentHP}"
             );
         }
+
+        PlayBurstVfx();
+    }
+
+    private void PlayBurstVfx()
+    {
+        Transform characterTransform =
+            CharacterManager.Instance.CharacterView.CurrentView.transform;
+
+        Vector3 source = characterTransform.position;
+        Vector3 target = source + characterTransform.forward;
+
+        LocationVfx burstVfx =
+            Instantiate(
+                burstVfxPrefab,
+                source,
+                Quaternion.identity
+            );
+
+        VfxData data = new VfxData(
+            source,
+            target,
+            burstVfxDuration,
+            burstVfxRadius
+        );
+
+        burstVfx.Play(data);
     }
 }

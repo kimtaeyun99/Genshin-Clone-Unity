@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1065721422020390852}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0.5}
+  m_LocalPosition: {x: 0, y: 1.25, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -102,8 +102,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd43c9219ac9c544193ab56a8ceea5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BarbaraAttack
-  projectilePrefab: {fileID: 6059027659825163303, guid: c6cc8ae038dd2fb47ac8eb2353e21eac, type: 3}
+  waterBulletPrefab: {fileID: 8922685332341523063, guid: 37f3b2c1f111a214e8e10740b19c997f, type: 3}
   spawnPoint: {fileID: 7212688460561430507}
+  projectileRange: 10
 --- !u!114 &4050773339568321605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aa96733472db67459bdd1a11a38e59a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BarbaraSkill
-  waterRingPrefab: {fileID: 4962693958474384062, guid: e261b920f0f503c4e9deec2b44e938bb, type: 3}
+  waterAuraPrefab: {fileID: -4135819851444712456, guid: 3617daedb686d924e991bdfa4d71b4c5, type: 3}
+  waterAuraDuration: 5
+  waterAuraRadius: 1
 --- !u!114 &1332487744848707196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,6 +132,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c690aa06e2dde764eb6bd243ec621c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BarbaraBurst
+  burstVfxPrefab: {fileID: 3842567802355953820, guid: 08551b82c5312134999733f261705527, type: 3}
+  burstVfxDuration: 3
+  burstVfxRadius: 1
 --- !u!1001 &3321093801075807124
 PrefabInstance:
   m_ObjectHideFlags: 0

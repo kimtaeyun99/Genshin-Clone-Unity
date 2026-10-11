@@ -1,9 +1,12 @@
 using UnityEngine;
+using PixPlays.ElementalVFX;
 
 public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 {
-    [Header("Water Ring")]
-    [SerializeField] private WaterRing waterRingPrefab;
+    [Header("Water Aura")]
+    [SerializeField] private LocationVfx waterAuraPrefab;
+    [SerializeField] private float waterAuraDuration = 10f;
+    [SerializeField] private float waterAuraRadius = 1f;
 
     private bool isFinished;
 
@@ -55,18 +58,48 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 
     private void SpawnSkillProjectile()
     {
-        float healPercent = character.Data.CharacterCombatData.GetSkillMultipliers(0);
+        // 회복량 계산
+        float healPercent =
+            character.Data.CharacterCombatData
+                .GetSkillMultipliers(0);
 
         int healAmount = Mathf.RoundToInt(
             character.MaxHP * (healPercent / 100f)
         );
 
-        WaterRing waterRing = Instantiate(
-            waterRingPrefab,
-            CharacterManager.Instance.CharacterView.CurrentView.transform.position,
-            Quaternion.identity
+        Transform effectRoot =
+            CharacterManager.Instance.EffectRoot;
+
+        Transform characterTransform =
+            CharacterManager.Instance.CharacterView.CurrentView.transform;
+
+        // WaterAura 생성
+        LocationVfx waterAura = Instantiate(
+            waterAuraPrefab,
+            effectRoot
         );
 
+        waterAura.transform.localPosition = Vector3.zero;
+        waterAura.transform.localRotation = Quaternion.identity;
+
+        // 기존 WaterRing 회복 + 원소 부착 로직 시작
+        WaterRing waterRing =
+            waterAura.GetComponent<WaterRing>();
+
         waterRing.Initialize(healAmount);
+
+        // WaterAura VFX 실행
+        Vector3 source = effectRoot.position;
+        Vector3 target =
+            source + characterTransform.forward;
+
+        VfxData data = new VfxData(
+            source,
+            target,
+            waterAuraDuration,
+            waterAuraRadius
+        );
+
+        waterAura.Play(data);
     }
 }
