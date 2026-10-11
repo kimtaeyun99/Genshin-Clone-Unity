@@ -114,7 +114,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
             return;
         }
 
-        character.AddEnergy(17f);
+        character.AddEnergy(170f);
         gainedEnergyThisHit = true;
     }
 }
