@@ -86,9 +86,24 @@ public class PlayerIdleState : PlayerStateBase
     }
     private void HandleBurst()
     {
-        if(player.Movement.IsGrounded)
+        if (!player.Movement.IsGrounded)
         {
-            stateMachine.ChangeState(PlayerStateType.Burst);
+            return;
         }
+
+        CharacterRunTime character =
+            player.CharacterManager.CurrentCharacter;
+
+        if (character == null)
+        {
+            return;
+        }
+
+        if (!character.IsBurstReady)
+        {
+            return;
+        }
+
+        stateMachine.ChangeState(PlayerStateType.Burst);
     }
 }

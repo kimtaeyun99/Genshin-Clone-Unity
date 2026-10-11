@@ -164,4 +164,30 @@ public class CharacterRunTime
                 burstCoolDown = 0f;
         }
     }
+    public void AddEnergy(float amount)
+    {
+        if (amount <= 0f)
+        {
+            return;
+        }
+
+        currentEnergy += amount;
+
+        if (currentEnergy > MaxEnergy)
+        {
+            currentEnergy = MaxEnergy;
+        }
+        Debug.Log($"¿¡³ÊÁö : {currentEnergy}");
+    }
+
+    public bool ConsumeBurstEnergy()
+    {
+        if (currentEnergy < MaxEnergy)
+        {
+            return false;
+        }
+
+        currentEnergy = 0f;
+        return true;
+    }
 }

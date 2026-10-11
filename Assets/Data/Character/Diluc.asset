@@ -19,8 +19,8 @@ MonoBehaviour:
   elementType: 0
   weaponType: 1
   skillCooldown: 5
-  burstCooldown: 0
-  burstEnergy: 0
+  burstCooldown: 15
+  burstEnergy: 100
   hp: 1011
   hpPerLevel: 100
   atk: 26
