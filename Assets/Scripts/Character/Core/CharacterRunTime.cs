@@ -18,7 +18,7 @@ public class CharacterRunTime
     private float burstCoolDown;
 
     public float CurrentEnergy => currentEnergy;
-    public float MaxEnergy => data.BurstEnergy;
+    public float MaxEnergy => data.MaxEnergy;
 
     public float SkillCoolDown => skillCoolDown;
     public float BurstCoolDown => burstCoolDown;
