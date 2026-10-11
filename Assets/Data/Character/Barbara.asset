@@ -15,6 +15,7 @@ MonoBehaviour:
   id: CH_002
   characterName: Barbara
   prefab: {fileID: 1597103609839366899, guid: 99ffa1ffc9ff5a4419ca97aabb00bd30, type: 3}
+  icon: {fileID: 21300000, guid: 55027a93da4889747aeddea640524fa1, type: 3}
   elementType: 1
   weaponType: 2
   hp: 821

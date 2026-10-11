@@ -7,6 +7,7 @@ public class CharacterData : ScriptableObject
     [SerializeField] private string id;
     [SerializeField] private string characterName;
     [SerializeField] private GameObject prefab;
+    [SerializeField] private Sprite icon;
 
     [Header("Attack")]
     [SerializeField] private ElementType elementType;
@@ -36,6 +37,7 @@ public class CharacterData : ScriptableObject
     public string ID => id;
     public string CharacterName => characterName;
     public GameObject Prefab => prefab;
+    public Sprite Icon => icon;
     public ElementType ElementType => elementType;
     public WeaponType WeaponType => weaponType;
     public int HP => hp;
