@@ -17,15 +17,22 @@ public class CharacterRunTime
     private float skillCoolDown;
     private float burstCoolDown;
 
+    public float CurrentEnergy => currentEnergy;
+    public float MaxEnergy => data.BurstEnergy;
+
+    public float SkillCoolDown => skillCoolDown;
+    public float BurstCoolDown => burstCoolDown;
+
+    public bool IsSkillReady => skillCoolDown <= 0f;
+    public bool IsBurstReady => burstCoolDown <= 0f && currentEnergy >= MaxEnergy;
+
+
     public CharacterData Data => data;
     public CharacterStat Stat => stat;
     public int Level => level;
     public int AscensionPhase => ascensionPhase;
     public int MaxHP => maxHP;
     public int CurrentHP => currentHP;
-    public float CurrentEnergy => currentEnergy;
-    public float SkillCoolDown => skillCoolDown;
-    public float BurstCoolDown => burstCoolDown;
 
     public bool IsDead;
     public CharacterRunTime(CharacterData data)
@@ -36,7 +43,7 @@ public class CharacterRunTime
         ascensionPhase = 0;
 
         maxHP = data.HP;
-        currentHP = 1;
+        currentHP = maxHP;
 
         currentEnergy = 0f;
 
@@ -127,5 +134,34 @@ public class CharacterRunTime
     public void Revive()
     {
         IsDead = false;
+    }
+
+    public void StartSkillCoolDown(float coolDown)
+    {
+        skillCoolDown = coolDown;
+    }
+
+    public void StartBurstCoolDown(float coolDown)
+    {
+        burstCoolDown = coolDown;
+    }
+
+    public void UpdateCoolDown(float deltaTime)
+    {
+        if (skillCoolDown > 0f)
+        {
+            skillCoolDown -= deltaTime;
+
+            if (skillCoolDown < 0f)
+                skillCoolDown = 0f;
+        }
+
+        if (burstCoolDown > 0f)
+        {
+            burstCoolDown -= deltaTime;
+
+            if (burstCoolDown < 0f)
+                burstCoolDown = 0f;
+        }
     }
 }

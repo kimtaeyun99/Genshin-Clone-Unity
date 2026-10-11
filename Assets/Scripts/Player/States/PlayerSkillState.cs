@@ -52,6 +52,13 @@ public class PlayerSkillState : PlayerStateBase
 
         currentSkill?.Exit();
 
+        CharacterRunTime character = player.CharacterManager.CurrentCharacter;
+
+        if(character != null)
+        {
+            character.StartSkillCoolDown(character.Data.SkillCooldown);
+        }
+
         currentSkill = null;
 
         Debug.Log("Skill Επΐε");
