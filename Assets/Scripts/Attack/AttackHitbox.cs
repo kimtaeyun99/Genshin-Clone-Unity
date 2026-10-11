@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class AttackHitbox : MonoBehaviour
 {
     [SerializeField] private LayerMask targetLayer;
@@ -15,6 +15,8 @@ public class AttackHitbox : MonoBehaviour
 
     public float Damage => damage;
     public ElementType Element => element;
+
+    public event Action<IAttackable> OnHit;
 
     public void SetAttack(
         float atk,
@@ -68,5 +70,7 @@ public class AttackHitbox : MonoBehaviour
             new AttackData(damage, element);
 
         attackable.TakeAttack(attackData);
+
+        OnHit?.Invoke(attackable);
     }
 }

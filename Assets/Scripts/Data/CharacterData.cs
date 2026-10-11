@@ -12,6 +12,9 @@ public class CharacterData : ScriptableObject
     [Header("Attack")]
     [SerializeField] private ElementType elementType;
     [SerializeField] private WeaponType weaponType;
+    [SerializeField] private float skillCooldown;
+    [SerializeField] private float burstCooldown;
+    [SerializeField] private float burstEnergy;
 
     [Header("Basic Stat")]
     [SerializeField] private int hp;
@@ -40,6 +43,9 @@ public class CharacterData : ScriptableObject
     public Sprite Icon => icon;
     public ElementType ElementType => elementType;
     public WeaponType WeaponType => weaponType;
+    public float SkillCooldown => skillCooldown;
+    public float BurstCooldown => burstCooldown;
+    public float BurstEnergy => burstEnergy;
     public int HP => hp;
     public int HPPerLevel => hpPerLevel;
     public int ATK => atk;

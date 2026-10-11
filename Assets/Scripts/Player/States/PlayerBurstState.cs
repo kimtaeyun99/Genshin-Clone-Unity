@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerBurstState : PlayerStateBase
 {
     private ICharacterBurst currentBurst;
+    private CharacterRunTime character;
 
     public PlayerBurstState(
         PlayerController player,
@@ -13,16 +14,18 @@ public class PlayerBurstState : PlayerStateBase
 
     public override void Enter()
     {
+        character = player.CharacterManager.CurrentCharacter;
         currentBurst = player.CharacterManager.CurrentBurst;
 
-        if (currentBurst == null)
+        if (character == null || currentBurst == null)
         {
             ChangeNextState();
             return;
         }
+        character.ConsumeBurstEnergy();
 
         currentBurst.Enter(
-            player.CharacterManager.CurrentCharacter,
+            character,
             player.Animation
         );
 
@@ -48,7 +51,15 @@ public class PlayerBurstState : PlayerStateBase
     {
         currentBurst?.Exit();
 
+        if (character != null)
+        {
+            character.StartBurstCoolDown(
+                character.Data.BurstCooldown
+            );
+        }
+
         currentBurst = null;
+        character = null;
 
         Debug.Log("Burst Επΐε");
     }

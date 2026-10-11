@@ -11,6 +11,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
     private AttackHitbox attackHitbox;
 
     public bool IsFinished => isFinished;
+    private bool gainedEnergyThisHit;
 
     public void Enter(
         CharacterRunTime characterRunTime,
@@ -24,6 +25,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
         isFinished = false;
 
         attackHitbox = GetComponentInChildren<AttackHitbox>(true);
+        attackHitbox.OnHit += HandleSkillHit;
 
         playerAnimationController.SetSkillIndex(skillIndex);
 
@@ -76,6 +78,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
 
     public void Exit()
     {
+        attackHitbox.OnHit -= HandleSkillHit;
         nextSkillInput = false;
         DisableSkillHitbox();
     }
@@ -96,11 +99,22 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
     }
     private void EnableSkillHitbox()
     {
+        gainedEnergyThisHit = false;
         attackHitbox.gameObject.SetActive(true);
     }
     private void DisableSkillHitbox()
     {
         attackHitbox.gameObject.SetActive(false);
         attackHitbox.ClearHitbox();
+    }
+    private void HandleSkillHit(IAttackable target)
+    {
+        if (gainedEnergyThisHit)
+        {
+            return;
+        }
+
+        character.AddEnergy(17f);
+        gainedEnergyThisHit = true;
     }
 }

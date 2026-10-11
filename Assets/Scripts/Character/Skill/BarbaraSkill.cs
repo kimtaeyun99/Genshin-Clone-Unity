@@ -21,6 +21,8 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 
         isFinished = false;
 
+        character.AddEnergy(50f);
+
         playerAnimationController.PlaySkill();
 
         Debug.Log("Barbara Skill Ω√¿€");

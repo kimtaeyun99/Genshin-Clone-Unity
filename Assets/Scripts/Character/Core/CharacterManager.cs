@@ -40,6 +40,10 @@ public class CharacterManager : MonoBehaviour
         statCalculator = new CharacterStatCalculator();
         InitializeCharacters();
     }
+    private void Update()
+    {
+        UpdateCharacterCoolDown();
+    }
     private void InitializeCharacters()
     {
         characterRunTimes = new Dictionary<CharacterData, CharacterRunTime>();
@@ -88,5 +92,12 @@ public class CharacterManager : MonoBehaviour
         characterView.ChangeView(data);
 
         return true;
+    }
+    private void UpdateCharacterCoolDown()
+    {
+        foreach(CharacterRunTime runTime in characterRunTimes.Values)
+        {
+            runTime.UpdateCoolDown(Time.deltaTime);
+        }
     }
 }
