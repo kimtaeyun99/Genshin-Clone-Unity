@@ -31357,7 +31357,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &558084214
 RectTransform:
   m_ObjectHideFlags: 0
@@ -67046,6 +67046,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6554556fd3f28349bbf9d58ad87da96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  switchCoolDown: 3
+  switchCoolDownTimer: 0
   characterParty: {fileID: 814247880}
   characterManager: {fileID: 63624474}
 --- !u!143 &2097096006
@@ -67130,6 +67132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   hostElement: -1
   damageUIHeight: 2
+  switchInvincibleDuration: 0.5
 --- !u!1 &2098259077
 GameObject:
   m_ObjectHideFlags: 0

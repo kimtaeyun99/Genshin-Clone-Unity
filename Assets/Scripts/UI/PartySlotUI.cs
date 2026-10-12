@@ -14,6 +14,9 @@ public class PartySlotUI : MonoBehaviour
     [Header("Selected")]
     [SerializeField] private GameObject selectedEffect;
 
+    [Header("Switch CoolDown")]
+    [SerializeField] private TMP_Text switchCoolDownText;
+
     public void SetCharacter(
         CharacterData data,
         CharacterRunTime runTime)
@@ -32,11 +35,28 @@ public class PartySlotUI : MonoBehaviour
         if (runTime == null)
             return;
 
-        healthBarFill.fillAmount = runTime.MaxHP > 0 ? (float)runTime.CurrentHP / runTime.MaxHP : 0f;
+        healthBarFill.fillAmount =
+            runTime.MaxHP > 0
+                ? (float)runTime.CurrentHP / runTime.MaxHP
+                : 0f;
     }
 
     public void SetSelected(bool isSelected)
     {
         selectedEffect.SetActive(isSelected);
+    }
+
+    public void SetSwitchCoolDown(float coolDown)
+    {
+        if (coolDown <= 0f)
+        {
+            switchCoolDownText.gameObject.SetActive(false);
+            return;
+        }
+
+        switchCoolDownText.gameObject.SetActive(true);
+
+        switchCoolDownText.text =
+            coolDown.ToString("F1");
     }
 }

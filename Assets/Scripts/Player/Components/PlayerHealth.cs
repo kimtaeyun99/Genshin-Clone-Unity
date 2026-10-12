@@ -17,13 +17,35 @@ public class PlayerHealth :
 
     private CharacterRunTime currentCharacter;
 
+    [Header("Invincible")]
+    [SerializeField] private float switchInvincibleDuration = 0.5f;
+
+    private float invincibleTimer;
+
+    public bool IsInvincible => invincibleTimer > 0f;
     private void Awake()
     {
         hostElement = ElementType.None;
     }
+    private void Update()
+    {
+        if (invincibleTimer > 0f)
+        {
+            invincibleTimer -= Time.deltaTime;
 
+            if (invincibleTimer < 0f)
+            {
+                invincibleTimer = 0f;
+            }
+        }
+    }
     public void TakeDamage(float damage)
     {
+        if (IsInvincible)
+        {
+            return;
+        }
+
         currentCharacter =
             CharacterManager.Instance.CurrentCharacter;
 
@@ -43,6 +65,11 @@ public class PlayerHealth :
 
     public void TakeAttack(AttackData attackData)
     {
+        if (IsInvincible)
+        {
+            return;
+        }
+
         float damage = attackData.Damage;
 
         ElementReactionType reaction =
@@ -126,5 +153,9 @@ public class PlayerHealth :
     public void ResetElement()
     {
         hostElement = ElementType.None;
+    }
+    public void StartSwitchInvincible()
+    {
+        invincibleTimer = switchInvincibleDuration;
     }
 }

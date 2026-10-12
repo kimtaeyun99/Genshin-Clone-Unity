@@ -1,8 +1,13 @@
-using Polyart;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Character Switch")]
+    [SerializeField] private float switchCoolDown = 1f;
+    [SerializeField] private float switchCoolDownTimer;
+
+    public float SwitchCoolDownTimer => switchCoolDownTimer;
+    public bool CanSwitchCharacter => switchCoolDownTimer <= 0f;
     public PlayerStateMachine StateMachine { get; private set; }
     public PlayerMovement Movement { get; private set; }
 
@@ -48,6 +53,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        UpdateSwitchCoolDown();
+
         Movement.CheckGround();
 
         Movement.ApplyGravity();
@@ -80,7 +87,16 @@ public class PlayerController : MonoBehaviour
 
     private void SwitchCharacter(int index)
     {
-        if (StateMachine.CurrentState is PlayerDeadState) return;
+        if (StateMachine.CurrentState is PlayerDeadState)
+        {
+            return;
+        }
+
+        // 캐릭터 교체 쿨타임
+        if (!CanSwitchCharacter)
+        {
+            return;
+        }
 
         int partyIndex = index - 1;
 
@@ -93,12 +109,37 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+
+        // 실제 교체에 성공했을 때만 처리
+        if (!characterParty.SelectCharacter(partyIndex))
+        {
+            return;
+        }
+
         StateMachine.ChangeState(PlayerStateType.Idle);
 
-        characterParty.SelectCharacter(partyIndex);
+        // 교체 쿨타임 시작
+        switchCoolDownTimer = switchCoolDown;
+
+        // 교체 직후 무적 시작
+        Health.StartSwitchInvincible();
     }
     private void HandleDead()
     {
         StateMachine.ChangeState(PlayerStateType.Dead);
+    }
+    private void UpdateSwitchCoolDown()
+    {
+        if (switchCoolDownTimer <= 0f)
+        {
+            return;
+        }
+
+        switchCoolDownTimer -= Time.deltaTime;
+
+        if (switchCoolDownTimer < 0f)
+        {
+            switchCoolDownTimer = 0f;
+        }
     }
 }

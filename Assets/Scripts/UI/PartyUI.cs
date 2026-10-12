@@ -4,6 +4,9 @@ public class PartyUI : MonoBehaviour
 {
     [SerializeField] private PartySlotUI[] partySlots;
 
+    [Header("Player")]
+    [SerializeField] private PlayerController player;
+
     private void Update()
     {
         RefreshPartyUI();
@@ -32,9 +35,22 @@ public class PartyUI : MonoBehaviour
 
             partySlots[i].SetCharacter(data, runTime);
 
-            partySlots[i].SetSelected(
-                i == party.CurrentIndex
-            );
+            bool isSelected =
+                i == party.CurrentIndex;
+
+            partySlots[i].SetSelected(isSelected);
+
+            // 현재 캐릭터에는 교체 쿨타임 표시 X
+            if (isSelected)
+            {
+                partySlots[i].SetSwitchCoolDown(0f);
+            }
+            else
+            {
+                partySlots[i].SetSwitchCoolDown(
+                    player.SwitchCoolDownTimer
+                );
+            }
         }
     }
 }
