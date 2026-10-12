@@ -97,7 +97,7 @@ public class CombatUI : MonoBehaviour
         if (remaining > 0f)
         {
             skillCoolDownText.gameObject.SetActive(true);
-            skillCoolDownText.text = remaining.ToString("0.00");
+            skillCoolDownText.text = remaining.ToString("0.0");
         }
         else
         {
@@ -120,7 +120,7 @@ public class CombatUI : MonoBehaviour
         if (remaining > 0f)
         {
             burstCoolDownText.gameObject.SetActive(true);
-            burstCoolDownText.text = remaining.ToString("0.00");
+            burstCoolDownText.text = remaining.ToString("0.0");
         }
         else
         {
