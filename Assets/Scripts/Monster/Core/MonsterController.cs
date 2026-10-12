@@ -130,8 +130,9 @@ public class MonsterController : MonoBehaviour
 
     private void Start()
     {
-        SpawnPosition =
-            transform.position;
+        SpawnPosition = transform.position;
+
+        Agent.stoppingDistance = AttackRange;
 
         StateMachine.Initialize(
             MonsterStateType.Idle
