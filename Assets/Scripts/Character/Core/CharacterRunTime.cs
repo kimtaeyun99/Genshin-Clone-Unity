@@ -43,7 +43,7 @@ public class CharacterRunTime
         ascensionPhase = 0;
 
         maxHP = data.HP;
-        currentHP = 1;
+        currentHP = maxHP;
 
         currentEnergy = 0f;
 
