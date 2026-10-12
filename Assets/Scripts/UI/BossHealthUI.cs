@@ -10,9 +10,16 @@ public class BossHealthUI : MonoBehaviour
         private set;
     }
 
-    [Header("UI")]
+    [Header("HP")]
     [SerializeField] private TMP_Text bossNameText;
     [SerializeField] private Image healthBarFill;
+
+    [Header("Element")]
+    [SerializeField] private Image hostElementIcon;
+    [SerializeField] private Sprite pyroIcon;
+    [SerializeField] private Sprite hydroIcon;
+    [SerializeField] private Sprite cryoIcon;
+    [SerializeField] private Sprite electroIcon;
 
     private MonsterHealth currentBoss;
 
@@ -32,9 +39,11 @@ public class BossHealthUI : MonoBehaviour
             return;
         }
 
+        // 기존 보스가 있으면 이벤트 해제
         if (currentBoss != null)
         {
             currentBoss.OnHPChanged -= UpdateHealth;
+            currentBoss.OnHostElementChanged -= UpdateElementIcon;
             currentBoss.OnDead -= HideBoss;
         }
 
@@ -42,12 +51,20 @@ public class BossHealthUI : MonoBehaviour
 
         bossNameText.text = bossName;
 
+        // 현재 HP 즉시 반영
         UpdateHealth(
             currentBoss.CurrentHP,
             currentBoss.MaxHP
         );
 
+        // 현재 부착 원소 즉시 반영
+        UpdateElementIcon(
+            currentBoss.HostElement
+        );
+
+        // 이벤트 구독
         currentBoss.OnHPChanged += UpdateHealth;
+        currentBoss.OnHostElementChanged += UpdateElementIcon;
         currentBoss.OnDead += HideBoss;
 
         gameObject.SetActive(true);
@@ -58,10 +75,13 @@ public class BossHealthUI : MonoBehaviour
         if (currentBoss != null)
         {
             currentBoss.OnHPChanged -= UpdateHealth;
+            currentBoss.OnHostElementChanged -= UpdateElementIcon;
             currentBoss.OnDead -= HideBoss;
 
             currentBoss = null;
         }
+
+        hostElementIcon.gameObject.SetActive(false);
 
         gameObject.SetActive(false);
     }
@@ -76,11 +96,42 @@ public class BossHealthUI : MonoBehaviour
                 : 0f;
     }
 
+    private void UpdateElementIcon(
+        ElementType elementType)
+    {
+        switch (elementType)
+        {
+            case ElementType.Pyro:
+                hostElementIcon.sprite = pyroIcon;
+                break;
+
+            case ElementType.Hydro:
+                hostElementIcon.sprite = hydroIcon;
+                break;
+
+            case ElementType.Cryo:
+                hostElementIcon.sprite = cryoIcon;
+                break;
+
+            case ElementType.Electro:
+                hostElementIcon.sprite = electroIcon;
+                break;
+
+            default:
+                hostElementIcon.sprite = null;
+                hostElementIcon.gameObject.SetActive(false);
+                return;
+        }
+
+        hostElementIcon.gameObject.SetActive(true);
+    }
+
     private void OnDestroy()
     {
         if (currentBoss != null)
         {
             currentBoss.OnHPChanged -= UpdateHealth;
+            currentBoss.OnHostElementChanged -= UpdateElementIcon;
             currentBoss.OnDead -= HideBoss;
         }
 

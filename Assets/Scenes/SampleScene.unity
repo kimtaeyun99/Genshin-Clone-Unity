@@ -38780,6 +38780,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossHealthUI
   bossNameText: {fileID: 1640605200}
   healthBarFill: {fileID: 232189355}
+  hostElementIcon: {fileID: 391781312}
+  pyroIcon: {fileID: 21300000, guid: 7af873017776803418a3cfadb4aa4fe8, type: 3}
+  hydroIcon: {fileID: 21300000, guid: dbfbdd9aa7cbccd49ae0fa378d2a899e, type: 3}
+  cryoIcon: {fileID: 21300000, guid: eefc0b12bae4e49449a9e4ae2017a6cd, type: 3}
+  electroIcon: {fileID: 21300000, guid: 76c6899e6f67bac47bcc351d02cd46b5, type: 3}
 --- !u!1001 &903467083
 PrefabInstance:
   m_ObjectHideFlags: 0
