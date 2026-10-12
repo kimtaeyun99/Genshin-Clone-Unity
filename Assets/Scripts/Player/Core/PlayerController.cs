@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float switchCoolDownTimer;
 
     public float SwitchCoolDownTimer => switchCoolDownTimer;
+    public float SwitchCoolDown => switchCoolDown;
     public bool CanSwitchCharacter => switchCoolDownTimer <= 0f;
     public PlayerStateMachine StateMachine { get; private set; }
     public PlayerMovement Movement { get; private set; }

@@ -43,12 +43,16 @@ public class PartyUI : MonoBehaviour
             // 현재 캐릭터에는 교체 쿨타임 표시 X
             if (isSelected)
             {
-                partySlots[i].SetSwitchCoolDown(0f);
+                partySlots[i].SetSwitchCoolDown(
+                    0f,
+                    player.SwitchCoolDown
+                );
             }
             else
             {
                 partySlots[i].SetSwitchCoolDown(
-                    player.SwitchCoolDownTimer
+                    player.SwitchCoolDownTimer,
+                    player.SwitchCoolDown
                 );
             }
         }
