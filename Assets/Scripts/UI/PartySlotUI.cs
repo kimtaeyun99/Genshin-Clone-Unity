@@ -15,6 +15,7 @@ public class PartySlotUI : MonoBehaviour
     [SerializeField] private GameObject selectedEffect;
 
     [Header("Switch CoolDown")]
+    [SerializeField] private Image switchCoolDownFill;
     [SerializeField] private TMP_Text switchCoolDownText;
 
     public void SetCharacter(
@@ -46,17 +47,24 @@ public class PartySlotUI : MonoBehaviour
         selectedEffect.SetActive(isSelected);
     }
 
-    public void SetSwitchCoolDown(float coolDown)
+    public void SetSwitchCoolDown(
+        float currentCoolDown,
+        float maxCoolDown)
     {
-        if (coolDown <= 0f)
+        if (currentCoolDown <= 0f)
         {
+            switchCoolDownFill.gameObject.SetActive(false);
             switchCoolDownText.gameObject.SetActive(false);
             return;
         }
 
+        switchCoolDownFill.gameObject.SetActive(true);
         switchCoolDownText.gameObject.SetActive(true);
 
+        switchCoolDownFill.fillAmount =
+            currentCoolDown / maxCoolDown;
+
         switchCoolDownText.text =
-            coolDown.ToString("F1");
+            currentCoolDown.ToString("F1");
     }
 }
