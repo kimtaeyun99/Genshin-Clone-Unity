@@ -1,10 +1,17 @@
 using System;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour, IDamageable,IElementApplicable,IAttackable
+public class PlayerHealth :
+    MonoBehaviour,
+    IDamageable,
+    IElementApplicable,
+    IAttackable
 {
     [Header("Element")]
     [SerializeField] private ElementType hostElement;
+
+    [Header("Damage UI")]
+    [SerializeField] private float damageUIHeight = 2f;
 
     public event Action OnDead;
 
@@ -14,34 +21,69 @@ public class PlayerHealth : MonoBehaviour, IDamageable,IElementApplicable,IAttac
     {
         hostElement = ElementType.None;
     }
+
     public void TakeDamage(float damage)
     {
-        currentCharacter = CharacterManager.Instance.CurrentCharacter;
+        currentCharacter =
+            CharacterManager.Instance
+                .CurrentCharacter;
 
-        currentCharacter.TakeDamage(damage);
+        currentCharacter.TakeDamage(
+            damage
+        );
 
-        if(currentCharacter.IsDead)
+        if (currentCharacter.IsDead)
         {
             OnDead?.Invoke();
         }
-        Debug.Log($"{currentCharacter.Data.CharacterName} 피격 : {damage} / " + $"현재 HP : {currentCharacter.CurrentHP}");
+
+        Debug.Log(
+            $"{currentCharacter.Data.CharacterName} " +
+            $"피격 : {damage} / " +
+            $"현재 HP : {currentCharacter.CurrentHP}"
+        );
     }
-    public void TakeAttack(AttackData attackData)
+
+    public void TakeAttack(
+        AttackData attackData)
     {
-        float damage = attackData.Damage;
+        float damage =
+            attackData.Damage;
 
-        ElementReactionType reaction = ApplyElement(attackData.ElementType);
+        ElementReactionType reaction =
+            ApplyElement(
+                attackData.ElementType
+            );
 
-        float elementDamageMultiplier = ElementReaction.GetElementDamageMultiplier(reaction);
+        float elementDamageMultiplier =
+            ElementReaction
+                .GetElementDamageMultiplier(
+                    reaction
+                );
 
-        damage = damage * elementDamageMultiplier;
+        damage *= elementDamageMultiplier;
 
         TakeDamage(damage);
 
+        if (DamageUIManager.Instance != null)
+        {
+            DamageUIManager.Instance.ShowDamage(
+                damage,
+                attackData.ElementType,
+                reaction,
+                transform.position +
+                Vector3.up * damageUIHeight
+            );
+        }
     }
-    public ElementReactionType ApplyElement(ElementType guestElement)
+
+    public ElementReactionType ApplyElement(
+        ElementType guestElement)
     {
-        if (guestElement == ElementType.None || guestElement == ElementType.Physical)
+        if (
+            guestElement == ElementType.None ||
+            guestElement == ElementType.Physical
+        )
         {
             return ElementReactionType.None;
         }
@@ -49,7 +91,11 @@ public class PlayerHealth : MonoBehaviour, IDamageable,IElementApplicable,IAttac
         if (hostElement == ElementType.None)
         {
             hostElement = guestElement;
-            Debug.Log($"부착 : {hostElement}");
+
+            Debug.Log(
+                $"부착 : {hostElement}"
+            );
+
             return ElementReactionType.None;
         }
         else if (hostElement == guestElement)
@@ -58,12 +104,22 @@ public class PlayerHealth : MonoBehaviour, IDamageable,IElementApplicable,IAttac
         }
         else
         {
-            ElementReactionType reaction = ElementReaction.GetReaction(hostElement, guestElement);
+            ElementReactionType reaction =
+                ElementReaction.GetReaction(
+                    hostElement,
+                    guestElement
+                );
+
             hostElement = ElementType.None;
-            Debug.Log($"{reaction} 반응");
+
+            Debug.Log(
+                $"{reaction} 반응"
+            );
+
             return reaction;
         }
     }
+
     public void ResetElement()
     {
         hostElement = ElementType.None;
