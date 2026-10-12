@@ -23,6 +23,9 @@ public class MonsterHealth :
     public bool IsDead { get; private set; }
 
     public event Action<float, float> OnHPChanged;
+
+    public event Action<ElementType> OnHostElementChanged;
+    public ElementType HostElement => hostElement;
     private void Awake()
     {
         currentHP = maxHP;
@@ -84,8 +87,7 @@ public class MonsterHealth :
         }
     }
 
-    public ElementReactionType ApplyElement(
-        ElementType guestElement)
+    public ElementReactionType ApplyElement(ElementType guestElement)
     {
         if (
             guestElement == ElementType.None ||
@@ -98,6 +100,8 @@ public class MonsterHealth :
         if (hostElement == ElementType.None)
         {
             hostElement = guestElement;
+
+            OnHostElementChanged?.Invoke(hostElement);
 
             Debug.Log($"ºÎÂø : {hostElement}");
 
@@ -123,6 +127,8 @@ public class MonsterHealth :
 
         hostElement = ElementType.None;
 
+        OnHostElementChanged?.Invoke(hostElement);
+
         if (
             reaction != ElementReactionType.None &&
             DamageUIManager.Instance != null
@@ -131,8 +137,7 @@ public class MonsterHealth :
             DamageUIManager.Instance.ShowReaction(
                 reaction,
                 guestElement,
-                transform.position +
-                Vector3.up * damageUIHeight
+                transform.position + Vector3.up * damageUIHeight
             );
         }
 

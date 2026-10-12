@@ -3,9 +3,16 @@ using UnityEngine.UI;
 
 public class MonsterHealthBar : MonoBehaviour
 {
-    [Header("UI")]
+    [Header("HP")]
     [SerializeField] private GameObject healthBarBG;
     [SerializeField] private Image hpFill;
+
+    [Header("Element")]
+    [SerializeField] private Image hostElementIcon;
+    [SerializeField] private Sprite pyroIcon;
+    [SerializeField] private Sprite hydroIcon;
+    [SerializeField] private Sprite cryoIcon;
+    [SerializeField] private Sprite electroIcon;
 
     [Header("Display")]
     [SerializeField] private float visibleDuration = 3f;
@@ -14,7 +21,7 @@ public class MonsterHealthBar : MonoBehaviour
     private Camera mainCamera;
 
     private float visibleTimer;
-    private bool isVisible;
+    private bool isHealthBarVisible;
 
     private void Awake()
     {
@@ -31,20 +38,27 @@ public class MonsterHealthBar : MonoBehaviour
             monsterHealth.MaxHP
         );
 
-        SetVisible(false);
+        UpdateElementIcon(
+            monsterHealth.HostElement
+        );
+
+        SetHealthBarVisible(false);
     }
 
     private void OnEnable()
     {
-        if (monsterHealth != null)
+        if (monsterHealth == null)
         {
-            monsterHealth.OnHPChanged += HandleHPChanged;
+            return;
         }
+
+        monsterHealth.OnHPChanged += HandleHPChanged;
+        monsterHealth.OnHostElementChanged += UpdateElementIcon;
     }
 
     private void Update()
     {
-        if (!isVisible)
+        if (!isHealthBarVisible)
         {
             return;
         }
@@ -53,7 +67,7 @@ public class MonsterHealthBar : MonoBehaviour
 
         if (visibleTimer <= 0f)
         {
-            SetVisible(false);
+            SetHealthBarVisible(false);
         }
     }
 
@@ -84,7 +98,7 @@ public class MonsterHealthBar : MonoBehaviour
 
         visibleTimer = visibleDuration;
 
-        SetVisible(true);
+        SetHealthBarVisible(true);
     }
 
     private void UpdateHP(
@@ -97,9 +111,38 @@ public class MonsterHealthBar : MonoBehaviour
                 : 0f;
     }
 
-    private void SetVisible(bool visible)
+    private void UpdateElementIcon(
+        ElementType elementType)
     {
-        isVisible = visible;
+        switch (elementType)
+        {
+            case ElementType.Pyro:
+                hostElementIcon.sprite = pyroIcon;
+                break;
+
+            case ElementType.Hydro:
+                hostElementIcon.sprite = hydroIcon;
+                break;
+
+            case ElementType.Cryo:
+                hostElementIcon.sprite = cryoIcon;
+                break;
+
+            case ElementType.Electro:
+                hostElementIcon.sprite = electroIcon;
+                break;
+
+            default:
+                hostElementIcon.gameObject.SetActive(false);
+                return;
+        }
+
+        hostElementIcon.gameObject.SetActive(true);
+    }
+
+    private void SetHealthBarVisible(bool visible)
+    {
+        isHealthBarVisible = visible;
 
         healthBarBG.SetActive(visible);
         hpFill.gameObject.SetActive(visible);
@@ -107,9 +150,12 @@ public class MonsterHealthBar : MonoBehaviour
 
     private void OnDisable()
     {
-        if (monsterHealth != null)
+        if (monsterHealth == null)
         {
-            monsterHealth.OnHPChanged -= HandleHPChanged;
+            return;
         }
+
+        monsterHealth.OnHPChanged -= HandleHPChanged;
+        monsterHealth.OnHostElementChanged -= UpdateElementIcon;
     }
 }
