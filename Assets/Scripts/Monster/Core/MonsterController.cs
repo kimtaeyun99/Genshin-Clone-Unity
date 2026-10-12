@@ -3,6 +3,10 @@ using UnityEngine.AI;
 
 public class MonsterController : MonoBehaviour
 {
+    [Header("Monster")]
+    [SerializeField] private string monsterName;
+    [SerializeField] private bool isBoss;
+
     [Header("Idle")]
     [SerializeField] private float idleTime = 2f;
 
@@ -24,6 +28,9 @@ public class MonsterController : MonoBehaviour
 
     [Header("Element")]
     [SerializeField] private ElementType elementType;
+
+    public string MonsterName => monsterName;
+    public bool IsBoss => isBoss;
 
     public float IdleTime => idleTime;
     public float PatrolRadius => patrolRadius;
@@ -57,10 +64,12 @@ public class MonsterController : MonoBehaviour
 
         InitializeStates();
     }
+
     private void OnEnable()
     {
         monsterHealth.OnDead += HandleDead;
     }
+
     private void OnDisable()
     {
         monsterHealth.OnDead -= HandleDead;
@@ -69,7 +78,10 @@ public class MonsterController : MonoBehaviour
     private void Start()
     {
         SpawnPosition = transform.position;
-        StateMachine.Initialize(MonsterStateType.Idle);
+
+        StateMachine.Initialize(
+            MonsterStateType.Idle
+        );
     }
 
     private void Update()
@@ -81,39 +93,72 @@ public class MonsterController : MonoBehaviour
     {
         StateMachine.AddState(
             MonsterStateType.Idle,
-            new MonsterIdleState(this, StateMachine)
+            new MonsterIdleState(
+                this,
+                StateMachine
+            )
         );
 
         StateMachine.AddState(
             MonsterStateType.Patrol,
-            new MonsterPatrolState(this, StateMachine)
+            new MonsterPatrolState(
+                this,
+                StateMachine
+            )
         );
 
         StateMachine.AddState(
             MonsterStateType.Chase,
-            new MonsterChaseState(this, StateMachine)
+            new MonsterChaseState(
+                this,
+                StateMachine
+            )
         );
 
         StateMachine.AddState(
             MonsterStateType.Attack,
-            new MonsterAttackState(this, StateMachine)
+            new MonsterAttackState(
+                this,
+                StateMachine
+            )
         );
 
         StateMachine.AddState(
             MonsterStateType.Dead,
-            new MonsterDeadState(this, StateMachine)
+            new MonsterDeadState(
+                this,
+                StateMachine
+            )
         );
     }
+
     public void SetTarget(Transform target)
     {
         Target = target;
+
+        if (isBoss)
+        {
+            BossHealthUI.Instance.ShowBoss(
+                monsterHealth,
+                monsterName
+            );
+        }
     }
+
     public void ClearTarget()
     {
         Target = null;
+
+        if (isBoss)
+        {
+            BossHealthUI.Instance.HideBoss();
+        }
     }
+
     private void HandleDead()
     {
-        StateMachine.ChangeState(MonsterStateType.Dead);
+        StateMachine.ChangeState(
+            MonsterStateType.Dead
+        );
     }
 }
