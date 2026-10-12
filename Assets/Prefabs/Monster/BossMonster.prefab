@@ -78,6 +78,7 @@ MonoBehaviour:
   maxHP: 100
   currentHP: 0
   hostElement: -1
+  damageUIHeight: 2
 --- !u!136 &-540773850167776490
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -185,6 +186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d16147d38cdbad418aaba78025d2d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterController
+  monsterName: Golem
+  isBoss: 1
   idleTime: 2
   patrolRadius: 10
   detectionRadius: 8
