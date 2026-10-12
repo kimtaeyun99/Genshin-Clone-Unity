@@ -103,4 +103,45 @@ public class CharacterManager : MonoBehaviour
             runTime.UpdateCoolDown(Time.deltaTime);
         }
     }
+    public bool IsPartyDead()
+    {
+        foreach (CharacterData partyMember
+                 in CharacterParty.Instance.PartyMembers)
+        {
+            CharacterRunTime runTime =
+                GetCharacter(partyMember);
+
+            if (runTime != null && !runTime.IsDead)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void RespawnParty()
+    {
+        foreach (CharacterData partyMember
+                 in CharacterParty.Instance.PartyMembers)
+        {
+            CharacterRunTime runTime =
+                GetCharacter(partyMember);
+
+            if (runTime == null)
+            {
+                continue;
+            }
+
+            runTime.Respawn();
+        }
+
+        // 첫 번째 파티원을 현재 캐릭터로
+        if (CharacterParty.Instance.PartyMembers.Count > 0)
+        {
+            SetCurrentCharacter(
+                CharacterParty.Instance.PartyMembers[0]
+            );
+        }
+    }
 }

@@ -190,4 +190,13 @@ public class CharacterRunTime
         currentEnergy = 0f;
         return true;
     }
+    public void Respawn()
+    {
+        IsDead = false;
+        currentHP = maxHP;
+        currentEnergy = 0f;
+
+        skillCoolDown = 0f;
+        burstCoolDown = 0f;
+    }
 }
