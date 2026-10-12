@@ -18,15 +18,16 @@ public class MonsterHealth :
     [SerializeField] private float damageUIHeight = 2f;
 
     public event Action OnDead;
-
+    public float MaxHP => maxHP;
+    public float CurrentHP => currentHP;
     public bool IsDead { get; private set; }
 
+    public event Action<float, float> OnHPChanged;
     private void Awake()
     {
         currentHP = maxHP;
         hostElement = ElementType.None;
     }
-
     public void TakeDamage(float damage)
     {
         Debug.Log($"{damage} 데미지받음");
@@ -34,6 +35,11 @@ public class MonsterHealth :
         currentHP = Mathf.Clamp(
             currentHP - damage,
             0,
+            maxHP
+        );
+
+        OnHPChanged?.Invoke(
+            currentHP,
             maxHP
         );
 
