@@ -143,4 +143,22 @@ public class MonsterHealth :
 
         return reaction;
     }
+    public void ResetCombatState()
+    {
+        currentHP = maxHP;
+
+        OnHPChanged?.Invoke(
+            currentHP,
+            maxHP
+        );
+
+        if (hostElement != ElementType.None)
+        {
+            hostElement = ElementType.None;
+
+            OnHostElementChanged?.Invoke(
+                hostElement
+            );
+        }
+    }
 }

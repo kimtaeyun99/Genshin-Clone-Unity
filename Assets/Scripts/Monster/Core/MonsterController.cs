@@ -213,6 +213,8 @@ public class MonsterController : MonoBehaviour
     {
         Target = null;
 
+        monsterHealth.ResetCombatState();
+
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
