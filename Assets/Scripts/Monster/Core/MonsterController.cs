@@ -36,31 +36,84 @@ public class MonsterController : MonoBehaviour
     public float PatrolRadius => patrolRadius;
     public float DetectionRadius => detectionRadius;
     public float ChaseRange => chaseRange;
+
     public float Attack => attack;
     public float AttackRange => attackRange;
     public float AttackDelay => attackDelay;
     public float AttackMultiplier => attackMultiplier;
+
     public float DeadDestroyDelay => deadDestroyDelay;
+
     public ElementType ElementType => elementType;
 
     public Vector3 SpawnPosition { get; private set; }
+
     public NavMeshAgent Agent { get; private set; }
-    public MonsterStateMachine StateMachine { get; private set; }
-    public Transform Target { get; private set; }
-    public MonsterAnimationController Animation { get; private set; }
-    public MonsterHealth monsterHealth { get; private set; }
-    public IMonsterAttack MonsterAttack { get; private set; }
+
+    public MonsterStateMachine StateMachine
+    {
+        get;
+        private set;
+    }
+
+    public Transform Target
+    {
+        get;
+        private set;
+    }
+
+    public MonsterAnimationController Animation
+    {
+        get;
+        private set;
+    }
+
+    public AttackHitbox[] Hitbox
+    {
+        get;
+        private set;
+    }
+
+    public MonsterHealth monsterHealth
+    {
+        get;
+        private set;
+    }
+
+    public IMonsterAttack MonsterAttack
+    {
+        get;
+        private set;
+    }
+
+    public MonsterHealthBar HealthBar
+    {
+        get;
+        private set;
+    }
 
     private void Awake()
     {
-        Agent = GetComponent<NavMeshAgent>();
+        Agent =
+            GetComponent<NavMeshAgent>();
 
-        StateMachine = new MonsterStateMachine();
+        StateMachine =
+            new MonsterStateMachine();
 
-        Animation = GetComponent<MonsterAnimationController>();
+        Animation =
+            GetComponent<MonsterAnimationController>();
 
-        monsterHealth = GetComponent<MonsterHealth>();
-        MonsterAttack = GetComponent<IMonsterAttack>();
+        Hitbox =
+            GetComponentsInChildren<AttackHitbox>(true);
+
+        monsterHealth =
+            GetComponent<MonsterHealth>();
+
+        MonsterAttack =
+            GetComponent<IMonsterAttack>();
+
+        HealthBar =
+            GetComponentInChildren<MonsterHealthBar>(true);
 
         InitializeStates();
     }
@@ -77,7 +130,8 @@ public class MonsterController : MonoBehaviour
 
     private void Start()
     {
-        SpawnPosition = transform.position;
+        SpawnPosition =
+            transform.position;
 
         StateMachine.Initialize(
             MonsterStateType.Idle
@@ -138,10 +192,20 @@ public class MonsterController : MonoBehaviour
 
         if (isBoss)
         {
-            BossHealthUI.Instance.ShowBoss(
-                monsterHealth,
-                monsterName
-            );
+            if (BossHealthUI.Instance != null)
+            {
+                BossHealthUI.Instance.ShowBoss(
+                    monsterHealth,
+                    monsterName
+                );
+            }
+
+            return;
+        }
+
+        if (HealthBar != null)
+        {
+            HealthBar.SetVisible(true);
         }
     }
 
@@ -149,14 +213,42 @@ public class MonsterController : MonoBehaviour
     {
         Target = null;
 
+        monsterHealth.ResetCombatState();
+
         if (isBoss)
         {
-            BossHealthUI.Instance.HideBoss();
+            if (BossHealthUI.Instance != null)
+            {
+                BossHealthUI.Instance.HideBoss();
+            }
+
+            return;
+        }
+
+        if (HealthBar != null)
+        {
+            HealthBar.SetVisible(false);
         }
     }
 
     private void HandleDead()
     {
+        // 사망 시 UI도 제거
+        if (isBoss)
+        {
+            if (BossHealthUI.Instance != null)
+            {
+                BossHealthUI.Instance.HideBoss();
+            }
+        }
+        else
+        {
+            if (HealthBar != null)
+            {
+                HealthBar.SetVisible(false);
+            }
+        }
+
         StateMachine.ChangeState(
             MonsterStateType.Dead
         );

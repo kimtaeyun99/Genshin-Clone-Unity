@@ -14,14 +14,8 @@ public class MonsterHealthBar : MonoBehaviour
     [SerializeField] private Sprite cryoIcon;
     [SerializeField] private Sprite electroIcon;
 
-    [Header("Display")]
-    [SerializeField] private float visibleDuration = 3f;
-
     private MonsterHealth monsterHealth;
     private Camera mainCamera;
-
-    private float visibleTimer;
-    private bool isHealthBarVisible;
 
     private void Awake()
     {
@@ -42,7 +36,7 @@ public class MonsterHealthBar : MonoBehaviour
             monsterHealth.HostElement
         );
 
-        SetHealthBarVisible(false);
+        SetVisible(false);
     }
 
     private void OnEnable()
@@ -52,23 +46,8 @@ public class MonsterHealthBar : MonoBehaviour
             return;
         }
 
-        monsterHealth.OnHPChanged += HandleHPChanged;
+        monsterHealth.OnHPChanged += UpdateHP;
         monsterHealth.OnHostElementChanged += UpdateElementIcon;
-    }
-
-    private void Update()
-    {
-        if (!isHealthBarVisible)
-        {
-            return;
-        }
-
-        visibleTimer -= Time.deltaTime;
-
-        if (visibleTimer <= 0f)
-        {
-            SetHealthBarVisible(false);
-        }
     }
 
     private void LateUpdate()
@@ -90,15 +69,23 @@ public class MonsterHealthBar : MonoBehaviour
             );
     }
 
-    private void HandleHPChanged(
-        float currentHP,
-        float maxHP)
+    public void SetVisible(bool visible)
     {
-        UpdateHP(currentHP, maxHP);
+        healthBarBG.SetActive(visible);
+        hpFill.gameObject.SetActive(visible);
 
-        visibleTimer = visibleDuration;
-
-        SetHealthBarVisible(true);
+        // 원소가 붙어있어도
+        // 몬스터를 인식하지 않은 상태면 숨김
+        if (!visible)
+        {
+            hostElementIcon.gameObject.SetActive(false);
+        }
+        else
+        {
+            UpdateElementIcon(
+                monsterHealth.HostElement
+            );
+        }
     }
 
     private void UpdateHP(
@@ -140,14 +127,6 @@ public class MonsterHealthBar : MonoBehaviour
         hostElementIcon.gameObject.SetActive(true);
     }
 
-    private void SetHealthBarVisible(bool visible)
-    {
-        isHealthBarVisible = visible;
-
-        healthBarBG.SetActive(visible);
-        hpFill.gameObject.SetActive(visible);
-    }
-
     private void OnDisable()
     {
         if (monsterHealth == null)
@@ -155,7 +134,7 @@ public class MonsterHealthBar : MonoBehaviour
             return;
         }
 
-        monsterHealth.OnHPChanged -= HandleHPChanged;
+        monsterHealth.OnHPChanged -= UpdateHP;
         monsterHealth.OnHostElementChanged -= UpdateElementIcon;
     }
 }
