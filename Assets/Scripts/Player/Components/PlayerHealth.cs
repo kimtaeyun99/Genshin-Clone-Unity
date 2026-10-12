@@ -25,12 +25,9 @@ public class PlayerHealth :
     public void TakeDamage(float damage)
     {
         currentCharacter =
-            CharacterManager.Instance
-                .CurrentCharacter;
+            CharacterManager.Instance.CurrentCharacter;
 
-        currentCharacter.TakeDamage(
-            damage
-        );
+        currentCharacter.TakeDamage(damage);
 
         if (currentCharacter.IsDead)
         {
@@ -38,28 +35,23 @@ public class PlayerHealth :
         }
 
         Debug.Log(
-            $"{currentCharacter.Data.CharacterName} " +
-            $"피격 : {damage} / " +
-            $"현재 HP : {currentCharacter.CurrentHP}"
+            $"{currentCharacter.Data.CharacterName} 피격 : " +
+            $"{damage} / 현재 HP : " +
+            $"{currentCharacter.CurrentHP}"
         );
     }
 
-    public void TakeAttack(
-        AttackData attackData)
+    public void TakeAttack(AttackData attackData)
     {
-        float damage =
-            attackData.Damage;
+        float damage = attackData.Damage;
 
         ElementReactionType reaction =
-            ApplyElement(
-                attackData.ElementType
-            );
+            ApplyElement(attackData.ElementType);
 
         float elementDamageMultiplier =
-            ElementReaction
-                .GetElementDamageMultiplier(
-                    reaction
-                );
+            ElementReaction.GetElementDamageMultiplier(
+                reaction
+            );
 
         damage *= elementDamageMultiplier;
 
@@ -70,7 +62,6 @@ public class PlayerHealth :
             DamageUIManager.Instance.ShowDamage(
                 damage,
                 attackData.ElementType,
-                reaction,
                 transform.position +
                 Vector3.up * damageUIHeight
             );
@@ -92,32 +83,44 @@ public class PlayerHealth :
         {
             hostElement = guestElement;
 
-            Debug.Log(
-                $"부착 : {hostElement}"
-            );
+            Debug.Log($"부착 : {hostElement}");
 
             return ElementReactionType.None;
         }
-        else if (hostElement == guestElement)
+
+        if (hostElement == guestElement)
         {
             return ElementReactionType.None;
         }
-        else
-        {
-            ElementReactionType reaction =
-                ElementReaction.GetReaction(
-                    hostElement,
-                    guestElement
-                );
 
-            hostElement = ElementType.None;
-
-            Debug.Log(
-                $"{reaction} 반응"
+        ElementReactionType reaction =
+            ElementReaction.GetReaction(
+                hostElement,
+                guestElement
             );
 
-            return reaction;
+        Debug.Log(
+            $"원소 반응 : Host={hostElement}, " +
+            $"Guest={guestElement}, " +
+            $"Reaction={reaction}"
+        );
+
+        hostElement = ElementType.None;
+
+        if (
+            reaction != ElementReactionType.None &&
+            DamageUIManager.Instance != null
+        )
+        {
+            DamageUIManager.Instance.ShowReaction(
+                reaction,
+                guestElement,
+                transform.position +
+                Vector3.up * damageUIHeight
+            );
         }
+
+        return reaction;
     }
 
     public void ResetElement()

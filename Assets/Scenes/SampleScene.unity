@@ -27256,7 +27256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f56cc2fbab0e9a6409b2ce3d5dd390a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageUIManager
-  damageTextPrefab: {fileID: 5303746760965541025, guid: 8a2ae6930690db84b84041879aefbdf2, type: 3}
+  damageTextPrefab: {fileID: 2597860900200350147, guid: d27b4c67ecc183f479aebc80eb718638, type: 3}
+  reactionTextPrefab: {fileID: 4196359386757349997, guid: d7382a2ff0158bb4abc69d2e3221e9fa, type: 3}
   damageTextRoot: {fileID: 1833520981}
 --- !u!1 &267939539
 GameObject:

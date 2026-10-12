@@ -24,7 +24,6 @@ public class MonsterHealth :
     private void Awake()
     {
         currentHP = maxHP;
-
         hostElement = ElementType.None;
     }
 
@@ -32,12 +31,11 @@ public class MonsterHealth :
     {
         Debug.Log($"{damage} 데미지받음");
 
-        currentHP =
-            Mathf.Clamp(
-                currentHP - damage,
-                0,
-                maxHP
-            );
+        currentHP = Mathf.Clamp(
+            currentHP - damage,
+            0,
+            maxHP
+        );
 
         if (currentHP <= 0f)
         {
@@ -50,26 +48,20 @@ public class MonsterHealth :
     private void Die()
     {
         IsDead = true;
-
         OnDead?.Invoke();
     }
 
-    public void TakeAttack(
-        AttackData attackData)
+    public void TakeAttack(AttackData attackData)
     {
-        float damage =
-            attackData.Damage;
+        float damage = attackData.Damage;
 
         ElementReactionType reaction =
-            ApplyElement(
-                attackData.ElementType
-            );
+            ApplyElement(attackData.ElementType);
 
         float elementDamageMultiplier =
-            ElementReaction
-                .GetElementDamageMultiplier(
-                    reaction
-                );
+            ElementReaction.GetElementDamageMultiplier(
+                reaction
+            );
 
         damage *= elementDamageMultiplier;
 
@@ -80,7 +72,6 @@ public class MonsterHealth :
             DamageUIManager.Instance.ShowDamage(
                 damage,
                 attackData.ElementType,
-                reaction,
                 transform.position +
                 Vector3.up * damageUIHeight
             );
@@ -102,31 +93,43 @@ public class MonsterHealth :
         {
             hostElement = guestElement;
 
-            Debug.Log(
-                $"부착 : {hostElement}"
-            );
+            Debug.Log($"부착 : {hostElement}");
 
             return ElementReactionType.None;
         }
-        else if (hostElement == guestElement)
+
+        if (hostElement == guestElement)
         {
             return ElementReactionType.None;
         }
-        else
-        {
-            ElementReactionType reaction =
-                ElementReaction.GetReaction(
-                    hostElement,
-                    guestElement
-                );
 
-            hostElement = ElementType.None;
-
-            Debug.Log(
-                $"{reaction} 반응"
+        ElementReactionType reaction =
+            ElementReaction.GetReaction(
+                hostElement,
+                guestElement
             );
 
-            return reaction;
+        Debug.Log(
+            $"원소 반응 : Host={hostElement}, " +
+            $"Guest={guestElement}, " +
+            $"Reaction={reaction}"
+        );
+
+        hostElement = ElementType.None;
+
+        if (
+            reaction != ElementReactionType.None &&
+            DamageUIManager.Instance != null
+        )
+        {
+            DamageUIManager.Instance.ShowReaction(
+                reaction,
+                guestElement,
+                transform.position +
+                Vector3.up * damageUIHeight
+            );
         }
+
+        return reaction;
     }
 }
