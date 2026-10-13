@@ -43,11 +43,9 @@ public class CharacterRunTime
         ascensionPhase = 0;
 
         maxHP = data.HP;
-        currentHP = 1;
+        currentHP = maxHP;
 
-        //tset
-        currentEnergy = 100f;
-        //test
+        currentEnergy = 0f;
 
         skillCoolDown = 0f;
         burstCoolDown = 0f;
@@ -127,7 +125,7 @@ public class CharacterRunTime
 
         currentHP -= Mathf.RoundToInt(damage);
 
-        if(currentHP < 0)
+        if(currentHP <= 0)
         {
             currentHP = 0;
             IsDead = true;
@@ -200,5 +198,32 @@ public class CharacterRunTime
 
         skillCoolDown = 0f;
         burstCoolDown = 0f;
+    }
+    public void LoadGrowthData(
+        int level,
+        int ascensionPhase)
+    {
+        this.level = level;
+        this.ascensionPhase = ascensionPhase;
+    }
+
+    public void LoadStateData(
+        int currentHP,
+        float currentEnergy,
+        bool isDead)
+    {
+        this.currentHP = Mathf.Clamp(
+            currentHP,
+            0,
+            maxHP
+        );
+
+        this.currentEnergy = Mathf.Clamp(
+            currentEnergy,
+            0f,
+            MaxEnergy
+        );
+
+        IsDead = isDead;
     }
 }

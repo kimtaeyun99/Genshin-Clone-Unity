@@ -20,9 +20,6 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
         PlayerAnimationController playerAnimationController)
     {
         character = characterRunTime;
-        //test
-        character.AddEnergy(170f);
-        //test
         this.playerAnimationController = playerAnimationController;
         fireVFX.gameObject.SetActive(true);
         skillIndex = 1;
@@ -119,9 +116,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
         {
             return;
         }
-        //test
-        character.AddEnergy(170f);
-        //test
+        character.AddEnergy(17f);
         gainedEnergyThisHit = true;
     }
 }
