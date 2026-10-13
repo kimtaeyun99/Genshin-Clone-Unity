@@ -10,7 +10,6 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
 
     private bool isFinished;
     private bool enteredBurstAnimation;
-
     private CharacterRunTime character;
     private PlayerAnimationController playerAnimationController;
 
@@ -22,9 +21,8 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
     {
         character = characterRunTime;
         this.playerAnimationController = playerAnimationController;
-
-        isFinished = false;
         enteredBurstAnimation = false;
+        isFinished = false;
 
         playerAnimationController.PlayBurst();
 
@@ -36,13 +34,22 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
         AnimatorStateInfo stateInfo =
             playerAnimationController.GetCurrentStateInfo();
 
-        if (stateInfo.IsTag("Burst"))
+        if (!enteredBurstAnimation)
         {
-            enteredBurstAnimation = true;
+            if (stateInfo.IsTag("Burst"))
+            {
+                enteredBurstAnimation = true;
+            }
+
             return;
         }
 
-        if (enteredBurstAnimation)
+        if (!stateInfo.IsTag("Burst"))
+        {
+            return;
+        }
+
+        if (stateInfo.normalizedTime >= 0.95f)
         {
             isFinished = true;
         }

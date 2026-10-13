@@ -7,7 +7,7 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
     [SerializeField] private Transform spawnPoint;
 
     private bool isFinished;
-
+    private bool enteredBurstAnimation;
     private CharacterRunTime character;
     private PlayerAnimationController playerAnimationController;
 
@@ -21,6 +21,7 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
         this.playerAnimationController = playerAnimationController;
 
         isFinished = false;
+        enteredBurstAnimation = false;
 
         playerAnimationController.PlayBurst();
 
@@ -32,6 +33,18 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
         AnimatorStateInfo stateInfo =
             playerAnimationController.GetCurrentStateInfo();
 
+        // 실제 Burst 애니메이션 진입 확인
+        if (!enteredBurstAnimation)
+        {
+            if (stateInfo.IsTag("Burst"))
+            {
+                enteredBurstAnimation = true;
+            }
+
+            return;
+        }
+
+        // Burst에 진입한 이후 Burst 애니메이션 진행률만 검사
         if (!stateInfo.IsTag("Burst"))
         {
             return;

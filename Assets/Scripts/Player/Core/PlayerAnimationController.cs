@@ -28,7 +28,7 @@ public class PlayerAnimationController : MonoBehaviour
 
     public void PlayNormalAttack()
     {
-        Animator.SetInteger("State", 0);
+        //Animator.SetInteger("State", 0);
         Animator.SetTrigger("NormalAttack");
     }
 
@@ -38,7 +38,7 @@ public class PlayerAnimationController : MonoBehaviour
     }
     public void PlaySkill()
     {
-        Animator.SetInteger("State", 0);
+        //Animator.SetInteger("State", 0);
         Animator.SetTrigger("Skill");
     }
     public void SetSkillIndex(int index)
@@ -47,12 +47,12 @@ public class PlayerAnimationController : MonoBehaviour
     }
     public void PlayBurst()
     {
-        Animator.SetInteger("State", 0);
+        //Animator.SetInteger("State", 0);
         Animator.SetTrigger("Burst");
     }
     public void PlayDead()
     {
-        Animator.SetInteger("State", 0);
+        //Animator.SetInteger("State", 0);
         Animator.SetTrigger("Dead");
     }
     public AnimatorStateInfo GetCurrentStateInfo()
