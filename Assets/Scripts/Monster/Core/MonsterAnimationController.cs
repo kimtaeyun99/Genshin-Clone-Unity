@@ -4,31 +4,36 @@ public class MonsterAnimationController : MonoBehaviour
 {
     [SerializeField] private Animator animator;
 
+    private static readonly int StateHash = Animator.StringToHash("State");
+    private static readonly int AttackIndexHash = Animator.StringToHash("AttackIndex");
+    private static readonly int AttackHash = Animator.StringToHash("Attack");
+    private static readonly int DeadHash = Animator.StringToHash("Dead");
+
     public void PlayIdle()
     {
-        animator.SetInteger("State", 0);
+        animator.SetInteger(StateHash, 0);
     }
 
     public void PlayPatrol()
     {
-        animator.SetInteger("State", 1);
+        animator.SetInteger(StateHash, 1);
     }
 
     public void PlayChase()
     {
-        animator.SetInteger("State", 2);
+        animator.SetInteger(StateHash, 2);
     }
 
     public void PlayAttack(int attackIndex)
     {
-        animator.SetInteger("State", 3);
-        animator.SetInteger("AttackIndex", attackIndex);
-        animator.SetTrigger("Attack");
+        animator.SetInteger(StateHash, 3);
+        animator.SetInteger(AttackIndexHash, attackIndex);
+        animator.SetTrigger(AttackHash);
     }
 
     public void PlayDead()
     {
-        animator.SetTrigger("Dead");
+        animator.SetTrigger(DeadHash);
     }
 
     public AnimatorStateInfo GetCurrentStateInfo()
