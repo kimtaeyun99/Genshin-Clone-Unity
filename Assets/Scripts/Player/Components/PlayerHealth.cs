@@ -158,4 +158,11 @@ public class PlayerHealth :
     {
         invincibleTimer = switchInvincibleDuration;
     }
+    public void StartDodgeInvincible(float duration)
+    {
+        invincibleTimer = Mathf.Max(
+            invincibleTimer,
+            duration
+        );
+    }
 }
