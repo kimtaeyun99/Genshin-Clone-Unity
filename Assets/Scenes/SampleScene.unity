@@ -63165,6 +63165,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameOverManager
   gameOverUI: {fileID: 558084213}
   player: {fileID: 2097096005}
+  fieldMonsterSpawners:
+  - {fileID: 731240408}
+  - {fileID: 1319174523}
+  - {fileID: 1023763281}
+  - {fileID: 321740858}
+  - {fileID: 33075646}
+  - {fileID: 4324653}
+  bossWaveSpawner: {fileID: 1756119652}
 --- !u!4 &1760646619
 Transform:
   m_ObjectHideFlags: 0
