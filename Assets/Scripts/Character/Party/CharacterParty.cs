@@ -21,7 +21,7 @@ public class CharacterParty : MonoBehaviour
     {
         if(Instance != null && Instance != this)
         {
-            Destroy(Instance);
+            Destroy(gameObject);
             return;
         }
 

@@ -61,7 +61,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ToggleWalk",
+                    "name": "Toggle",
                     "type": "Button",
                     "id": "af8ac806-1032-42b6-8226-8ce33e0e60bf",
                     "expectedControlType": "",
@@ -271,7 +271,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "ToggleWalk",
+                    "action": "Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

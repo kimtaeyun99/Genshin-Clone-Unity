@@ -12,7 +12,6 @@ public class InputManager : MonoBehaviour
 
     // 상태 입력
     public bool IsSprintHeld { get; private set; }
-    public bool IsWalking { get; private set; }
 
     // 일회성 입력
     public event Action OnAttack;
@@ -23,12 +22,15 @@ public class InputManager : MonoBehaviour
     public event Action OnBurst;
     public event Action OnMenu;
     public event Action OnInventory;
+    public event Action OnToggle;
 
 
     // 캐릭터 변경
     public event Action<int> OnSwitchCharacter;
 
     private PlayerInputActions inputActions;
+    public bool CanPlayerInput =>
+    Cursor.lockState == CursorLockMode.Locked;
 
     private void Awake()
     {
@@ -60,8 +62,6 @@ public class InputManager : MonoBehaviour
         inputActions.Player.Sprint.performed += OnSprint;
         inputActions.Player.Sprint.canceled += OnSprint;
 
-        inputActions.Player.ToggleWalk.performed += OnToggleWalk;
-
         // Combat
         inputActions.Player.Attack.performed += OnAttackPerformed;
         inputActions.Player.Skill.performed += OnSkillPerformed;
@@ -79,6 +79,8 @@ public class InputManager : MonoBehaviour
         inputActions.Player.Switch2.performed += OnSwitch2;
         inputActions.Player.Switch3.performed += OnSwitch3;
         inputActions.Player.Switch4.performed += OnSwitch4;
+
+        inputActions.Player.Toggle.performed += OnTogglePerformed;
     }
 
     private void OnDisable()
@@ -95,8 +97,6 @@ public class InputManager : MonoBehaviour
 
         inputActions.Player.Sprint.performed -= OnSprint;
         inputActions.Player.Sprint.canceled -= OnSprint;
-
-        inputActions.Player.ToggleWalk.performed -= OnToggleWalk;
 
         // Combat
         inputActions.Player.Attack.performed -= OnAttackPerformed;
@@ -116,6 +116,8 @@ public class InputManager : MonoBehaviour
         inputActions.Player.Switch3.performed -= OnSwitch3;
         inputActions.Player.Switch4.performed -= OnSwitch4;
 
+        inputActions.Player.Toggle.performed -= OnTogglePerformed;
+
         inputActions.Disable();
     }
 
@@ -125,6 +127,12 @@ public class InputManager : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext context)
     {
+        if (!CanPlayerInput)
+        {
+            MoveInput = Vector2.zero;
+            return;
+        }
+
         MoveInput = context.ReadValue<Vector2>();
     }
 
@@ -139,11 +147,21 @@ public class InputManager : MonoBehaviour
 
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
+        if (!CanPlayerInput)
+        {
+            return;
+        }
+
         OnJump?.Invoke();
     }
 
     private void OnSprint(InputAction.CallbackContext context)
     {
+        if (!CanPlayerInput)
+        {
+            return;
+        }
+
         if (context.performed)
         {
             IsSprintHeld = true;
@@ -156,27 +174,37 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    private void OnToggleWalk(InputAction.CallbackContext context)
-    {
-        IsWalking = !IsWalking;
-    }
-
     // =========================
     // Combat
     // =========================
 
     private void OnAttackPerformed(InputAction.CallbackContext context)
     {
+        if (!CanPlayerInput)
+        {
+            return;
+        }
+
         OnAttack?.Invoke();
     }
 
     private void OnSkillPerformed(InputAction.CallbackContext context)
     {
+        if (!CanPlayerInput)
+        {
+            return;
+        }
+
         OnSkill?.Invoke();
     }
 
     private void OnBurstPerformed(InputAction.CallbackContext context)
     {
+        if (!CanPlayerInput)
+        {
+            return;
+        }
+
         OnBurst?.Invoke();
     }
 
@@ -209,21 +237,43 @@ public class InputManager : MonoBehaviour
 
     private void OnSwitch1(InputAction.CallbackContext context)
     {
+        if (!CanPlayerInput)
+        {
+            return;
+        }
         OnSwitchCharacter?.Invoke(1);
     }
 
     private void OnSwitch2(InputAction.CallbackContext context)
     {
+        if (!CanPlayerInput)
+        {
+            return;
+        }
         OnSwitchCharacter?.Invoke(2);
     }
 
     private void OnSwitch3(InputAction.CallbackContext context)
     {
+        if (!CanPlayerInput)
+        {
+            return;
+        }
         OnSwitchCharacter?.Invoke(3);
     }
 
     private void OnSwitch4(InputAction.CallbackContext context)
     {
+        if (!CanPlayerInput)
+        {
+            return;
+        }
         OnSwitchCharacter?.Invoke(4);
+    }
+    private void OnTogglePerformed(InputAction.CallbackContext context)
+    {
+        Debug.Log("Toggle 입력됨");
+
+        OnToggle?.Invoke();
     }
 }
