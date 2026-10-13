@@ -1,5 +1,3 @@
-using UnityEngine.Playables;
-
 public class PlayerJumpState : PlayerStateBase
 {
     public PlayerJumpState(PlayerController player, PlayerStateMachine stateMachine) : base(player,stateMachine)
@@ -19,9 +17,5 @@ public class PlayerJumpState : PlayerStateBase
         {
             stateMachine.ChangeState(PlayerStateType.Fall);
         }
-    }
-    public override void Exit()
-    {
-        
     }
 }

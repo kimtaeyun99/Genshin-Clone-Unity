@@ -75,8 +75,6 @@ public class PlayerController : MonoBehaviour
 
         StateMachine.AddState(PlayerStateType.Dodge, new PlayerDodgeState(this, StateMachine));
 
-        //StateMachine.AddState(PlayerStateType.Climb, new PlayerClimbState(this, StateMachine));
-
         StateMachine.AddState(PlayerStateType.Attack, new PlayerAttackState(this, StateMachine));
 
         StateMachine.AddState(PlayerStateType.Skill, new PlayerSkillState(this, StateMachine));
@@ -93,7 +91,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        // 캐릭터 교체 쿨타임
         if (!CanSwitchCharacter)
         {
             return;
@@ -111,7 +108,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        // 실제 교체에 성공했을 때만 처리
         if (!characterParty.SelectCharacter(partyIndex))
         {
             return;
@@ -119,10 +115,8 @@ public class PlayerController : MonoBehaviour
 
         StateMachine.ChangeState(PlayerStateType.Idle);
 
-        // 교체 쿨타임 시작
         switchCoolDownTimer = switchCoolDown;
 
-        // 교체 직후 무적 시작
         Health.StartSwitchInvincible();
     }
     private void HandleDead()

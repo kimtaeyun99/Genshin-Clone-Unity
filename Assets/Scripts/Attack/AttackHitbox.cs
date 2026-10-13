@@ -10,7 +10,6 @@ public class AttackHitbox : MonoBehaviour
 
     private readonly HashSet<IAttackable> hitTargets = new();
 
-    // 여러 Hitbox가 같이 사용할 피격 목록
     private HashSet<IAttackable> sharedHitTargets;
 
     public float Damage => damage;

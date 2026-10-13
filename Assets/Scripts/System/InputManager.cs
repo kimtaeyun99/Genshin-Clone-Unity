@@ -272,7 +272,6 @@ public class InputManager : MonoBehaviour
     }
     private void OnTogglePerformed(InputAction.CallbackContext context)
     {
-        Debug.Log("Toggle ภิทยตส");
 
         OnToggle?.Invoke();
     }

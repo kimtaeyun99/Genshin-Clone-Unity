@@ -9,8 +9,5 @@ public enum PlayerStateType
     Attack,
     Skill,
     Burst,
-    Climb,
-    Glide,
-    Hit,
     Dead
 }

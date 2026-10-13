@@ -177,7 +177,6 @@ public class CharacterRunTime
         {
             currentEnergy = MaxEnergy;
         }
-        Debug.Log($"¿¡³ÊÁö : {currentEnergy}");
     }
 
     public bool ConsumeBurstEnergy()

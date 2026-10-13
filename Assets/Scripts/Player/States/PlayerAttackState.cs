@@ -28,7 +28,6 @@ public class PlayerAttackState : PlayerStateBase
 
         InputManager.Instance.OnAttack += OnAttack;
 
-        Debug.Log("Attack ÁøÀÔ");
     }
 
     public override void Update()
@@ -54,7 +53,6 @@ public class PlayerAttackState : PlayerStateBase
 
         currentAttack = null;
 
-        Debug.Log("Attack ÅğÀå");
     }
 
     private void OnAttack()

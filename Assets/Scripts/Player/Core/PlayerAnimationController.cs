@@ -6,54 +6,60 @@ public class PlayerAnimationController : MonoBehaviour
 
     private Animator Animator => characterManager.CurrentAnimator;
 
+    private static readonly int StateHash = Animator.StringToHash("State");
+    private static readonly int JumpHash = Animator.StringToHash("Jump");
+    private static readonly int DodgeHash = Animator.StringToHash("Dodge");
+    private static readonly int NormalAttackHash = Animator.StringToHash("NormalAttack");
+    private static readonly int NormalAttackIndexHash = Animator.StringToHash("NormalAttackIndex");
+    private static readonly int SkillHash = Animator.StringToHash("Skill");
+    private static readonly int SkillIndexHash = Animator.StringToHash("SkillIndex");
+    private static readonly int BurstHash = Animator.StringToHash("Burst");
+    private static readonly int DeadHash = Animator.StringToHash("Dead");
+
     public void PlayIdle()
     {
-        Animator.SetInteger("State", 0);
+        Animator.SetInteger(StateHash, 0);
     }
 
     public void PlayMove()
     {
-        Animator.SetInteger("State", 1);
+        Animator.SetInteger(StateHash, 1);
     }
 
     public void PlayJump()
     {
-        Animator.SetTrigger("Jump");
+        Animator.SetTrigger(JumpHash);
     }
 
     public void PlayDodge()
     {
-        Animator.SetTrigger("Dodge");
+        Animator.SetTrigger(DodgeHash);
     }
 
     public void PlayNormalAttack()
     {
-        //Animator.SetInteger("State", 0);
-        Animator.SetTrigger("NormalAttack");
+        Animator.SetTrigger(NormalAttackHash);
     }
 
     public void SetNormalAttackIndex(int index)
     {
-        Animator.SetInteger("NormalAttackIndex", index);
+        Animator.SetInteger(NormalAttackIndexHash, index);
     }
     public void PlaySkill()
     {
-        //Animator.SetInteger("State", 0);
-        Animator.SetTrigger("Skill");
+        Animator.SetTrigger(SkillHash);
     }
     public void SetSkillIndex(int index)
     {
-        Animator.SetInteger("SkillIndex", index);
+        Animator.SetInteger(SkillIndexHash, index);
     }
     public void PlayBurst()
     {
-        //Animator.SetInteger("State", 0);
-        Animator.SetTrigger("Burst");
+        Animator.SetTrigger(BurstHash);
     }
     public void PlayDead()
     {
-        //Animator.SetInteger("State", 0);
-        Animator.SetTrigger("Dead");
+        Animator.SetTrigger(DeadHash);
     }
     public AnimatorStateInfo GetCurrentStateInfo()
     {

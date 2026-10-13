@@ -27,8 +27,6 @@ public class PlayerSkillState : PlayerStateBase
         );
 
         InputManager.Instance.OnSkill += OnSkill;
-
-        Debug.Log("Skill ÁøÀÔ");
     }
 
     public override void Update()
@@ -61,7 +59,6 @@ public class PlayerSkillState : PlayerStateBase
 
         currentSkill = null;
 
-        Debug.Log("Skill ÅğÀå");
     }
 
     private void OnSkill()
