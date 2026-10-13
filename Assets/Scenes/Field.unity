@@ -129,7 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4324652}
   - component: {fileID: 4324653}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FieldMonsterSpawner_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -734,7 +734,7 @@ GameObject:
   m_Component:
   - component: {fileID: 33075645}
   - component: {fileID: 33075646}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FieldMonsterSpawner_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26598,7 +26598,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 226373123}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28307,7 +28307,7 @@ GameObject:
   m_Component:
   - component: {fileID: 321740857}
   - component: {fileID: 321740858}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FieldMonsterSpawner_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28655,6 +28655,11 @@ MonoBehaviour:
   sensitivity: 0.15
   minPitch: -30
   maxPitch: 60
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  collisionRadius: 0.2
+  collisionOffset: 0.1
 --- !u!4 &332364084 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1030983698, guid: abc00000000015138092619593813830, type: 3}
@@ -29841,7 +29846,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 430709287}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29947,7 +29952,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 441553868}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31245,7 +31250,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 525380393}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32254,7 +32259,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 580060810}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34263,7 +34268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 731240407}
   - component: {fileID: 731240408}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FieldMonsterSpawner_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37214,7 +37219,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 749556530}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37718,7 +37723,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 776688702}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40763,7 +40768,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 941050459}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41609,7 +41614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1023763280}
   - component: {fileID: 1023763281}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FieldMonsterSpawner_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43413,7 +43418,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1151006826}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43449,7 +43454,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1152743239}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wave02_SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53988,7 +53993,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1319174522}
   - component: {fileID: 1319174523}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FieldMonsterSpawner_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55106,7 +55111,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1375724821}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55684,7 +55689,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1425655095}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59186,7 +59191,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1531449920}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60386,7 +60391,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1590147446}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wave03_SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60423,7 +60428,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1591276354}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60454,7 +60459,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1591618866}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60563,7 +60568,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1594382442}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62560,7 +62565,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1708662567}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63346,7 +63351,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1736775384}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63696,7 +63701,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1756119651}
   - component: {fileID: 1756119652}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BossWaveSpawner_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63885,7 +63890,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1761402139}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64605,7 +64610,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1792334308}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68395,7 +68400,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2024600404}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69232,7 +69237,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2047307965}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wave01_SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
