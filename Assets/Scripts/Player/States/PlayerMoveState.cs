@@ -13,6 +13,8 @@ public class PlayerMoveState : PlayerStateBase
         InputManager.Instance.OnJump += HandleJump;
         InputManager.Instance.OnDodge += HandleDodge;
         InputManager.Instance.OnAttack += HandleAttack;
+        InputManager.Instance.OnSkill += HandleSkill;
+        InputManager.Instance.OnBurst += HandleBurst;
 
         player.Animation.PlayMove();
         sprintHoldTimer = 0f;
@@ -68,6 +70,8 @@ public class PlayerMoveState : PlayerStateBase
         InputManager.Instance.OnJump -= HandleJump;
         InputManager.Instance.OnDodge -= HandleDodge;
         InputManager.Instance.OnAttack -= HandleAttack;
+        InputManager.Instance.OnSkill -= HandleSkill;
+        InputManager.Instance.OnBurst -= HandleBurst;
     }
 
     private void UpdateDashMode()
@@ -118,5 +122,40 @@ public class PlayerMoveState : PlayerStateBase
         {
             stateMachine.ChangeState(PlayerStateType.Attack);
         }
+    }
+    private void HandleSkill()
+    {
+        if (!player.Movement.IsGrounded)
+        {
+            return;
+        }
+
+        CharacterRunTime character =
+            player.CharacterManager.CurrentCharacter;
+
+        if (character == null || !character.IsSkillReady)
+        {
+            return;
+        }
+
+        stateMachine.ChangeState(PlayerStateType.Skill);
+    }
+
+    private void HandleBurst()
+    {
+        if (!player.Movement.IsGrounded)
+        {
+            return;
+        }
+
+        CharacterRunTime character =
+            player.CharacterManager.CurrentCharacter;
+
+        if (character == null || !character.IsBurstReady)
+        {
+            return;
+        }
+
+        stateMachine.ChangeState(PlayerStateType.Burst);
     }
 }

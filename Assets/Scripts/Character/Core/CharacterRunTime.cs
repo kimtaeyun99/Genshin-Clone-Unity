@@ -43,9 +43,11 @@ public class CharacterRunTime
         ascensionPhase = 0;
 
         maxHP = data.HP;
-        currentHP = maxHP;
+        currentHP = 1;
 
-        currentEnergy = 0f;
+        //tset
+        currentEnergy = 100f;
+        //test
 
         skillCoolDown = 0f;
         burstCoolDown = 0f;
