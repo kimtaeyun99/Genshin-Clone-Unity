@@ -29,7 +29,6 @@ public class PlayerBurstState : PlayerStateBase
             player.Animation
         );
 
-        Debug.Log("Burst ÁøÀÔ");
     }
 
     public override void Update()
@@ -61,7 +60,6 @@ public class PlayerBurstState : PlayerStateBase
         currentBurst = null;
         character = null;
 
-        Debug.Log("Burst ÅğÀå");
     }
 
     private void ChangeNextState()

@@ -61,10 +61,6 @@ public class SaveManager : MonoBehaviour
             SavePath,
             json
         );
-
-        Debug.Log(
-            $"게임 저장 완료\n{SavePath}"
-        );
     }
 
     private void SavePlayer(
@@ -184,9 +180,6 @@ public class SaveManager : MonoBehaviour
 
             if (data == null)
             {
-                Debug.LogWarning(
-                    $"CharacterData를 찾을 수 없음 : {characterId}"
-                );
 
                 continue;
             }
@@ -204,11 +197,8 @@ public class SaveManager : MonoBehaviour
             return;
         }
 
-        // 저장 당시 사용 중이던 캐릭터 선택
         if (!party.SelectCharacter(party.CurrentIndex))
         {
-            // 저장 당시 캐릭터가 사망 상태라면
-            // 살아있는 캐릭터 선택
             party.SelectNextAlive();
         }
     }
@@ -224,7 +214,6 @@ public class SaveManager : MonoBehaviour
     {
         if (!HasSaveData())
         {
-            Debug.LogWarning("저장 데이터가 없습니다.");
             return;
         }
 
@@ -236,15 +225,12 @@ public class SaveManager : MonoBehaviour
 
         if (saveData == null)
         {
-            Debug.LogError("저장 데이터 로드 실패");
             return;
         }
 
         LoadCharacters(saveData);
         LoadParty(saveData);
         LoadPlayer(saveData);
-
-        Debug.Log("게임 로드 완료");
     }
     private void LoadCharacters(GameSaveData saveData)
     {
@@ -266,11 +252,6 @@ public class SaveManager : MonoBehaviour
 
             if (data == null)
             {
-                Debug.LogWarning(
-                    $"CharacterData를 찾을 수 없음 : " +
-                    $"{characterSave.characterId}"
-                );
-
                 continue;
             }
 
@@ -311,10 +292,6 @@ public class SaveManager : MonoBehaviour
 
         if (player == null)
         {
-            Debug.LogWarning(
-                "PlayerController를 찾을 수 없습니다."
-            );
-
             return;
         }
 
