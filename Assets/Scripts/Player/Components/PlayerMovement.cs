@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.UI.Image;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
@@ -171,6 +170,22 @@ public class PlayerMovement : MonoBehaviour
 
     //    characterController.Move(moveDirection * climbSpeed * Time.deltaTime);
     //}
+    public void Teleport(Vector3 position, Quaternion rotation)
+    {
+        characterController.enabled = false;
+
+        transform.SetPositionAndRotation(
+            position,
+            rotation
+        );
+
+        verticalVelocity = 0f;
+        IsDashMode = false;
+
+        characterController.enabled = true;
+
+        CheckGround();
+    }
 
     private void OnDrawGizmosSelected()
     {

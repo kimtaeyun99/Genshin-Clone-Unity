@@ -44,7 +44,7 @@ public class GameOverManager : MonoBehaviour
 
         CharacterManager.Instance.RespawnParty();
 
-        player.transform.SetPositionAndRotation(
+        player.Movement.Teleport(
             spawnPosition,
             spawnRotation
         );
