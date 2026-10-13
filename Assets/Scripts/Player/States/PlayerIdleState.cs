@@ -2,7 +2,7 @@ public class PlayerIdleState : PlayerStateBase
 {
     public PlayerIdleState(
         PlayerController player,
-        PlayerStateMachine stateMachine)
+        StateMachine<PlayerStateType> stateMachine)
         : base(player, stateMachine)
     {
     }

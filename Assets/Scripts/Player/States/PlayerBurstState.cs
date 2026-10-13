@@ -7,7 +7,7 @@ public class PlayerBurstState : PlayerStateBase
 
     public PlayerBurstState(
         PlayerController player,
-        PlayerStateMachine stateMachine)
+        StateMachine<PlayerStateType> stateMachine)
         : base(player, stateMachine)
     {
     }
@@ -60,17 +60,5 @@ public class PlayerBurstState : PlayerStateBase
         currentBurst = null;
         character = null;
 
-    }
-
-    private void ChangeNextState()
-    {
-        if (InputManager.Instance.MoveInput.sqrMagnitude > 0.01f)
-        {
-            stateMachine.ChangeState(PlayerStateType.Move);
-        }
-        else
-        {
-            stateMachine.ChangeState(PlayerStateType.Idle);
-        }
     }
 }

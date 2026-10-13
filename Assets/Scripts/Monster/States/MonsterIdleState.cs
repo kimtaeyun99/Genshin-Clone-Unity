@@ -6,7 +6,7 @@ public class MonsterIdleState : MonsterStateBase
 
     public MonsterIdleState(
         MonsterController monster,
-        MonsterStateMachine stateMachine)
+        StateMachine<MonsterStateType> stateMachine)
         : base(monster, stateMachine)
     {
     }
@@ -26,10 +26,5 @@ public class MonsterIdleState : MonsterStateBase
         {
             stateMachine.ChangeState(MonsterStateType.Patrol);
         }
-    }
-
-    public override void Exit()
-    {
-
     }
 }

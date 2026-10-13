@@ -5,7 +5,7 @@ public class MonsterChaseState : MonsterStateBase
     private float attackTimer;
     public MonsterChaseState(
         MonsterController monster,
-        MonsterStateMachine stateMachine)
+        StateMachine<MonsterStateType> stateMachine)
         : base(monster, stateMachine)
     {
     }
@@ -50,9 +50,5 @@ public class MonsterChaseState : MonsterStateBase
             return;
         }
         monster.Agent.SetDestination(monster.Target.position);
-    }
-
-    public override void Exit()
-    {
     }
 }

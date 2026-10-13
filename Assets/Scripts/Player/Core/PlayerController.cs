@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public float SwitchCoolDownTimer => switchCoolDownTimer;
     public float SwitchCoolDown => switchCoolDown;
     public bool CanSwitchCharacter => switchCoolDownTimer <= 0f;
-    public PlayerStateMachine StateMachine { get; private set; }
+    public StateMachine<PlayerStateType> StateMachine { get; private set; }
     public PlayerMovement Movement { get; private set; }
 
     public PlayerStamina Stamina { get; private set; }
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
         Health = GetComponent<PlayerHealth>();
 
-        StateMachine = new PlayerStateMachine();
+        StateMachine = new StateMachine<PlayerStateType>();
 
         InitializeStates();
     }

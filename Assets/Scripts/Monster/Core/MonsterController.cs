@@ -50,7 +50,7 @@ public class MonsterController : MonoBehaviour
 
     public NavMeshAgent Agent { get; private set; }
 
-    public MonsterStateMachine StateMachine
+    public StateMachine<MonsterStateType> StateMachine
     {
         get;
         private set;
@@ -98,7 +98,7 @@ public class MonsterController : MonoBehaviour
             GetComponent<NavMeshAgent>();
 
         StateMachine =
-            new MonsterStateMachine();
+            new StateMachine<MonsterStateType>();
 
         Animation =
             GetComponent<MonsterAnimationController>();

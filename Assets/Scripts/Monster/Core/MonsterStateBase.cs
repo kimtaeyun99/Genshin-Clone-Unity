@@ -1,17 +1,12 @@
-public abstract class MonsterStateBase
+public abstract class MonsterStateBase : State
 {
     protected MonsterController monster;
-    protected MonsterStateMachine stateMachine;
 
-    protected MonsterStateBase(
-        MonsterController monster,
-        MonsterStateMachine stateMachine)
+    protected StateMachine<MonsterStateType> stateMachine;
+
+    protected MonsterStateBase(MonsterController monster, StateMachine<MonsterStateType> stateMachine)
     {
         this.monster = monster;
         this.stateMachine = stateMachine;
     }
-
-    public virtual void Enter() { }
-    public virtual void Update() { }
-    public virtual void Exit() { }
 }

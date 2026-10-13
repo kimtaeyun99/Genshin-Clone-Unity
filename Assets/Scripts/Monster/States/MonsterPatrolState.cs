@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 public class MonsterPatrolState : MonsterStateBase
 {
-    public MonsterPatrolState(MonsterController monster,MonsterStateMachine stateMachine) : base(monster, stateMachine)
+    public MonsterPatrolState(MonsterController monster,StateMachine<MonsterStateType> stateMachine) : base(monster, stateMachine)
     {
     }
 

@@ -6,7 +6,7 @@ public class PlayerAttackState : PlayerStateBase
 
     public PlayerAttackState(
         PlayerController player,
-        PlayerStateMachine stateMachine)
+        StateMachine<PlayerStateType> stateMachine)
         : base(player, stateMachine)
     {
     }
@@ -58,17 +58,5 @@ public class PlayerAttackState : PlayerStateBase
     private void OnAttack()
     {
         currentAttack?.OnAttackInput();
-    }
-
-    private void ChangeNextState()
-    {
-        if (InputManager.Instance.MoveInput.sqrMagnitude > 0.01f)
-        {
-            stateMachine.ChangeState(PlayerStateType.Move);
-        }
-        else
-        {
-            stateMachine.ChangeState(PlayerStateType.Idle);
-        }
     }
 }

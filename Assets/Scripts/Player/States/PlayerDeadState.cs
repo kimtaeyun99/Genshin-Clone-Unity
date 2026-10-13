@@ -6,7 +6,7 @@ public class PlayerDeadState : PlayerStateBase
 
     public PlayerDeadState(
         PlayerController player,
-        PlayerStateMachine stateMachine)
+        StateMachine<PlayerStateType> stateMachine)
         : base(player, stateMachine)
     {
     }

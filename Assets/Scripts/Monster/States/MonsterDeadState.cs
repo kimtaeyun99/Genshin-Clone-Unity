@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MonsterDeadState : MonsterStateBase
 {
-    public MonsterDeadState(MonsterController monster,MonsterStateMachine stateMachine) : base(monster, stateMachine)
+    public MonsterDeadState(MonsterController monster,StateMachine<MonsterStateType> stateMachine) : base(monster, stateMachine)
     {
     }
     public override void Enter()

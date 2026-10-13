@@ -5,7 +5,7 @@ public class MonsterAttackState : MonsterStateBase
 
     public MonsterAttackState(
         MonsterController monster,
-        MonsterStateMachine stateMachine)
+        StateMachine<MonsterStateType> stateMachine)
         : base(monster, stateMachine)
     {
     }
