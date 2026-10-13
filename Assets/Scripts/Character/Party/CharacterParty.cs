@@ -116,4 +116,48 @@ public class CharacterParty : MonoBehaviour
         }
         return false;
     }
+    public void LoadParty(
+    List<CharacterData> members,
+    int savedCurrentIndex)
+    {
+        partyMembers.Clear();
+
+        if (members == null)
+        {
+            currentIndex = 0;
+            return;
+        }
+
+        for (int i = 0; i < members.Count; i++)
+        {
+            if (members[i] == null)
+            {
+                continue;
+            }
+
+            if (partyMembers.Count >= MaxPartyCount)
+            {
+                break;
+            }
+
+            if (partyMembers.Contains(members[i]))
+            {
+                continue;
+            }
+
+            partyMembers.Add(members[i]);
+        }
+
+        if (partyMembers.Count == 0)
+        {
+            currentIndex = 0;
+            return;
+        }
+
+        currentIndex = Mathf.Clamp(
+            savedCurrentIndex,
+            0,
+            partyMembers.Count - 1
+        );
+    }
 }

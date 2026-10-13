@@ -144,4 +144,37 @@ public class CharacterManager : MonoBehaviour
             );
         }
     }
+    public IReadOnlyList<CharacterData> CharacterDatas
+    => characterDatas;
+
+    public CharacterData GetCharacterData(string characterId)
+    {
+        foreach (CharacterData data in characterDatas)
+        {
+            if (data == null)
+            {
+                continue;
+            }
+
+            if (data.ID == characterId)
+            {
+                return data;
+            }
+        }
+
+        return null;
+    }
+    public void RefreshCharacterStat(
+    CharacterRunTime runTime)
+    {
+        if (runTime == null)
+        {
+            return;
+        }
+
+        CharacterStat stat =
+            statCalculator.ApplyStat(runTime);
+
+        runTime.SetStat(stat);
+    }
 }
