@@ -6,6 +6,11 @@ public class MonsterHealthBar : MonoBehaviour
     [Header("HP")]
     [SerializeField] private GameObject healthBarBG;
     [SerializeField] private Image hpFill;
+    [SerializeField] private Image delayHpFill;
+
+    [Header("HP Delay")]
+    [SerializeField] private float delayTime = 0.3f;
+    [SerializeField] private float smoothTime = 0.3f;
 
     [Header("Element")]
     [SerializeField] private Image hostElementIcon;
@@ -17,6 +22,10 @@ public class MonsterHealthBar : MonoBehaviour
     private MonsterHealth monsterHealth;
     private Camera mainCamera;
 
+    private float targetFillAmount;
+    private float delayTimer;
+    private float delayVelocity;
+
     private void Awake()
     {
         monsterHealth =
@@ -27,10 +36,15 @@ public class MonsterHealthBar : MonoBehaviour
 
     private void Start()
     {
-        UpdateHP(
-            monsterHealth.CurrentHP,
-            monsterHealth.MaxHP
-        );
+        float hpPercent =
+            monsterHealth.MaxHP > 0f
+                ? monsterHealth.CurrentHP / monsterHealth.MaxHP
+                : 0f;
+
+        hpFill.fillAmount = hpPercent;
+        delayHpFill.fillAmount = hpPercent;
+
+        targetFillAmount = hpPercent;
 
         UpdateElementIcon(
             monsterHealth.HostElement
@@ -48,6 +62,11 @@ public class MonsterHealthBar : MonoBehaviour
 
         monsterHealth.OnHPChanged += UpdateHP;
         monsterHealth.OnHostElementChanged += UpdateElementIcon;
+    }
+
+    private void Update()
+    {
+        UpdateDelayHP();
     }
 
     private void LateUpdate()
@@ -73,9 +92,8 @@ public class MonsterHealthBar : MonoBehaviour
     {
         healthBarBG.SetActive(visible);
         hpFill.gameObject.SetActive(visible);
+        delayHpFill.gameObject.SetActive(visible);
 
-        // 원소가 붙어있어도
-        // 몬스터를 인식하지 않은 상태면 숨김
         if (!visible)
         {
             hostElementIcon.gameObject.SetActive(false);
@@ -92,10 +110,70 @@ public class MonsterHealthBar : MonoBehaviour
         float currentHP,
         float maxHP)
     {
-        hpFill.fillAmount =
+        float newFillAmount =
             maxHP > 0f
                 ? currentHP / maxHP
                 : 0f;
+
+        // 체력 회복
+        if (newFillAmount > targetFillAmount)
+        {
+            hpFill.fillAmount = newFillAmount;
+            delayHpFill.fillAmount = newFillAmount;
+
+            targetFillAmount = newFillAmount;
+
+            delayVelocity = 0f;
+            delayTimer = 0f;
+
+            return;
+        }
+
+        // 데미지
+        targetFillAmount = newFillAmount;
+
+        // 초록색은 즉시 감소
+        hpFill.fillAmount = targetFillAmount;
+
+        // 주황색은 잠시 후 감소
+        delayTimer = delayTime;
+        delayVelocity = 0f;
+    }
+
+    private void UpdateDelayHP()
+    {
+        // 이미 현재 HP까지 도착
+        if (delayHpFill.fillAmount <= targetFillAmount)
+        {
+            delayHpFill.fillAmount = targetFillAmount;
+            return;
+        }
+
+        // 피격 후 잠깐 기다림
+        if (delayTimer > 0f)
+        {
+            delayTimer -= Time.deltaTime;
+            return;
+        }
+
+        // 현재 HP까지 부드럽게 감소
+        delayHpFill.fillAmount =
+            Mathf.SmoothDamp(
+                delayHpFill.fillAmount,
+                targetFillAmount,
+                ref delayVelocity,
+                smoothTime
+            );
+
+        if (Mathf.Abs(
+                delayHpFill.fillAmount -
+                targetFillAmount) < 0.001f)
+        {
+            delayHpFill.fillAmount =
+                targetFillAmount;
+
+            delayVelocity = 0f;
+        }
     }
 
     private void UpdateElementIcon(
