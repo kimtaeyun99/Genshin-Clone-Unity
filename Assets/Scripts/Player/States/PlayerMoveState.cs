@@ -50,13 +50,14 @@ public class PlayerMoveState : PlayerStateBase
         {
             player.Movement.DashMove(moveInput);
 
-            player.Stamina.ConsumeStamina(player.Stamina.DashStaminaCostPerSecond);
+            player.Stamina.ConsumeStamina(
+                player.Stamina.DashStaminaCostPerSecond
+            );
 
             if (player.Stamina.IsEmpty)
             {
                 player.Movement.ExitDashMode();
             }
-
         }
         else
         {
@@ -80,10 +81,10 @@ public class PlayerMoveState : PlayerStateBase
         {
             return;
         }
-        if (player.Stamina.IsEmpty)
+        if (!player.Stamina.CanUseStaminaAction)
         {
             sprintHoldTimer = 0f;
-
+            return;
         }
         if (InputManager.Instance.IsSprintHeld)
         {
@@ -110,10 +111,17 @@ public class PlayerMoveState : PlayerStateBase
 
     private void HandleDodge()
     {
-        if (player.Movement.IsGrounded)
+        if (!player.Movement.IsGrounded)
         {
-            stateMachine.ChangeState(PlayerStateType.Dodge);
+            return;
         }
+
+        if (!player.Stamina.CanUseStaminaAction)
+        {
+            return;
+        }
+
+        stateMachine.ChangeState(PlayerStateType.Dodge);
     }
 
     private void HandleAttack()

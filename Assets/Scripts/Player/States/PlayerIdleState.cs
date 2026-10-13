@@ -51,6 +51,10 @@ public class PlayerIdleState : PlayerStateBase
 
     private void HandleDodge()
     {
+        if (!player.Stamina.CanUseStaminaAction)
+        {
+            return;
+        }
         if (player.Movement.IsGrounded)
         {
             stateMachine.ChangeState(PlayerStateType.Dodge);

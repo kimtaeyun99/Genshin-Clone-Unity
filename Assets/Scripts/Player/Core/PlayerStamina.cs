@@ -6,12 +6,19 @@ public class PlayerStamina : MonoBehaviour
     [SerializeField] private float maxStamina = 100f;
     [Header("Consume")]
     [SerializeField] private float dashStaminaCostPerSecond = 15f;
+    [SerializeField] private float dodgeStaminaCost = 20f;
     [Header("Recovery")]
     [SerializeField] private float recoveryPerSecond = 20f;
     [SerializeField] private float recoveryDelay = 1f;
+
+    [SerializeField] private float actionLimitPercent = 0.2f;
+    public bool CanUseStaminaAction =>
+        CurrentStamina >= MaxStamina * actionLimitPercent;
+
     public float CurrentStamina { get; private set; }
     public float MaxStamina => maxStamina;
     public float DashStaminaCostPerSecond => dashStaminaCostPerSecond;
+    public float DodgeStaminaCost => dodgeStaminaCost;
     public bool IsEmpty => CurrentStamina <= 0f;
     public bool IsFull => CurrentStamina >= maxStamina;
 
@@ -29,6 +36,18 @@ public class PlayerStamina : MonoBehaviour
     {
         CurrentStamina -= StaminaCost * Time.deltaTime;
         CurrentStamina = Mathf.Clamp(CurrentStamina, 0f,maxStamina);
+        recoverTimer = 0f;
+    }
+    public void ConsumeStaminaInstant(float staminaCost)
+    {
+        CurrentStamina -= staminaCost;
+
+        CurrentStamina = Mathf.Clamp(
+            CurrentStamina,
+            0f,
+            maxStamina
+        );
+
         recoverTimer = 0f;
     }
     public void RecoveryStamina()
