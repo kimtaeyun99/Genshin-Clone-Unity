@@ -28,7 +28,6 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 
         playerAnimationController.PlaySkill();
 
-        Debug.Log("Barbara Skill 시작");
     }
 
     public void SkillUpdate()
@@ -53,7 +52,6 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 
     public void Exit()
     {
-        Debug.Log("Barbara Skill 종료");
     }
 
     private void SpawnSkillProjectile()

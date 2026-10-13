@@ -16,8 +16,6 @@ public class MonsterIdleState : MonsterStateBase
         idleTimer = monster.IdleTime;
 
         monster.Animation.PlayIdle();
-
-        Debug.Log("Monster Idle 진입");
     }
 
     public override void Update()
@@ -32,6 +30,6 @@ public class MonsterIdleState : MonsterStateBase
 
     public override void Exit()
     {
-        Debug.Log("Monster Idle 종료");
+
     }
 }

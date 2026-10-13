@@ -132,10 +132,6 @@ public class BossWaveSpawner : MonoBehaviour
 
         isWaveActive = true;
         isWaitingNextWave = false;
-
-        Debug.Log(
-            $"{wave.waveName} 시작"
-        );
     }
 
     private void CheckWaveClear()
@@ -156,10 +152,6 @@ public class BossWaveSpawner : MonoBehaviour
         spawnedMonsters.Clear();
 
         isWaveActive = false;
-
-        Debug.Log(
-            $"{waves[currentWaveIndex].waveName} 클리어"
-        );
 
         currentWaveIndex++;
 
@@ -193,8 +185,6 @@ public class BossWaveSpawner : MonoBehaviour
         isCleared = true;
         isWaveActive = false;
         isWaitingNextWave = false;
-
-        Debug.Log("보스룸 클리어");
     }
 
     private void OnDrawGizmosSelected()

@@ -12,7 +12,6 @@ public class MonsterPatrolState : MonsterStateBase
         monster.Animation.PlayPatrol();
 
         SetRandomDestination();
-        Debug.Log("Patrol ÁøÀÔ");
     }
 
     public override void Update()
@@ -39,7 +38,6 @@ public class MonsterPatrolState : MonsterStateBase
     public override void Exit()
     {
         monster.Agent.ResetPath();
-        Debug.Log("Patrol ÅğÀå");
     }
 
     private void SetRandomDestination()

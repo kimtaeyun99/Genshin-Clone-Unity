@@ -46,7 +46,6 @@ public class MonsterChaseState : MonsterStateBase
         }
         if (distance <= monster.AttackRange && attackTimer >= monster.AttackDelay)
         {
-            Debug.Log("Chase → Attack 전환");
             stateMachine.ChangeState(MonsterStateType.Attack);
             return;
         }
@@ -55,6 +54,5 @@ public class MonsterChaseState : MonsterStateBase
 
     public override void Exit()
     {
-        Debug.Log("Monster Chase 종료");
     }
 }
