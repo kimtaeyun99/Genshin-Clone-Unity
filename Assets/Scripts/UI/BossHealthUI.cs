@@ -13,6 +13,11 @@ public class BossHealthUI : MonoBehaviour
     [Header("HP")]
     [SerializeField] private TMP_Text bossNameText;
     [SerializeField] private Image healthBarFill;
+    [SerializeField] private Image delayHealthBarFill;
+
+    [Header("HP Delay")]
+    [SerializeField] private float delayTime = 0.3f;
+    [SerializeField] private float smoothTime = 0.3f;
 
     [Header("Element")]
     [SerializeField] private Image hostElementIcon;
@@ -23,11 +28,20 @@ public class BossHealthUI : MonoBehaviour
 
     private MonsterHealth currentBoss;
 
+    private float targetFillAmount;
+    private float delayTimer;
+    private float delayVelocity;
+
     private void Awake()
     {
         Instance = this;
 
         gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        UpdateDelayHealth();
     }
 
     public void ShowBoss(
@@ -39,7 +53,6 @@ public class BossHealthUI : MonoBehaviour
             return;
         }
 
-        // 기존 보스가 있으면 이벤트 해제
         if (currentBoss != null)
         {
             currentBoss.OnHPChanged -= UpdateHealth;
@@ -51,18 +64,22 @@ public class BossHealthUI : MonoBehaviour
 
         bossNameText.text = bossName;
 
-        // 현재 HP 즉시 반영
-        UpdateHealth(
-            currentBoss.CurrentHP,
-            currentBoss.MaxHP
-        );
+        float hpPercent =
+            currentBoss.MaxHP > 0f
+                ? currentBoss.CurrentHP / currentBoss.MaxHP
+                : 0f;
 
-        // 현재 부착 원소 즉시 반영
+        healthBarFill.fillAmount = hpPercent;
+        delayHealthBarFill.fillAmount = hpPercent;
+        targetFillAmount = hpPercent;
+
+        delayTimer = 0f;
+        delayVelocity = 0f;
+
         UpdateElementIcon(
             currentBoss.HostElement
         );
 
-        // 이벤트 구독
         currentBoss.OnHPChanged += UpdateHealth;
         currentBoss.OnHostElementChanged += UpdateElementIcon;
         currentBoss.OnDead += HideBoss;
@@ -90,10 +107,75 @@ public class BossHealthUI : MonoBehaviour
         float currentHP,
         float maxHP)
     {
-        healthBarFill.fillAmount =
+        float newFillAmount =
             maxHP > 0f
                 ? currentHP / maxHP
                 : 0f;
+
+        // 체력 회복
+        if (newFillAmount > targetFillAmount)
+        {
+            healthBarFill.fillAmount =
+                newFillAmount;
+
+            delayHealthBarFill.fillAmount =
+                newFillAmount;
+
+            targetFillAmount =
+                newFillAmount;
+
+            delayTimer = 0f;
+            delayVelocity = 0f;
+
+            return;
+        }
+
+        // 데미지
+        targetFillAmount =
+            newFillAmount;
+
+        // 초록색 체력은 즉시 감소
+        healthBarFill.fillAmount =
+            targetFillAmount;
+
+        // 주황색 체력은 잠시 후 감소
+        delayTimer = delayTime;
+        delayVelocity = 0f;
+    }
+
+    private void UpdateDelayHealth()
+    {
+        if (delayHealthBarFill.fillAmount <= targetFillAmount)
+        {
+            delayHealthBarFill.fillAmount =
+                targetFillAmount;
+
+            return;
+        }
+
+        if (delayTimer > 0f)
+        {
+            delayTimer -= Time.deltaTime;
+            return;
+        }
+
+        delayHealthBarFill.fillAmount =
+            Mathf.SmoothDamp(
+                delayHealthBarFill.fillAmount,
+                targetFillAmount,
+                ref delayVelocity,
+                smoothTime
+            );
+
+        if (Mathf.Abs(
+                delayHealthBarFill.fillAmount -
+                targetFillAmount) < 0.001f)
+        {
+            delayHealthBarFill.fillAmount =
+                targetFillAmount;
+
+            delayVelocity = 0f;
+        }
     }
 
     private void UpdateElementIcon(

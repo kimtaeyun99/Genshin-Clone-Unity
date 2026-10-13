@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6480918560204352728}
   - component: {fileID: 4439431087252582390}
   m_Layer: 5
-  m_Name: HealthBarFill
+  m_Name: DelayHealthBarFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1f63a1a3ace87c840beecb35d09e2871, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5f1118f5ec2c2cd4895419824667a9cc, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 5010733636570988657}
   - component: {fileID: 4409368693799079987}
   m_Layer: 9
-  m_Name: Image
+  m_Name: HostElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220,6 +220,81 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2642707152996400420
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3522349859032671854}
+  - component: {fileID: 1757847447616596997}
+  - component: {fileID: 1398872064195819502}
+  m_Layer: 5
+  m_Name: HealthBarFill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3522349859032671854
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2642707152996400420}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 8.9, y: 10, z: 10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2166138902484836309}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 2}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1757847447616596997
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2642707152996400420}
+  m_CullTransparentMesh: 1
+--- !u!114 &1398872064195819502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2642707152996400420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 1f63a1a3ace87c840beecb35d09e2871, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -483,6 +558,7 @@ RectTransform:
   m_Children:
   - {fileID: 6991749845163933641}
   - {fileID: 5153710631361677906}
+  - {fileID: 3522349859032671854}
   - {fileID: 6837758063672735754}
   m_Father: {fileID: 5460657064006050993}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -567,13 +643,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterHealthBar
   healthBarBG: {fileID: 2334117553161183634}
-  hpFill: {fileID: 4439431087252582390}
+  hpFill: {fileID: 1398872064195819502}
+  delayHpFill: {fileID: 4439431087252582390}
+  delayTime: 1
+  smoothTime: 0.3
   hostElementIcon: {fileID: 4409368693799079987}
   pyroIcon: {fileID: 21300000, guid: 7af873017776803418a3cfadb4aa4fe8, type: 3}
   hydroIcon: {fileID: 21300000, guid: dbfbdd9aa7cbccd49ae0fa378d2a899e, type: 3}
   cryoIcon: {fileID: 21300000, guid: eefc0b12bae4e49449a9e4ae2017a6cd, type: 3}
   electroIcon: {fileID: 21300000, guid: 76c6899e6f67bac47bcc351d02cd46b5, type: 3}
-  visibleDuration: 10
 --- !u!1 &7623811628097655393
 GameObject:
   m_ObjectHideFlags: 0
