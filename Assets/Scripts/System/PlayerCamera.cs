@@ -41,6 +41,10 @@ public class PlayerCamera : MonoBehaviour
         {
             return;
         }
+        if (Cursor.lockState != CursorLockMode.Locked)
+        {
+            return;
+        }
 
         Vector2 lookInput =
             InputManager.Instance.LookInput;

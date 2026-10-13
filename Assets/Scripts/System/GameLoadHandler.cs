@@ -4,6 +4,9 @@ public class GameLoadHandler : MonoBehaviour
 {
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         if (SaveManager.Instance == null)
         {
             return;

@@ -34,11 +34,10 @@ public class CharacterManager : MonoBehaviour
     {
         if(Instance != null && Instance != this)
         {
-            Destroy(Instance);
+            Destroy(gameObject);
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         statCalculator = new CharacterStatCalculator();
         InitializeCharacters();
