@@ -33,7 +33,6 @@ public class MonsterHealth :
     }
     public void TakeDamage(float damage)
     {
-        Debug.Log($"{damage} 데미지받음");
 
         currentHP = Mathf.Clamp(
             currentHP - damage,
@@ -50,8 +49,6 @@ public class MonsterHealth :
         {
             Die();
         }
-
-        Debug.Log(currentHP);
     }
 
     private void Die()
@@ -103,8 +100,6 @@ public class MonsterHealth :
 
             OnHostElementChanged?.Invoke(hostElement);
 
-            Debug.Log($"부착 : {hostElement}");
-
             return ElementReactionType.None;
         }
 
@@ -118,12 +113,6 @@ public class MonsterHealth :
                 hostElement,
                 guestElement
             );
-
-        Debug.Log(
-            $"원소 반응 : Host={hostElement}, " +
-            $"Guest={guestElement}, " +
-            $"Reaction={reaction}"
-        );
 
         hostElement = ElementType.None;
 

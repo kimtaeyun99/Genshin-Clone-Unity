@@ -65,11 +65,6 @@ public class WaterRing : MonoBehaviour
         currentCharacter.Heal(healAmount);
 
         healTimer = healInterval;
-
-        Debug.Log(
-            $"WaterRing 회복 : {healAmount} / " +
-            $"현재 HP : {currentCharacter.CurrentHP}"
-        );
     }
     private void UpdateElemental()
     {

@@ -25,8 +25,6 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
         isFinished = false;
 
         playerAnimationController.PlayBurst();
-
-        Debug.Log("Barbara Burst 시작");
     }
 
     public void BurstUpdate()
@@ -57,7 +55,7 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
 
     public void Exit()
     {
-        Debug.Log("Barbara Burst 종료");
+
     }
 
     // Animation Event
@@ -82,11 +80,6 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
             }
 
             runTime.Heal(healAmount);
-
-            Debug.Log(
-                $"{partyMember.name} 회복 : {healAmount} / " +
-                $"현재 HP : {runTime.CurrentHP}"
-            );
         }
 
         PlayBurstVfx();

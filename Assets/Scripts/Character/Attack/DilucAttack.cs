@@ -30,8 +30,6 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
         SetAttackData();
 
         playerAnimationController.PlayNormalAttack();
-
-        Debug.Log("Diluc 평타 시작");
     }
 
     public void AttackUpdate()
@@ -84,8 +82,6 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
         DisableNormalAttackHitbox();
 
         nextAttackInput = false;
-
-        Debug.Log("Diluc 평타 종료");
     }
 
     private void SetAttackData()

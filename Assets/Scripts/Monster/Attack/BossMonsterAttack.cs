@@ -72,7 +72,6 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
         }
 
         hitTargets.Clear();
-        Debug.Log("AttackÅğÀå");
     }
 
     private void LookTarget()

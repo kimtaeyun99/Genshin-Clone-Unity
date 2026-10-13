@@ -1,6 +1,6 @@
 public class PlayerFallState : PlayerStateBase
 {
-    public PlayerFallState(PlayerController player,PlayerStateMachine stateMachine) : base(player,stateMachine)
+    public PlayerFallState(PlayerController player,StateMachine<PlayerStateType> stateMachine) : base(player,stateMachine)
     {
 
     }
@@ -8,16 +8,9 @@ public class PlayerFallState : PlayerStateBase
     {
         player.Movement.AirMove(InputManager.Instance.MoveInput);
 
-        if(player.Movement.IsGrounded)
+        if (player.Movement.IsGrounded)
         {
-            if(InputManager.Instance.MoveInput.sqrMagnitude >= 0.01f)
-            {
-                stateMachine.ChangeState(PlayerStateType.Move);
-            }
-            else
-            {
-                stateMachine.ChangeState(PlayerStateType.Idle);
-            }
+            ChangeNextState();
         }
     }
 }

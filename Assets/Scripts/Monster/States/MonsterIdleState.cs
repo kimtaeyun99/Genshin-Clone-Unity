@@ -6,7 +6,7 @@ public class MonsterIdleState : MonsterStateBase
 
     public MonsterIdleState(
         MonsterController monster,
-        MonsterStateMachine stateMachine)
+        StateMachine<MonsterStateType> stateMachine)
         : base(monster, stateMachine)
     {
     }
@@ -16,8 +16,6 @@ public class MonsterIdleState : MonsterStateBase
         idleTimer = monster.IdleTime;
 
         monster.Animation.PlayIdle();
-
-        Debug.Log("Monster Idle 진입");
     }
 
     public override void Update()
@@ -28,10 +26,5 @@ public class MonsterIdleState : MonsterStateBase
         {
             stateMachine.ChangeState(MonsterStateType.Patrol);
         }
-    }
-
-    public override void Exit()
-    {
-        Debug.Log("Monster Idle 종료");
     }
 }

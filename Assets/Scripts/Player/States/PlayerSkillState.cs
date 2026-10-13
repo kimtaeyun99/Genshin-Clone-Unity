@@ -6,7 +6,7 @@ public class PlayerSkillState : PlayerStateBase
 
     public PlayerSkillState(
         PlayerController player,
-        PlayerStateMachine stateMachine)
+        StateMachine<PlayerStateType> stateMachine)
         : base(player, stateMachine)
     {
     }
@@ -64,17 +64,5 @@ public class PlayerSkillState : PlayerStateBase
     private void OnSkill()
     {
         currentSkill?.OnSkillInput();
-    }
-
-    private void ChangeNextState()
-    {
-        if (InputManager.Instance.MoveInput.sqrMagnitude > 0.01f)
-        {
-            stateMachine.ChangeState(PlayerStateType.Move);
-        }
-        else
-        {
-            stateMachine.ChangeState(PlayerStateType.Idle);
-        }
     }
 }

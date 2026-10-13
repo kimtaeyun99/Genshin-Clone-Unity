@@ -4,7 +4,7 @@ public class PlayerMoveState : PlayerStateBase
 {
     private float sprintHoldTimer;
 
-    public PlayerMoveState(PlayerController player,PlayerStateMachine stateMachine) : base(player, stateMachine)
+    public PlayerMoveState(PlayerController player,StateMachine<PlayerStateType> stateMachine) : base(player, stateMachine)
     {
     }
 

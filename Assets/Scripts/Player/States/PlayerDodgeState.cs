@@ -7,7 +7,7 @@ public class PlayerDodgeState : PlayerStateBase
 
     public PlayerDodgeState(
         PlayerController player,
-        PlayerStateMachine stateMachine)
+        StateMachine<PlayerStateType> stateMachine)
         : base(player, stateMachine)
     {
     }
@@ -49,18 +49,6 @@ public class PlayerDodgeState : PlayerStateBase
     public override void Exit()
     {
         InputManager.Instance.OnAttack -= HandleAttack;
-    }
-
-    private void ChangeNextState()
-    {
-        if (InputManager.Instance.MoveInput.sqrMagnitude > 0.01f)
-        {
-            stateMachine.ChangeState(PlayerStateType.Move);
-        }
-        else
-        {
-            stateMachine.ChangeState(PlayerStateType.Idle);
-        }
     }
     private void HandleAttack()
     {

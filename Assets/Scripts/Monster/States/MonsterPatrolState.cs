@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 public class MonsterPatrolState : MonsterStateBase
 {
-    public MonsterPatrolState(MonsterController monster,MonsterStateMachine stateMachine) : base(monster, stateMachine)
+    public MonsterPatrolState(MonsterController monster,StateMachine<MonsterStateType> stateMachine) : base(monster, stateMachine)
     {
     }
 
@@ -12,7 +12,6 @@ public class MonsterPatrolState : MonsterStateBase
         monster.Animation.PlayPatrol();
 
         SetRandomDestination();
-        Debug.Log("Patrol ÁøÀÔ");
     }
 
     public override void Update()
@@ -39,7 +38,6 @@ public class MonsterPatrolState : MonsterStateBase
     public override void Exit()
     {
         monster.Agent.ResetPath();
-        Debug.Log("Patrol ÅğÀå");
     }
 
     private void SetRandomDestination()

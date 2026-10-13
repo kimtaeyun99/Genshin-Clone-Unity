@@ -5,7 +5,7 @@ public class MonsterChaseState : MonsterStateBase
     private float attackTimer;
     public MonsterChaseState(
         MonsterController monster,
-        MonsterStateMachine stateMachine)
+        StateMachine<MonsterStateType> stateMachine)
         : base(monster, stateMachine)
     {
     }
@@ -46,15 +46,9 @@ public class MonsterChaseState : MonsterStateBase
         }
         if (distance <= monster.AttackRange && attackTimer >= monster.AttackDelay)
         {
-            Debug.Log("Chase → Attack 전환");
             stateMachine.ChangeState(MonsterStateType.Attack);
             return;
         }
         monster.Agent.SetDestination(monster.Target.position);
-    }
-
-    public override void Exit()
-    {
-        Debug.Log("Monster Chase 종료");
     }
 }

@@ -55,12 +55,6 @@ public class PlayerHealth :
         {
             OnDead?.Invoke();
         }
-
-        Debug.Log(
-            $"{currentCharacter.Data.CharacterName} 피격 : " +
-            $"{damage} / 현재 HP : " +
-            $"{currentCharacter.CurrentHP}"
-        );
     }
 
     public void TakeAttack(AttackData attackData)
@@ -110,8 +104,6 @@ public class PlayerHealth :
         {
             hostElement = guestElement;
 
-            Debug.Log($"부착 : {hostElement}");
-
             return ElementReactionType.None;
         }
 
@@ -125,12 +117,6 @@ public class PlayerHealth :
                 hostElement,
                 guestElement
             );
-
-        Debug.Log(
-            $"원소 반응 : Host={hostElement}, " +
-            $"Guest={guestElement}, " +
-            $"Reaction={reaction}"
-        );
 
         hostElement = ElementType.None;
 

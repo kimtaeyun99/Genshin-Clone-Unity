@@ -1,6 +1,6 @@
 public class PlayerJumpState : PlayerStateBase
 {
-    public PlayerJumpState(PlayerController player, PlayerStateMachine stateMachine) : base(player,stateMachine)
+    public PlayerJumpState(PlayerController player, StateMachine<PlayerStateType> stateMachine) : base(player,stateMachine)
     {
 
     }
