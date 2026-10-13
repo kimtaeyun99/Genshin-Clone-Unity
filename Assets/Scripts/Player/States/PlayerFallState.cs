@@ -4,10 +4,6 @@ public class PlayerFallState : PlayerStateBase
     {
 
     }
-    public override void Enter()
-    {
-        
-    }
     public override void Update()
     {
         player.Movement.AirMove(InputManager.Instance.MoveInput);
@@ -23,9 +19,5 @@ public class PlayerFallState : PlayerStateBase
                 stateMachine.ChangeState(PlayerStateType.Idle);
             }
         }
-    }
-    public override void Exit()
-    {
-        
     }
 }

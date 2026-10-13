@@ -30,11 +30,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float dashMoveSpeed = 8f;
     [SerializeField] private float dashHoldTime = 0.5f;
 
-    //[Header("Climb")]
-    //[SerializeField] private float climbCheckDistance = 0.7f;
-    //[SerializeField] private float climbSpeed = 5f;
-    //[SerializeField] private LayerMask climbableLayer;
-
     public bool IsGrounded { get; private set; }
     public bool IsDashMode { get; private set; }
 
@@ -159,17 +154,7 @@ public class PlayerMovement : MonoBehaviour
     {
         verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
-    //public bool CheckClimbableWall(out RaycastHit hit)
-    //{
-    //    return Physics.Raycast(transform.position, transform.forward, out hit, climbCheckDistance, climbableLayer);
-    //}
 
-    //public void ClimbVertical(float inputY)
-    //{
-    //    Vector3 moveDirection = Vector3.up * inputY;
-
-    //    characterController.Move(moveDirection * climbSpeed * Time.deltaTime);
-    //}
     public void Teleport(Vector3 position, Quaternion rotation)
     {
         characterController.enabled = false;
