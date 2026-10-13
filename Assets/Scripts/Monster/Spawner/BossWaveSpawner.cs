@@ -204,4 +204,26 @@ public class BossWaveSpawner : MonoBehaviour
             startRange
         );
     }
+    public void ResetSpawner()
+    {
+        // 현재 소환되어 있는 몬스터 제거
+        foreach (GameObject monster in spawnedMonsters)
+        {
+            if (monster != null)
+            {
+                Destroy(monster);
+            }
+        }
+
+        spawnedMonsters.Clear();
+
+        currentWaveIndex = 0;
+
+        isStarted = false;
+        isWaveActive = false;
+        isWaitingNextWave = false;
+        isCleared = false;
+
+        waveDelayTimer = 0f;
+    }
 }

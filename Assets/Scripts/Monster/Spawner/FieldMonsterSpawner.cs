@@ -137,6 +137,24 @@ public class FieldMonsterSpawner : MonoBehaviour
         // 시간이 끝났을 때 플레이어가 범위 안이면 즉시 재소환
         CheckSpawnRange();
     }
+    public void ResetSpawner()
+    {
+        respawnTimer = 0f;
+        isRespawnWaiting = false;
+
+        // 현재 살아있는 소환 몬스터 제거
+        foreach (GameObject monster in spawnedMonsters)
+        {
+            if (monster != null)
+            {
+                Destroy(monster);
+            }
+        }
+
+        spawnedMonsters.Clear();
+
+        isSpawned = false;
+    }
 
     private void OnDrawGizmosSelected()
     {
