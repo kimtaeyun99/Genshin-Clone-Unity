@@ -7,54 +7,165 @@ public class PartyUI : MonoBehaviour
     [Header("Player")]
     [SerializeField] private PlayerController player;
 
-    private void Update()
+    // Singleton managers do not need Inspector references.
+    private CharacterParty party;
+    private CharacterManager manager;
+    private CharacterRunTime[] slotRuntimes;
+
+    private void Awake()
     {
-        RefreshPartyUI();
+        slotRuntimes = new CharacterRunTime[partySlots.Length];
     }
 
-    private void RefreshPartyUI()
+    private void OnEnable()
     {
-        CharacterParty party = CharacterParty.Instance;
-        CharacterManager manager = CharacterManager.Instance;
+        BindEvents();
+    }
 
+    private void Start()
+    {
+        // Awake order between GameObjects is not guaranteed.
+        // Retry once after all scene Awake calls have completed.
+        if (party == null)
+            BindEvents();
+    }
+
+    private void OnDisable()
+    {
+        if (party != null)
+        {
+            party.OnPartyChanged -= RefreshPartySlots;
+            party.OnSelectionChanged -= HandleSelectionChanged;
+        }
+
+        if (player != null)
+            player.OnSwitchCooldownChanged -= RefreshSwitchCooldown;
+
+        UnsubscribeHealthEvents();
+        party = null;
+        manager = null;
+    }
+
+    private void BindEvents()
+    {
+        if (party != null)
+            return;
+
+        CharacterParty currentParty = CharacterParty.Instance;
+        CharacterManager currentManager = CharacterManager.Instance;
+
+        if (currentParty == null || currentManager == null || player == null)
+            return;
+
+        party = currentParty;
+        manager = currentManager;
+
+        party.OnPartyChanged += RefreshPartySlots;
+        party.OnSelectionChanged += HandleSelectionChanged;
+        player.OnSwitchCooldownChanged += RefreshSwitchCooldown;
+
+        // Also covers UI being enabled after the party was initialized.
+        RefreshPartySlots();
+    }
+
+    private void RefreshPartySlots()
+    {
         if (party == null || manager == null)
             return;
 
+        UnsubscribeHealthEvents();
+
         for (int i = 0; i < partySlots.Length; i++)
         {
+            PartySlotUI slot = partySlots[i];
+            if (slot == null)
+                continue;
+
             if (i >= party.Count)
             {
-                partySlots[i].gameObject.SetActive(false);
+                slot.SetCharacter(null, null);
                 continue;
             }
 
             CharacterData data = party.GetCharacterData(i);
+            CharacterRunTime runtime = data != null ? manager.GetCharacter(data) : null;
 
-            CharacterRunTime runTime =
-                manager.GetCharacter(data);
+            slot.SetCharacter(data, runtime);
+            slotRuntimes[i] = runtime;
 
-            partySlots[i].SetCharacter(data, runTime);
+            if (runtime != null)
+                runtime.OnHealthChanged += HandlePartyHealthChanged;
+        }
 
-            bool isSelected =
-                i == party.CurrentIndex;
+        RefreshSelection();
+        RefreshSwitchCooldown(player.SwitchCoolDownTimer, player.SwitchCoolDown);
+    }
 
-            partySlots[i].SetSelected(isSelected);
+    private void HandleSelectionChanged()
+    {
+        // CharacterParty raises this after CurrentIndex has been updated.
+        RefreshSelection();
+        RefreshSwitchCooldown(player.SwitchCoolDownTimer, player.SwitchCoolDown);
+    }
 
-            // 현재 캐릭터에는 교체 쿨타임 표시 X
-            if (isSelected)
-            {
-                partySlots[i].SetSwitchCoolDown(
-                    0f,
-                    player.SwitchCoolDown
-                );
-            }
-            else
-            {
-                partySlots[i].SetSwitchCoolDown(
-                    player.SwitchCoolDownTimer,
-                    player.SwitchCoolDown
-                );
-            }
+    private void RefreshSelection()
+    {
+        if (party == null)
+            return;
+
+        for (int i = 0; i < partySlots.Length; i++)
+        {
+            PartySlotUI slot = partySlots[i];
+            if (slot == null || i >= party.Count)
+                continue;
+
+            slot.SetSelected(i == party.CurrentIndex);
+        }
+    }
+
+    private void RefreshSwitchCooldown(float remaining, float total)
+    {
+        if (party == null)
+            return;
+
+        for (int i = 0; i < partySlots.Length; i++)
+        {
+            PartySlotUI slot = partySlots[i];
+            if (slot == null || i >= party.Count)
+                continue;
+
+            // Selected character never displays a switch cooldown.
+            float displayRemaining = i == party.CurrentIndex ? 0f : remaining;
+            slot.SetSwitchCoolDown(displayRemaining, total);
+        }
+    }
+
+    private void HandlePartyHealthChanged(int currentHP, int maxHP)
+    {
+        // At most four party slots; refresh only the health bars, not icons/names.
+        // Shared handler avoids creating one captured delegate per slot.
+        for (int i = 0; i < slotRuntimes.Length; i++)
+        {
+            if (slotRuntimes[i] == null || partySlots[i] == null)
+                continue;
+
+            partySlots[i].SetHealth(slotRuntimes[i].CurrentHP, slotRuntimes[i].MaxHP);
+        }
+    }
+
+    private void UnsubscribeHealthEvents()
+    {
+        if (slotRuntimes == null)
+            return;
+
+        for (int i = 0; i < slotRuntimes.Length; i++)
+        {
+            CharacterRunTime runtime = slotRuntimes[i];
+            if (runtime == null)
+                continue;
+
+            runtime.OnHealthChanged -= HandlePartyHealthChanged;
+            slotRuntimes[i] = null;
         }
     }
 }

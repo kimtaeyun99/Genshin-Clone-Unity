@@ -18,53 +18,87 @@ public class PartySlotUI : MonoBehaviour
     [SerializeField] private Image switchCoolDownFill;
     [SerializeField] private TMP_Text switchCoolDownText;
 
-    public void SetCharacter(
-        CharacterData data,
-        CharacterRunTime runTime)
+    private CharacterData displayedCharacter;
+    private int lastCurrentHP = int.MinValue;
+    private int lastMaxHP = int.MinValue;
+    private int lastCooldownTenths = int.MinValue;
+
+    public void SetCharacter(CharacterData data, CharacterRunTime runTime)
     {
         if (data == null)
         {
-            gameObject.SetActive(false);
+            displayedCharacter = null;
+            lastCurrentHP = int.MinValue;
+            lastMaxHP = int.MinValue;
+
+            if (gameObject.activeSelf)
+                gameObject.SetActive(false);
             return;
         }
 
-        gameObject.SetActive(true);
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
 
-        characterIcon.sprite = data.Icon;
-        characterNameText.text = data.CharacterName;
+        // Character identity is stable between party/selection events.
+        if (displayedCharacter != data)
+        {
+            displayedCharacter = data;
+            characterIcon.sprite = data.Icon;
+            characterNameText.text = data.CharacterName;
+            lastCurrentHP = int.MinValue;
+            lastMaxHP = int.MinValue;
+        }
 
-        if (runTime == null)
+        if (runTime != null)
+            SetHealth(runTime.CurrentHP, runTime.MaxHP);
+        else
+            SetHealth(0, 0);
+    }
+
+    public void SetHealth(int currentHP, int maxHP)
+    {
+        if (lastCurrentHP == currentHP && lastMaxHP == maxHP)
             return;
 
-        healthBarFill.fillAmount =
-            runTime.MaxHP > 0
-                ? (float)runTime.CurrentHP / runTime.MaxHP
-                : 0f;
+        healthBarFill.fillAmount = maxHP > 0
+            ? Mathf.Clamp01((float)currentHP / maxHP)
+            : 0f;
+
+        lastCurrentHP = currentHP;
+        lastMaxHP = maxHP;
     }
 
     public void SetSelected(bool isSelected)
     {
-        selectedEffect.SetActive(isSelected);
+        if (selectedEffect.activeSelf != isSelected)
+            selectedEffect.SetActive(isSelected);
     }
 
-    public void SetSwitchCoolDown(
-        float currentCoolDown,
-        float maxCoolDown)
+    public void SetSwitchCoolDown(float currentCoolDown, float maxCoolDown)
     {
-        if (currentCoolDown <= 0f)
+        bool isCoolingDown = currentCoolDown > 0f && maxCoolDown > 0f;
+
+        if (switchCoolDownFill.gameObject.activeSelf != isCoolingDown)
+            switchCoolDownFill.gameObject.SetActive(isCoolingDown);
+
+        if (switchCoolDownText.gameObject.activeSelf != isCoolingDown)
+            switchCoolDownText.gameObject.SetActive(isCoolingDown);
+
+        if (!isCoolingDown)
         {
-            switchCoolDownFill.gameObject.SetActive(false);
-            switchCoolDownText.gameObject.SetActive(false);
+            lastCooldownTenths = int.MinValue;
             return;
         }
 
-        switchCoolDownFill.gameObject.SetActive(true);
-        switchCoolDownText.gameObject.SetActive(true);
+        // Smooth fill while cooldown is running.
+        switchCoolDownFill.fillAmount = Mathf.Clamp01(currentCoolDown / maxCoolDown);
 
-        switchCoolDownFill.fillAmount =
-            currentCoolDown / maxCoolDown;
-
-        switchCoolDownText.text =
-            currentCoolDown.ToString("F1");
+        // Only rewrite visible text when the displayed tenth changes.
+        int currentTenths = Mathf.RoundToInt(currentCoolDown * 10f);
+        if (lastCooldownTenths != currentTenths)
+        {
+            switchCoolDownText.text = currentCoolDown.ToString("F1");
+            lastCooldownTenths = currentTenths;
+        }
     }
 }
