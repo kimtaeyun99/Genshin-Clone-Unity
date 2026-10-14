@@ -1,17 +1,23 @@
+using System;
 using UnityEngine;
 
 public class PlayerStamina : MonoBehaviour
 {
     [Header("Stamina")]
     [SerializeField] private float maxStamina = 100f;
+
     [Header("Consume")]
     [SerializeField] private float dashStaminaCostPerSecond = 15f;
     [SerializeField] private float dodgeStaminaCost = 20f;
+
     [Header("Recovery")]
     [SerializeField] private float recoveryPerSecond = 20f;
     [SerializeField] private float recoveryDelay = 1f;
 
     [SerializeField] private float actionLimitPercent = 0.2f;
+
+    public event Action<float, float> OnStaminaChanged;
+
     public bool CanUseStaminaAction =>
         CurrentStamina >= MaxStamina * actionLimitPercent;
 
@@ -28,28 +34,24 @@ public class PlayerStamina : MonoBehaviour
     {
         CurrentStamina = maxStamina;
     }
+
     private void Update()
     {
         RecoveryStamina();
     }
-    public void ConsumeStamina(float StaminaCost)
+
+    public void ConsumeStamina(float staminaCost)
     {
-        CurrentStamina -= StaminaCost * Time.deltaTime;
-        CurrentStamina = Mathf.Clamp(CurrentStamina, 0f,maxStamina);
+        SetStamina(CurrentStamina - staminaCost * Time.deltaTime);
         recoverTimer = 0f;
     }
+
     public void ConsumeStaminaInstant(float staminaCost)
     {
-        CurrentStamina -= staminaCost;
-
-        CurrentStamina = Mathf.Clamp(
-            CurrentStamina,
-            0f,
-            maxStamina
-        );
-
+        SetStamina(CurrentStamina - staminaCost);
         recoverTimer = 0f;
     }
+
     public void RecoveryStamina()
     {
         if (IsFull)
@@ -64,8 +66,18 @@ public class PlayerStamina : MonoBehaviour
             return;
         }
 
-        CurrentStamina += recoveryPerSecond * Time.deltaTime;
+        SetStamina(CurrentStamina + recoveryPerSecond * Time.deltaTime);
+    }
 
-        CurrentStamina = Mathf.Min(CurrentStamina, maxStamina);
+    private void SetStamina(float value)
+    {
+        float clampedValue = Mathf.Clamp(value, 0f, maxStamina);
+        if (CurrentStamina == clampedValue)
+        {
+            return;
+        }
+
+        CurrentStamina = clampedValue;
+        OnStaminaChanged?.Invoke(CurrentStamina, MaxStamina);
     }
 }
