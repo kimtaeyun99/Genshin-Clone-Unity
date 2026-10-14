@@ -28,7 +28,6 @@ public class MonsterHealthBar : MonoBehaviour
     private float delayTimer;
     private float delayVelocity;
 
-    // HP 변화가 발생한 동안에만 지연 체력바를 보간한다.
     private bool isDelayAnimating;
     private bool isVisible;
 
@@ -45,7 +44,6 @@ public class MonsterHealthBar : MonoBehaviour
 
     private void Start()
     {
-        // 다른 MonoBehaviour의 Awake 순서가 보장되지 않으므로 Start에서도 연결을 확인한다.
         Subscribe();
         if (runtime == null || health == null)
             return;

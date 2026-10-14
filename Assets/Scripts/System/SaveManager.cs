@@ -44,8 +44,7 @@ public class SaveManager : MonoBehaviour
     }
 
     public void SaveGame()
-    {
-        // 씬 전환 중 매니저/플레이어가 없다면 기존 저장 파일은 유지한다.
+    { 
         if (CharacterManager.Instance == null ||
             CharacterParty.Instance == null)
         {
@@ -69,11 +68,8 @@ public class SaveManager : MonoBehaviour
         }
         catch (Exception exception)
         {
-            // 저장 실패 시 예외를 앱 종료 콜백까지 전파하지 않는다.
-            // 기존 save.json은 임시 파일 교체가 성공한 경우에만 변경된다.
-            Debug.LogError($"[SaveManager] 저장 실패: {exception}", this);
+
         }
-        Debug.Log($"저장 위치: {SavePath}");
     }
 
     private void SavePlayer(
@@ -165,8 +161,6 @@ public class SaveManager : MonoBehaviour
     }
     private void WriteSaveFile(string json)
     {
-        // 동일 디렉터리의 임시 파일에 먼저 저장하여 중간에 쓰기가 실패해도
-        // 기존 save.json을 직접 손상시키지 않는다.
         string savePath = SavePath;
         string tempPath = savePath + ".tmp";
         string backupPath = savePath + ".bak";
@@ -177,7 +171,6 @@ public class SaveManager : MonoBehaviour
 
             if (File.Exists(savePath))
             {
-                // Windows(PC)에서는 기존 파일 교체와 직전 파일 백업을 수행한다.
                 File.Replace(tempPath, savePath, backupPath);
             }
             else
@@ -187,8 +180,6 @@ public class SaveManager : MonoBehaviour
         }
         finally
         {
-            // 교체에 실패하여 남은 임시 파일만 정리한다.
-            // 삭제 실패가 원래 예외를 덮어쓰지 않도록 한다.
             try
             {
                 if (File.Exists(tempPath))
@@ -196,7 +187,6 @@ public class SaveManager : MonoBehaviour
             }
             catch (Exception exception)
             {
-                Debug.LogWarning($"[SaveManager] 임시 파일 정리 실패: {exception}", this);
             }
         }
     }
@@ -260,7 +250,6 @@ public class SaveManager : MonoBehaviour
         if (!HasSaveData())
             return;
 
-        // 파일 읽기·역직렬화가 성공하기 전까지 Runtime 상태를 변경하지 않는다.
         GameSaveData saveData;
         try
         {
@@ -269,17 +258,14 @@ public class SaveManager : MonoBehaviour
         }
         catch (Exception exception)
         {
-            Debug.LogError($"[SaveManager] 저장 파일 읽기 실패: {exception}", this);
             return;
         }
 
         if (saveData == null)
         {
-            Debug.LogWarning("[SaveManager] 저장 데이터가 비어 있어 불러오기를 중단합니다.", this);
             return;
         }
 
-        // 캐릭터 스탯·파티 선택·플레이어 위치의 기존 복원 순서는 유지한다.
         LoadCharacters(saveData);
         LoadParty(saveData);
         LoadPlayer(saveData);
@@ -315,16 +301,13 @@ public class SaveManager : MonoBehaviour
                 continue;
             }
 
-            // 레벨 / 돌파 복구
             runTime.LoadGrowthData(
                 characterSave.level,
                 characterSave.ascensionPhase
             );
 
-            // 레벨 / 돌파에 맞춰 스탯 다시 계산
             manager.RefreshCharacterStat(runTime);
 
-            // HP / 에너지 / 사망 상태 복구
             runTime.LoadStateData(
                 characterSave.currentHP,
                 characterSave.currentEnergy,

@@ -34,7 +34,6 @@ public class CombatUI : MonoBehaviour
 
     private void Start()
     {
-        // OnEnable 시점에 CharacterManager.Awake가 아직 실행되지 않았을 때를 대비.
         BindManager();
     }
 
@@ -63,7 +62,6 @@ public class CombatUI : MonoBehaviour
             characterManager.OnCurrentCharacterChanged += HandleCharacterChanged;
         }
 
-        // UI가 나중에 활성화되더라도 현재 선택된 캐릭터를 표시.
         if (currentCharacter != manager.CurrentCharacter)
             HandleCharacterChanged(manager.CurrentCharacter);
     }
@@ -80,7 +78,6 @@ public class CombatUI : MonoBehaviour
         currentCharacter.OnSkillCooldownChanged += RefreshSkillCoolDown;
         currentCharacter.OnBurstCooldownChanged += RefreshBurstCoolDown;
 
-        // 새 캐릭터의 텍스트를 반드시 한 번 갱신.
         lastCurrentEnergyInt = int.MinValue;
         lastMaxEnergyInt = int.MinValue;
         lastSkillTenths = int.MinValue;
@@ -128,7 +125,6 @@ public class CombatUI : MonoBehaviour
             ? currentEnergy / maxEnergy
             : 0f;
 
-        // 눈에 보이는 정수 값이 바뀔 때만 텍스트를 다시 작성.
         int roundedCurrent = Mathf.RoundToInt(currentEnergy);
         int roundedMax = Mathf.RoundToInt(maxEnergy);
         if (lastCurrentEnergyInt != roundedCurrent)
@@ -162,7 +158,6 @@ public class CombatUI : MonoBehaviour
         if (!isCoolingDown)
             return;
 
-        // 게이지는 매 틱 부드럽게 갱신하되, 소수 1자리 숫자가 바뀔 때만 문자열 갱신.
         int tenths = Mathf.RoundToInt(remaining * 10f);
         if (lastSkillTenths != tenths)
         {

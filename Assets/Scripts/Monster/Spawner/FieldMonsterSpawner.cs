@@ -68,7 +68,6 @@ public class FieldMonsterSpawner : MonoBehaviour
     {
         UnsubscribeFromMonsterDeaths();
 
-        // 이전 몬스터의 사망 연출 중인 오브젝트는 ResetSpawner에서 정리 가능하도록 유지.
         for (int i = spawnedMonsters.Count - 1; i >= 0; i--)
         {
             if (spawnedMonsters[i] == null)
@@ -81,13 +80,9 @@ public class FieldMonsterSpawner : MonoBehaviour
             if (spawnData.monsterPrefab == null || spawnData.spawnPoint == null)
                 continue;
 
-            // MonsterController가 Runtime을 생성하고 Health와 연결한다.
             if (!spawnData.monsterPrefab.TryGetComponent<MonsterController>(out _) ||
                 !spawnData.monsterPrefab.TryGetComponent<Health>(out _))
             {
-                Debug.LogError(
-                    $"[FieldMonsterSpawner] '{spawnData.monsterPrefab.name}' 프리팹 루트에 MonsterController와 Health가 필요합니다.",
-                    this);
                 continue;
             }
 
@@ -128,7 +123,6 @@ public class FieldMonsterSpawner : MonoBehaviour
 
     private void OnAllMonstersDead()
     {
-        // 마지막 OnDead에서 즉시 타이머를 시작한다. 사망 연출은 MonsterDeadState가 담당.
         isSpawned = false;
         isRespawnWaiting = true;
         respawnTimer = respawnTime;

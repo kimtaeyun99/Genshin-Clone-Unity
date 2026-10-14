@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float switchCoolDown = 1f;
     [SerializeField] private float switchCoolDownTimer;
 
-    // The party UI only needs updates while the switch cooldown changes.
     public event Action<float, float> OnSwitchCooldownChanged;
 
     public float SwitchCoolDownTimer => switchCoolDownTimer;
@@ -18,8 +17,6 @@ public class PlayerController : MonoBehaviour
 
     public PlayerStamina Stamina { get; private set; }
     public PlayerAnimationController Animation { get; private set; }
-    // 이전 State 코드의 player.CharacterManager 사용과 호환성을 유지하되,
-    // 실제 조회는 싱글톤으로 통일한다. Inspector 참조는 필요하지 않다.
     public CharacterManager CharacterManager => CharacterManager.Instance;
     public Health Health { get; private set; }
 

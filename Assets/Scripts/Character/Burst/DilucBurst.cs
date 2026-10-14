@@ -32,7 +32,6 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
         AnimatorStateInfo stateInfo =
             playerAnimationController.GetCurrentStateInfo();
 
-        // 실제 Burst 애니메이션 진입 확인
         if (!enteredBurstAnimation)
         {
             if (stateInfo.IsTag("Burst"))
@@ -43,7 +42,6 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
             return;
         }
 
-        // Burst에 진입한 이후 Burst 애니메이션 진행률만 검사
         if (!stateInfo.IsTag("Burst"))
         {
             return;

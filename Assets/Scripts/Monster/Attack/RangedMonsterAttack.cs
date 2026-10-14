@@ -54,7 +54,6 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
             return;
         }
 
-        // Attack2
         if (attackStep == 1)
         {
             if (!stateInfo.IsName("Attack2"))

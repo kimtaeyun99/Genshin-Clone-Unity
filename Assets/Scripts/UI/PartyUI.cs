@@ -7,7 +7,6 @@ public class PartyUI : MonoBehaviour
     [Header("Player")]
     [SerializeField] private PlayerController player;
 
-    // Singleton managers do not need Inspector references.
     private CharacterParty party;
     private CharacterManager manager;
     private CharacterRunTime[] slotRuntimes;
@@ -24,8 +23,6 @@ public class PartyUI : MonoBehaviour
 
     private void Start()
     {
-        // Awake order between GameObjects is not guaranteed.
-        // Retry once after all scene Awake calls have completed.
         if (party == null)
             BindEvents();
     }
@@ -64,7 +61,6 @@ public class PartyUI : MonoBehaviour
         party.OnSelectionChanged += HandleSelectionChanged;
         player.OnSwitchCooldownChanged += RefreshSwitchCooldown;
 
-        // Also covers UI being enabled after the party was initialized.
         RefreshPartySlots();
     }
 
@@ -103,7 +99,6 @@ public class PartyUI : MonoBehaviour
 
     private void HandleSelectionChanged()
     {
-        // CharacterParty raises this after CurrentIndex has been updated.
         RefreshSelection();
         RefreshSwitchCooldown(player.SwitchCoolDownTimer, player.SwitchCoolDown);
     }
@@ -134,7 +129,6 @@ public class PartyUI : MonoBehaviour
             if (slot == null || i >= party.Count)
                 continue;
 
-            // Selected character never displays a switch cooldown.
             float displayRemaining = i == party.CurrentIndex ? 0f : remaining;
             slot.SetSwitchCoolDown(displayRemaining, total);
         }
@@ -142,8 +136,6 @@ public class PartyUI : MonoBehaviour
 
     private void HandlePartyHealthChanged(int currentHP, int maxHP)
     {
-        // At most four party slots; refresh only the health bars, not icons/names.
-        // Shared handler avoids creating one captured delegate per slot.
         for (int i = 0; i < slotRuntimes.Length; i++)
         {
             if (slotRuntimes[i] == null || partySlots[i] == null)

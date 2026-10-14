@@ -6,7 +6,6 @@ public class MonsterPatrolState : MonsterStateBase
 {
     private const int InitialDetectionBufferSize = 32;
 
-    // 몬스터별 PatrolState에서 한 번 생성해 재사용한다.
     private Collider[] detectionBuffer = new Collider[InitialDetectionBufferSize];
 
     public MonsterPatrolState(
@@ -24,7 +23,6 @@ public class MonsterPatrolState : MonsterStateBase
 
     public override void Update()
     {
-        // 기존처럼 매 프레임 플레이어 탐지: 탐지 반응 주기 변경 없음.
         DetectPlayer();
 
         if (monster.Target != null)
@@ -65,9 +63,6 @@ public class MonsterPatrolState : MonsterStateBase
     {
         int hitCount;
 
-        // NonAlloc 결과가 버퍼를 꽉 채운 경우 잘렸을 가능성이 있다.
-        // 플레이어를 놓치지 않도록 버퍼를 늘려 즉시 다시 탐지한다.
-        // 확장 시에만 배열 할당이 발생하고 이후에는 재사용된다.
         while (true)
         {
             hitCount = Physics.OverlapSphereNonAlloc(

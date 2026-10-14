@@ -67,7 +67,6 @@ public class MonsterController : MonoBehaviour
         Animation = GetComponent<MonsterAnimationController>();
         Hitbox = GetComponentsInChildren<AttackHitbox>(true);
 
-        // 몬스터별 원본 HP/사망 상태는 일반 C# Runtime 하나에서 관리한다.
         Runtime = new MonsterRunTime(maxHP);
         Health = GetComponent<Health>();
         Health.BindMonsterRunTime(Runtime);

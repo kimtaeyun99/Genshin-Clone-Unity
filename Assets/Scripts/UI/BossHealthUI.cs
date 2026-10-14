@@ -29,7 +29,6 @@ public class BossHealthUI : MonoBehaviour
     private float delayTimer;
     private float delayVelocity;
 
-    // 보스 HP가 변한 동안에만 지연 체력바를 보간한다.
     private bool isDelayAnimating;
 
     private void Awake()

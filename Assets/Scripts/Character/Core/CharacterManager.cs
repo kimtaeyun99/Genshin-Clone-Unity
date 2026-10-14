@@ -6,7 +6,6 @@ public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager Instance { get; private set; }
 
-    // CurrentCharacter 변경은 CombatUI 등 여러 UI에서 구독 가능.
     public event Action<CharacterRunTime> OnCurrentCharacterChanged;
 
     [Header("Character Data")]
@@ -24,6 +23,7 @@ public class CharacterManager : MonoBehaviour
     public Transform EffectRoot => effectRoot;
 
     private CharacterRunTime currentCharacter;
+
     private CharacterStatCalculator statCalculator;
     public CharacterRunTime CurrentCharacter => currentCharacter;
 
@@ -92,7 +92,6 @@ public class CharacterManager : MonoBehaviour
 
         characterView.ChangeView(data);
 
-        // 기존 모델 교체와 스탯 적용이 끝난 후 현재 캐릭터 변경 알림.
         OnCurrentCharacterChanged?.Invoke(currentCharacter);
         return true;
     }
@@ -128,7 +127,6 @@ public class CharacterManager : MonoBehaviour
             runTime.Respawn();
         }
 
-        // 첫 번째 파티원을 현재 캐릭터로
         if (CharacterParty.Instance.PartyMembers.Count > 0)
             SetCurrentCharacter(CharacterParty.Instance.PartyMembers[0]);
     }

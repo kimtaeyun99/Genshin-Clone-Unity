@@ -1,6 +1,5 @@
 public class CharacterStat
 {
-    // Attack
     public int ATK { get; private set; }
     public int ElementalMastery { get; private set; }
     public float CriticalRate { get; private set; }
@@ -13,7 +12,6 @@ public class CharacterStat
     public float ElectroDamageBonus { get; private set; }
     public float PhysicalDamageBonus { get; private set; }
 
-    // Defense
     public int MaxHP { get; private set; }
     public int CurrentHP { get; private set; }
     public int DEF { get; private set; }

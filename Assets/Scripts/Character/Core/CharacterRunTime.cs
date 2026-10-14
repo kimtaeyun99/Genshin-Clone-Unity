@@ -53,29 +53,6 @@ public class CharacterRunTime
         this.stat = stat;
     }
 
-    public bool LevelUp()
-    {
-        int maxLevel = CharacterLevelRule.GetMaxLevel(ascensionPhase);
-        if (level >= maxLevel)
-            return false;
-
-        level++;
-        return true;
-    }
-
-    public bool Ascension()
-    {
-        if (ascensionPhase >= CharacterLevelRule.MaxLevels.Length - 1)
-            return false;
-
-        int maxLevel = CharacterLevelRule.GetMaxLevel(ascensionPhase);
-        if (level < maxLevel)
-            return false;
-
-        ascensionPhase++;
-        return true;
-    }
-
     public void SetMaxHP(int newMaxHP)
     {
         int previousHP = currentHP;
@@ -115,18 +92,6 @@ public class CharacterRunTime
             IsDead = true;
         }
 
-        NotifyHealthChangedIfNeeded(previousHP, maxHP);
-    }
-
-    public void Revive()
-    {
-        // 전투 중 부활 기능은 없으며, 부활 시에는 HP를 완전히 회복한다.
-        if (!IsDead)
-            return;
-
-        int previousHP = currentHP;
-        IsDead = false;
-        currentHP = maxHP;
         NotifyHealthChangedIfNeeded(previousHP, maxHP);
     }
 
@@ -234,8 +199,6 @@ public class CharacterRunTime
         bool energyChanged = this.currentEnergy != newEnergy;
         this.currentEnergy = newEnergy;
 
-        // 기존 저장 파일의 사망 상태와 HP 값은 이번 작업에서 임의 보정하지 않는다.
-        // 기존 LoadStateData 규칙 유지. 저장 데이터 검증은 SaveManager 단계에서 진행.
         IsDead = isDead;
 
         NotifyHealthChangedIfNeeded(previousHP, previousMaxHP);

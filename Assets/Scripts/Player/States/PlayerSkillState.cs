@@ -1,8 +1,6 @@
 public class PlayerSkillState : PlayerStateBase
 {
     private ICharacterSkill currentSkill;
-    // 캐릭터 교체 시에는 CharacterManager.CurrentCharacter가 이미 새 캐릭터다.
-    // 따라서 스킬을 시작한 캐릭터를 별도로 보관해야 올바른 대상에 쿨다운이 적용된다.
     private CharacterRunTime skillOwner;
 
     public PlayerSkillState(
