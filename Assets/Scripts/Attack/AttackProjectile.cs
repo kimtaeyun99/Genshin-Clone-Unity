@@ -18,7 +18,8 @@ public class AttackProjectile : MonoBehaviour
     {
         this.damage = damage;
         this.elementType = elementType;
-        this.direction = direction;
+        // 방향의 길이가 투사체 속도에 영향을 주지 않도록 단위 벡터로 저장한다.
+        this.direction = direction.normalized;
 
         hitTargets.Clear();
         Destroy(gameObject, lifeTime);
