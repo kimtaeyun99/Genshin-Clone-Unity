@@ -18,11 +18,9 @@ public class PlayerController : MonoBehaviour
 
     public PlayerStamina Stamina { get; private set; }
     public PlayerAnimationController Animation { get; private set; }
-    [SerializeField] private CharacterParty characterParty;
-
-    [SerializeField] private CharacterManager characterManager;
-
-    public CharacterManager CharacterManager => characterManager;
+    // 이전 State 코드의 player.CharacterManager 사용과 호환성을 유지하되,
+    // 실제 조회는 싱글톤으로 통일한다. Inspector 참조는 필요하지 않다.
+    public CharacterManager CharacterManager => CharacterManager.Instance;
     public PlayerHealth Health { get; private set; }
 
     private void Awake()
@@ -50,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        characterParty.SelectCharacter(0);
+        CharacterParty.Instance.SelectCharacter(0);
         StateMachine.Initialize(PlayerStateType.Idle);
     }
 
@@ -83,14 +81,18 @@ public class PlayerController : MonoBehaviour
         if (!CanSwitchCharacter)
             return;
 
+        CharacterParty party = CharacterParty.Instance;
+        if (party == null)
+            return;
+
         int partyIndex = index - 1;
-        if (partyIndex < 0 || partyIndex >= characterParty.Count)
+        if (partyIndex < 0 || partyIndex >= party.Count)
             return;
 
-        if (partyIndex == characterParty.CurrentIndex)
+        if (partyIndex == party.CurrentIndex)
             return;
 
-        if (!characterParty.SelectCharacter(partyIndex))
+        if (!party.SelectCharacter(partyIndex))
             return;
 
         StateMachine.ChangeState(PlayerStateType.Idle);
