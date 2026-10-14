@@ -49,6 +49,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
+  hitboxCollider: {fileID: 1718935741325599187}
 --- !u!65 &1718935741325599187
 BoxCollider:
   m_ObjectHideFlags: 0

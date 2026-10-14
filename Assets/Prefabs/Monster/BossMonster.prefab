@@ -271,6 +271,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
+  hitboxCollider: {fileID: 8788401351569925606}
 --- !u!65 &8788401351569925606
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -340,6 +341,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
+  hitboxCollider: {fileID: 8788401351569925606}
 --- !u!65 &2099685759511742928
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -409,6 +411,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
+  hitboxCollider: {fileID: 8788401351569925606}
 --- !u!65 &7078126000915524254
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -499,6 +502,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
+  hitboxCollider: {fileID: 8788401351569925606}
 --- !u!1001 &6012395775606927684
 PrefabInstance:
   m_ObjectHideFlags: 0
