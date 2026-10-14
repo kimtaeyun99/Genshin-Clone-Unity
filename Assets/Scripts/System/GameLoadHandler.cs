@@ -1,23 +1,21 @@
+using System.Collections;
 using UnityEngine;
 
 public class GameLoadHandler : MonoBehaviour
 {
-    private void Start()
+    private IEnumerator Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        if (SaveManager.Instance == null)
-        {
-            return;
-        }
+        yield return null;
 
-        if (!SaveManager.Instance.LoadRequested)
-        {
-            return;
-        }
+        SaveManager saveManager = SaveManager.Instance;
 
-        SaveManager.Instance.LoadGame();
-        SaveManager.Instance.SetLoadRequested(false);
+        if (saveManager == null || !saveManager.LoadRequested)
+            yield break;
+
+        saveManager.LoadGame();
+        saveManager.SetLoadRequested(false);
     }
 }
