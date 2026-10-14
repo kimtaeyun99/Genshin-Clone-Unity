@@ -45,22 +45,26 @@ public class Health : MonoBehaviour
 
         if (monsterRunTime != null)
         {
+            if (monsterRunTime.IsDead)
+                return;
+
             monsterRunTime.TakeDamage(damage);
-            return;
         }
+        else
+        {
+            CharacterManager manager = CharacterManager.Instance;
+            if (manager == null)
+                return;
 
-        CharacterManager manager = CharacterManager.Instance;
-        if (manager == null)
-            return;
+            CharacterRunTime character = manager.CurrentCharacter;
+            if (character == null || character.IsDead)
+                return;
 
-        CharacterRunTime character = manager.CurrentCharacter;
-        if (character == null || character.IsDead)
-            return;
+            character.TakeDamage(damage);
 
-        character.TakeDamage(damage);
-        if (character.IsDead)
-            OnDead?.Invoke();
-
+            if (character.IsDead)
+                OnDead?.Invoke();
+        }
         if (DamageUIManager.Instance != null)
         {
             DamageUIManager.Instance.ShowDamage(
