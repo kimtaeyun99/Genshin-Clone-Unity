@@ -17,47 +17,62 @@ public class StaminaUI : MonoBehaviour
     [SerializeField] private Color lowStaminaColor = Color.red;
     [SerializeField] private float lowStaminaPercent = 0.2f;
 
+    private int lastDisplayedCurrent = int.MinValue;
+    private int lastDisplayedMax = int.MinValue;
+
+    private void OnEnable()
+    {
+        if (playerStamina != null)
+        {
+            playerStamina.OnStaminaChanged += UpdateStaminaUI;
+            UpdateStaminaUI(playerStamina.CurrentStamina, playerStamina.MaxStamina);
+        }
+    }
+
     private void Start()
     {
-        UpdateStaminaUI();
+        if (playerStamina != null)
+        {
+            UpdateStaminaUI(playerStamina.CurrentStamina, playerStamina.MaxStamina);
+        }
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        UpdateStaminaUI();
+        if (playerStamina != null)
+        {
+            playerStamina.OnStaminaChanged -= UpdateStaminaUI;
+        }
     }
 
-    private void UpdateStaminaUI()
+    private void UpdateStaminaUI(float currentStamina, float maxStamina)
     {
-        if (playerStamina == null)
+        if (staminaBarFill == null || currentStaminaText == null || maxStaminaText == null)
         {
             return;
         }
 
-        float currentStamina = playerStamina.CurrentStamina;
-        float maxStamina = playerStamina.MaxStamina;
+        float staminaPercent = maxStamina > 0f
+            ? Mathf.Clamp01(currentStamina / maxStamina)
+            : 0f;
 
-        float staminaPercent =
-            currentStamina / maxStamina;
+        staminaBarFill.fillAmount = staminaPercent;
+        staminaBarFill.color = staminaPercent <= lowStaminaPercent
+            ? lowStaminaColor
+            : normalColor;
 
-        staminaBarFill.fillAmount =
-            staminaPercent;
-
-        currentStaminaText.text =
-            Mathf.CeilToInt(currentStamina).ToString();
-
-        maxStaminaText.text =
-            Mathf.CeilToInt(maxStamina).ToString();
-
-        if (staminaPercent <= lowStaminaPercent)
+        int displayedCurrent = Mathf.CeilToInt(currentStamina);
+        if (lastDisplayedCurrent != displayedCurrent)
         {
-            staminaBarFill.color =
-                lowStaminaColor;
+            currentStaminaText.SetText("{0}", displayedCurrent);
+            lastDisplayedCurrent = displayedCurrent;
         }
-        else
+
+        int displayedMax = Mathf.CeilToInt(maxStamina);
+        if (lastDisplayedMax != displayedMax)
         {
-            staminaBarFill.color =
-                normalColor;
+            maxStaminaText.SetText("{0}", displayedMax);
+            lastDisplayedMax = displayedMax;
         }
     }
 }
