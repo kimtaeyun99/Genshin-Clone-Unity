@@ -7,6 +7,9 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private string monsterName;
     [SerializeField] private bool isBoss;
 
+    [Header("HP")]
+    [SerializeField] private float maxHP = 100f;
+
     [Header("Idle")]
     [SerializeField] private float idleTime = 2f;
 
@@ -31,6 +34,7 @@ public class MonsterController : MonoBehaviour
 
     public string MonsterName => monsterName;
     public bool IsBoss => isBoss;
+    public float MaxHP => maxHP;
 
     public float IdleTime => idleTime;
     public float PatrolRadius => patrolRadius;
@@ -43,100 +47,52 @@ public class MonsterController : MonoBehaviour
     public float AttackMultiplier => attackMultiplier;
 
     public float DeadDestroyDelay => deadDestroyDelay;
-
     public ElementType ElementType => elementType;
 
     public Vector3 SpawnPosition { get; private set; }
-
     public NavMeshAgent Agent { get; private set; }
-
-    public StateMachine<MonsterStateType> StateMachine
-    {
-        get;
-        private set;
-    }
-
-    public Transform Target
-    {
-        get;
-        private set;
-    }
-
-    public MonsterAnimationController Animation
-    {
-        get;
-        private set;
-    }
-
-    public AttackHitbox[] Hitbox
-    {
-        get;
-        private set;
-    }
-
-    public MonsterHealth monsterHealth
-    {
-        get;
-        private set;
-    }
-
-    public IMonsterAttack MonsterAttack
-    {
-        get;
-        private set;
-    }
-
-    public MonsterHealthBar HealthBar
-    {
-        get;
-        private set;
-    }
+    public StateMachine<MonsterStateType> StateMachine { get; private set; }
+    public Transform Target { get; private set; }
+    public MonsterAnimationController Animation { get; private set; }
+    public AttackHitbox[] Hitbox { get; private set; }
+    public Health Health { get; private set; }
+    public MonsterRunTime Runtime { get; private set; }
+    public IMonsterAttack MonsterAttack { get; private set; }
+    public MonsterHealthBar HealthBar { get; private set; }
 
     private void Awake()
     {
-        Agent =
-            GetComponent<NavMeshAgent>();
+        Agent = GetComponent<NavMeshAgent>();
+        StateMachine = new StateMachine<MonsterStateType>();
+        Animation = GetComponent<MonsterAnimationController>();
+        Hitbox = GetComponentsInChildren<AttackHitbox>(true);
 
-        StateMachine =
-            new StateMachine<MonsterStateType>();
+        // 몬스터별 원본 HP/사망 상태는 일반 C# Runtime 하나에서 관리한다.
+        Runtime = new MonsterRunTime(maxHP);
+        Health = GetComponent<Health>();
+        Health.BindMonsterRunTime(Runtime);
 
-        Animation =
-            GetComponent<MonsterAnimationController>();
-
-        Hitbox =
-            GetComponentsInChildren<AttackHitbox>(true);
-
-        monsterHealth =
-            GetComponent<MonsterHealth>();
-
-        MonsterAttack =
-            GetComponent<IMonsterAttack>();
-
-        HealthBar =
-            GetComponentInChildren<MonsterHealthBar>(true);
+        MonsterAttack = GetComponent<IMonsterAttack>();
+        HealthBar = GetComponentInChildren<MonsterHealthBar>(true);
 
         InitializeStates();
     }
 
     private void OnEnable()
     {
-        monsterHealth.OnDead += HandleDead;
+        Runtime.OnDead += HandleDead;
     }
 
     private void OnDisable()
     {
-        monsterHealth.OnDead -= HandleDead;
+        Runtime.OnDead -= HandleDead;
     }
 
     private void Start()
     {
         SpawnPosition = transform.position;
-
         Agent.stoppingDistance = AttackRange;
-
-        StateMachine.Initialize(
-            MonsterStateType.Idle
-        );
+        StateMachine.Initialize(MonsterStateType.Idle);
     }
 
     private void Update()
@@ -146,45 +102,16 @@ public class MonsterController : MonoBehaviour
 
     private void InitializeStates()
     {
-        StateMachine.AddState(
-            MonsterStateType.Idle,
-            new MonsterIdleState(
-                this,
-                StateMachine
-            )
-        );
-
-        StateMachine.AddState(
-            MonsterStateType.Patrol,
-            new MonsterPatrolState(
-                this,
-                StateMachine
-            )
-        );
-
-        StateMachine.AddState(
-            MonsterStateType.Chase,
-            new MonsterChaseState(
-                this,
-                StateMachine
-            )
-        );
-
-        StateMachine.AddState(
-            MonsterStateType.Attack,
-            new MonsterAttackState(
-                this,
-                StateMachine
-            )
-        );
-
-        StateMachine.AddState(
-            MonsterStateType.Dead,
-            new MonsterDeadState(
-                this,
-                StateMachine
-            )
-        );
+        StateMachine.AddState(MonsterStateType.Idle,
+            new MonsterIdleState(this, StateMachine));
+        StateMachine.AddState(MonsterStateType.Patrol,
+            new MonsterPatrolState(this, StateMachine));
+        StateMachine.AddState(MonsterStateType.Chase,
+            new MonsterChaseState(this, StateMachine));
+        StateMachine.AddState(MonsterStateType.Attack,
+            new MonsterAttackState(this, StateMachine));
+        StateMachine.AddState(MonsterStateType.Dead,
+            new MonsterDeadState(this, StateMachine));
     }
 
     public void SetTarget(Transform target)
@@ -194,64 +121,47 @@ public class MonsterController : MonoBehaviour
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-            {
-                BossHealthUI.Instance.ShowBoss(
-                    monsterHealth,
-                    monsterName
-                );
-            }
-
+                BossHealthUI.Instance.ShowBoss(Runtime, Health, monsterName);
             return;
         }
 
         if (HealthBar != null)
-        {
             HealthBar.SetVisible(true);
-        }
     }
 
     public void ClearTarget()
     {
         Target = null;
 
-        monsterHealth.ResetCombatState();
+        // 사망 상태에서 호출되는 경우 HP=0 및 IsDead=true를 유지한다.
+        if (!Runtime.IsDead)
+            Runtime.ResetCombatState();
+
+        Health.ResetElement();
 
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-            {
                 BossHealthUI.Instance.HideBoss();
-            }
-
             return;
         }
 
         if (HealthBar != null)
-        {
             HealthBar.SetVisible(false);
-        }
     }
 
     private void HandleDead()
     {
-        // 사망 시 UI도 제거
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-            {
                 BossHealthUI.Instance.HideBoss();
-            }
         }
-        else
+        else if (HealthBar != null)
         {
-            if (HealthBar != null)
-            {
-                HealthBar.SetVisible(false);
-            }
+            HealthBar.SetVisible(false);
         }
 
-        StateMachine.ChangeState(
-            MonsterStateType.Dead
-        );
+        StateMachine.ChangeState(MonsterStateType.Dead);
     }
 }

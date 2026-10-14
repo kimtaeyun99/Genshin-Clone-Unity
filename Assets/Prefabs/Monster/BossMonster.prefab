@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5834902922549279692}
   - component: {fileID: 3073257704534523668}
-  - component: {fileID: -2767415717066698930}
   - component: {fileID: -540773850167776490}
   - component: {fileID: 4620149988930584267}
   - component: {fileID: 9052432419476202732}
@@ -18,6 +17,7 @@ GameObject:
   - component: {fileID: -5746444085354902349}
   - component: {fileID: -4508270777546901744}
   - component: {fileID: 5658523355244737476}
+  - component: {fileID: 5727128916410237385}
   m_Layer: 9
   m_Name: BossMonster
   m_TagString: Untagged
@@ -63,22 +63,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-2767415717066698930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1047092964744365345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 295de357a5912354d84c491b1aa92c25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MonsterHealth
-  maxHP: 100
-  currentHP: 0
-  hostElement: -1
-  damageUIHeight: 2
 --- !u!136 &-540773850167776490
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -188,6 +172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MonsterController
   monsterName: Golem
   isBoss: 1
+  maxHP: 100
   idleTime: 2
   patrolRadius: 10
   detectionRadius: 8
@@ -223,6 +208,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fb503f485b2034abb43911838753bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossMonsterAttack
+--- !u!114 &5727128916410237385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047092964744365345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0a03af3c34abe43a0438105602bb1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  hostElement: -1
+  damageUIHeight: 2
+  switchInvincibleDuration: 0.5
 --- !u!1 &1351490571417952553
 GameObject:
   m_ObjectHideFlags: 0

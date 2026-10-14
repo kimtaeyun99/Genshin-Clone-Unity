@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
+
 public class AttackHitbox : MonoBehaviour
 {
     [SerializeField] private LayerMask targetLayer;
@@ -8,26 +9,20 @@ public class AttackHitbox : MonoBehaviour
     private float damage;
     private ElementType element;
 
-    private readonly HashSet<IAttackable> hitTargets = new();
-
-    private HashSet<IAttackable> sharedHitTargets;
+    private readonly HashSet<Health> hitTargets = new();
+    private HashSet<Health> sharedHitTargets;
 
     public float Damage => damage;
     public ElementType Element => element;
+    public event Action<Health> OnHit;
 
-    public event Action<IAttackable> OnHit;
-
-    public void SetAttack(
-        float atk,
-        float multiplier,
-        ElementType elementType)
+    public void SetAttack(float atk, float multiplier, ElementType elementType)
     {
         damage = atk * multiplier;
         element = elementType;
     }
 
-    public void SetSharedHitTargets(
-        HashSet<IAttackable> sharedHitTargets)
+    public void SetSharedHitTargets(HashSet<Health> sharedHitTargets)
     {
         this.sharedHitTargets = sharedHitTargets;
     }
@@ -45,31 +40,17 @@ public class AttackHitbox : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         if ((targetLayer.value & (1 << other.gameObject.layer)) == 0)
-        {
             return;
-        }
 
-        if (!other.TryGetComponent<IAttackable>(
-                out IAttackable attackable))
-        {
+        if (!other.TryGetComponent<Health>(out Health health))
             return;
-        }
 
-        HashSet<IAttackable> targets =
-            sharedHitTargets ?? hitTargets;
-
-        if (targets.Contains(attackable))
-        {
+        HashSet<Health> targets = sharedHitTargets ?? hitTargets;
+        if (targets.Contains(health))
             return;
-        }
 
-        targets.Add(attackable);
-
-        AttackData attackData =
-            new AttackData(damage, element);
-
-        attackable.TakeAttack(attackData);
-
-        OnHit?.Invoke(attackable);
+        targets.Add(health);
+        health.TakeAttack(new AttackData(damage, element));
+        OnHit?.Invoke(health);
     }
 }

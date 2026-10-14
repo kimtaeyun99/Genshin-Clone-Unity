@@ -21,14 +21,14 @@ public class PlayerController : MonoBehaviour
     // 이전 State 코드의 player.CharacterManager 사용과 호환성을 유지하되,
     // 실제 조회는 싱글톤으로 통일한다. Inspector 참조는 필요하지 않다.
     public CharacterManager CharacterManager => CharacterManager.Instance;
-    public PlayerHealth Health { get; private set; }
+    public Health Health { get; private set; }
 
     private void Awake()
     {
         Movement = GetComponent<PlayerMovement>();
         Stamina = GetComponent<PlayerStamina>();
         Animation = GetComponent<PlayerAnimationController>();
-        Health = GetComponent<PlayerHealth>();
+        Health = GetComponent<Health>();
 
         StateMachine = new StateMachine<PlayerStateType>();
         InitializeStates();

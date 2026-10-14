@@ -11,21 +11,17 @@ public class WaterRing : MonoBehaviour
     [SerializeField] private float elementRadius = 3f;
     [SerializeField] private float elementInterval = 1f;
 
-    // WaterRing 인스턴스가 활성화된 동안 원소 탐지 결과 배열을 재사용한다.
     private const int InitialElementBufferSize = 16;
     private Collider[] elementColliders = new Collider[InitialElementBufferSize];
 
     private float elementTimer;
-
     private int healAmount;
-
     private float durationTimer;
     private float healTimer;
 
     public void Initialize(int healAmount)
     {
         this.healAmount = healAmount;
-
         elementTimer = 0f;
         durationTimer = duration;
         healTimer = healInterval;
@@ -48,40 +44,27 @@ public class WaterRing : MonoBehaviour
     private void UpdateDuration()
     {
         durationTimer -= Time.deltaTime;
-
         if (durationTimer <= 0f)
-        {
             Destroy(gameObject);
-        }
     }
 
     private void UpdateHeal()
     {
         healTimer -= Time.deltaTime;
-
         if (healTimer > 0f)
-        {
             return;
-        }
 
-        CharacterRunTime currentCharacter =
-            CharacterManager.Instance.CurrentCharacter;
-
+        CharacterRunTime currentCharacter = CharacterManager.Instance.CurrentCharacter;
         currentCharacter.Heal(healAmount);
-
         healTimer = healInterval;
     }
+
     private void UpdateElemental()
     {
         elementTimer -= Time.deltaTime;
-
         if (elementTimer > 0f)
-        {
             return;
-        }
 
-        // NonAlloc 버퍼가 가득 찬 경우 일부 Collider가 누락됐을 수 있다.
-        // 기존 OverlapSphere와 동일하게 모든 결과를 처리하기 위해 즉시 확장 및 재조회한다.
         int hitCount;
         while (true)
         {
@@ -100,10 +83,8 @@ public class WaterRing : MonoBehaviour
         for (int i = 0; i < hitCount; i++)
         {
             Collider collider = elementColliders[i];
-            if (collider.TryGetComponent<IElementApplicable>(out IElementApplicable elementApplicable))
-            {
-                elementApplicable.ApplyElement(ElementType.Hydro);
-            }
+            if (collider.TryGetComponent<Health>(out Health health))
+                health.ApplyElement(ElementType.Hydro);
         }
 
         elementTimer = elementInterval;
