@@ -48,8 +48,15 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        CharacterParty.Instance.SelectCharacter(0);
-        StateMachine.Initialize(PlayerStateType.Idle);
+        if (CharacterManager.Instance.CurrentCharacter == null)
+        {
+            CharacterParty.Instance.SelectCharacter(0);
+        }
+        if (StateMachine.CurrentState == null)
+        {
+            StateMachine.Initialize(PlayerStateType.Idle);
+        }
+        SaveManager.Instance?.RegisterPlayer(this);
     }
 
     private void Update()
