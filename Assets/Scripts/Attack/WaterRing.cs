@@ -30,7 +30,10 @@ public class WaterRing : MonoBehaviour
     private void Update()
     {
         FollowCharacter();
-        UpdateDuration();
+
+        if (UpdateDuration())
+            return;
+
         UpdateHeal();
         UpdateElemental();
     }
@@ -41,11 +44,14 @@ public class WaterRing : MonoBehaviour
             CharacterManager.Instance.CharacterView.CurrentView.transform.position;
     }
 
-    private void UpdateDuration()
+    private bool UpdateDuration()
     {
         durationTimer -= Time.deltaTime;
-        if (durationTimer <= 0f)
-            Destroy(gameObject);
+        if (durationTimer > 0f)
+            return false;
+
+        Destroy(gameObject);
+        return true;
     }
 
     private void UpdateHeal()
