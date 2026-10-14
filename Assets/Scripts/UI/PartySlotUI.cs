@@ -39,7 +39,6 @@ public class PartySlotUI : MonoBehaviour
         if (!gameObject.activeSelf)
             gameObject.SetActive(true);
 
-        // Character identity is stable between party/selection events.
         if (displayedCharacter != data)
         {
             displayedCharacter = data;
@@ -90,10 +89,8 @@ public class PartySlotUI : MonoBehaviour
             return;
         }
 
-        // Smooth fill while cooldown is running.
         switchCoolDownFill.fillAmount = Mathf.Clamp01(currentCoolDown / maxCoolDown);
 
-        // Only rewrite visible text when the displayed tenth changes.
         int currentTenths = Mathf.RoundToInt(currentCoolDown * 10f);
         if (lastCooldownTenths != currentTenths)
         {

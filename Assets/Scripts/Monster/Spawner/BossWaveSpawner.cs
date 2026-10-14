@@ -116,9 +116,6 @@ public class BossWaveSpawner : MonoBehaviour
                 if (!spawnData.monsterPrefab.TryGetComponent<MonsterController>(out _) ||
                     !spawnData.monsterPrefab.TryGetComponent<Health>(out _))
                 {
-                    Debug.LogError(
-                        $"[BossWaveSpawner] '{spawnData.monsterPrefab.name}' 프리팹 루트에 MonsterController와 Health가 필요합니다.",
-                        this);
                     continue;
                 }
 
@@ -140,7 +137,6 @@ public class BossWaveSpawner : MonoBehaviour
         isWaveActive = true;
         isWaitingNextWave = false;
 
-        // 기존 버전처럼 비어 있는 웨이브는 한 단계 넘긴다.
         if (deathHandlers.Count == 0)
             OnWaveClear();
     }

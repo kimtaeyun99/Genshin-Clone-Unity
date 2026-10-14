@@ -8,6 +8,7 @@ public class AttackProjectile : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float lifeTime = 5f;
     [SerializeField] private LayerMask targetLayer;
+    [SerializeField] private Collider projectileCollider;
 
     private const int InitialOverlapCapacity = 16;
 
@@ -15,33 +16,18 @@ public class AttackProjectile : MonoBehaviour
     private float damage;
     private ElementType elementType;
 
-    private Collider projectileCollider;
     private Collider[] overlapResults = new Collider[InitialOverlapCapacity];
     private readonly HashSet<Health> hitTargets = new();
-
-    private void Awake()
-    {
-        projectileCollider = GetComponent<Collider>();
-
-        if (projectileCollider is not BoxCollider &&
-            projectileCollider is not CapsuleCollider)
-        {
-            Debug.LogError(
-                "[AttackProjectile] BoxCollider 또는 CapsuleCollider가 필요합니다.", this);
-        }
-    }
 
     public void Initialize(float damage, ElementType elementType, Vector3 direction)
     {
         this.damage = damage;
         this.elementType = elementType;
-        // 목표까지의 거리와 관계없이 일정한 이동 속도를 유지한다.
         this.direction = direction.normalized;
 
         hitTargets.Clear();
         Destroy(gameObject, lifeTime);
 
-        // 생성될 때 이미 겹쳐 있는 대상도 첫 이동 전에 검사한다.
         CheckOverlaps();
     }
 
@@ -66,7 +52,6 @@ public class AttackProjectile : MonoBehaviour
         {
             count = QueryOverlaps();
 
-            // 꽉 찬 버퍼는 결과가 잘렸을 수 있으므로 확장해 재조회한다.
             if (count < overlapResults.Length)
                 break;
 
@@ -79,7 +64,6 @@ public class AttackProjectile : MonoBehaviour
             if (other == null)
                 continue;
 
-            // 기존 Trigger 충돌과 마찬가지로 레이어 충돌 무시 규칙을 적용한다.
             if (Physics.GetIgnoreLayerCollision(gameObject.layer, other.gameObject.layer))
                 continue;
 
@@ -156,11 +140,5 @@ public class AttackProjectile : MonoBehaviour
         }
 
         return 0;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawRay(transform.position, transform.forward * 3f);
     }
 }

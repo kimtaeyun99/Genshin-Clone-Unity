@@ -45,7 +45,6 @@ public class CharacterParty : MonoBehaviour
         if (data == null)
             return false;
 
-        // Keep the original return behavior for a non-null argument.
         bool removed = partyMembers.Remove(data);
         if (removed)
             OnPartyChanged?.Invoke();
@@ -81,8 +80,6 @@ public class CharacterParty : MonoBehaviour
         if (manager == null || !manager.SetCurrentCharacter(data))
             return false;
 
-        // Unlike CharacterManager's event, this notification fires
-        // only AFTER the party's selected index is updated.
         currentIndex = index;
         OnSelectionChanged?.Invoke();
         return true;

@@ -58,7 +58,6 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
 
     }
 
-    // Animation Event
     private void HealParty()
     {
         float healPercent =

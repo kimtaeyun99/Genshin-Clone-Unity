@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-// Unity 컴포넌트가 아닌 순수 런타임 상태 모델.
 public sealed class MonsterRunTime
 {
     public event Action<float, float> OnHPChanged;
@@ -37,7 +36,6 @@ public sealed class MonsterRunTime
         OnDead?.Invoke();
     }
 
-    // 살아 있을 때만 전투 이탈 시 체력 완전 회복.
     public void ResetCombatState()
     {
         if (IsDead || CurrentHP == MaxHP)

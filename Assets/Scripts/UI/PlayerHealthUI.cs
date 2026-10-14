@@ -11,7 +11,6 @@ public class PlayerHealthUI : MonoBehaviour
     [SerializeField] private TMP_Text currentHPText;
     [SerializeField] private TMP_Text maxHPText;
 
-    // CharacterManager는 싱글톤이므로 Inspector 연결하지 않음.
     private CharacterManager characterManager;
     private CharacterRunTime currentCharacter;
 
@@ -25,7 +24,6 @@ public class PlayerHealthUI : MonoBehaviour
 
     private void Start()
     {
-        // OnEnable이 CharacterManager.Awake보다 먼저 실행된 경우 한 번 재시도.
         if (characterManager == null)
             BindManager();
     }
@@ -46,7 +44,6 @@ public class PlayerHealthUI : MonoBehaviour
         if (manager == null || characterManager == manager)
             return;
 
-        // 관리자 인스턴스가 바뀔 가능성에 대비한 방어적 해제.
         if (characterManager != null)
             characterManager.OnCurrentCharacterChanged -= HandleCharacterChanged;
 
@@ -56,7 +53,6 @@ public class PlayerHealthUI : MonoBehaviour
         characterManager = manager;
         characterManager.OnCurrentCharacterChanged += HandleCharacterChanged;
 
-        // UI 활성화 전에 캐릭터가 선택되어 있어도 초기 체력을 표시.
         HandleCharacterChanged(characterManager.CurrentCharacter);
     }
 
@@ -86,7 +82,6 @@ public class PlayerHealthUI : MonoBehaviour
             ? (float)currentHP / maxHP
             : 0f;
 
-        // HP 표시값이 실제로 달라질 때만 텍스트 갱신.
         if (previousCurrentHP != currentHP)
         {
             currentHPText.text = currentHP.ToString();

@@ -21,7 +21,6 @@ public class CharacterView : MonoBehaviour
         if (data == null || data.Prefab == null || modelRoot == null)
             return;
 
-        // 처음 등장한 캐릭터만 Instantiate / GetComponentInChildren 실행.
         if (!cachedViews.TryGetValue(data, out CachedView next) || next.Instance == null)
         {
             next = CreateCachedView(data);
@@ -36,9 +35,6 @@ public class CharacterView : MonoBehaviour
 
         if (!next.Instance.activeSelf)
             next.Instance.SetActive(true);
-
-        // 애니메이션 초기화는 CharacterManager의 변경 이벤트를 구독하는
-        // PlayerAnimationController에서 처리한다.
     }
 
     private CachedView CreateCachedView(CharacterData data)

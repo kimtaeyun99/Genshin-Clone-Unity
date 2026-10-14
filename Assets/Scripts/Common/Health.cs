@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-// 공통 피격 진입점. HP/사망 상태의 원본 데이터는 각 Runtime이 소유한다.
 public class Health : MonoBehaviour
 {
     [Header("Element")]
@@ -13,11 +12,9 @@ public class Health : MonoBehaviour
     [Header("Invincible (Player)")]
     [SerializeField] private float switchInvincibleDuration = 0.5f;
 
-    // 몬스터는 무적 타이머를 사용하지 않는다. 절대 종료 시각 비교로 매 프레임 Update를 제거한다.
     private float invincibleUntil;
     private MonsterRunTime monsterRunTime;
 
-    // 플레이어 사망 상태 진입 알림. 몬스터의 사망 이벤트 원본은 MonsterRunTime.OnDead다.
     public event Action OnDead;
     public event Action<ElementType> OnHostElementChanged;
 
@@ -29,14 +26,20 @@ public class Health : MonoBehaviour
         hostElement = ElementType.None;
     }
 
-    // 몬스터 Controller.Awake에서 생성한 Runtime을 연결한다.
     public void BindMonsterRunTime(MonsterRunTime runtime)
     {
         monsterRunTime = runtime;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeAttack(AttackData attackData)
     {
+        if (IsInvincible)
+            return;
+
+        float damage = attackData.Damage;
+        ElementReactionType reaction = ApplyElement(attackData.ElementType);
+        damage *= ElementReaction.GetElementDamageMultiplier(reaction);
+
         if (IsInvincible || damage <= 0f)
             return;
 
@@ -57,18 +60,6 @@ public class Health : MonoBehaviour
         character.TakeDamage(damage);
         if (character.IsDead)
             OnDead?.Invoke();
-    }
-
-    public void TakeAttack(AttackData attackData)
-    {
-        if (IsInvincible)
-            return;
-
-        float damage = attackData.Damage;
-        ElementReactionType reaction = ApplyElement(attackData.ElementType);
-        damage *= ElementReaction.GetElementDamageMultiplier(reaction);
-
-        TakeDamage(damage);
 
         if (DamageUIManager.Instance != null)
         {
@@ -101,7 +92,6 @@ public class Health : MonoBehaviour
         ElementReactionType reaction = ElementReaction.GetReaction(
             hostElement, guestElement);
 
-        // 기존 개별 Health 컴포넌트와 같은 원소 소거 규칙.
         hostElement = ElementType.None;
         OnHostElementChanged?.Invoke(hostElement);
 
