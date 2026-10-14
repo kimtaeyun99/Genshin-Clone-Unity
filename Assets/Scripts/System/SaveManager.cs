@@ -339,9 +339,6 @@ public class SaveManager : MonoBehaviour
             return;
         }
 
-        PlayerController player =
-            FindFirstObjectByType<PlayerController>();
-
         if (player == null)
         {
             return;
