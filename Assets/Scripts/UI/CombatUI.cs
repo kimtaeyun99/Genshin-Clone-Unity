@@ -19,112 +19,182 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Image burstCoolDownFill;
     [SerializeField] private TMP_Text burstCoolDownText;
 
+    private CharacterManager characterManager;
     private CharacterRunTime currentCharacter;
 
-    private void Update()
+    private int lastCurrentEnergyInt = int.MinValue;
+    private int lastMaxEnergyInt = int.MinValue;
+    private int lastSkillTenths = int.MinValue;
+    private int lastBurstTenths = int.MinValue;
+
+    private void OnEnable()
     {
-        if (CharacterManager.Instance == null)
-        {
+        BindManager();
+    }
+
+    private void Start()
+    {
+        // OnEnable 시점에 CharacterManager.Awake가 아직 실행되지 않았을 때를 대비.
+        BindManager();
+    }
+
+    private void OnDisable()
+    {
+        if (characterManager != null)
+            characterManager.OnCurrentCharacterChanged -= HandleCharacterChanged;
+
+        UnsubscribeCharacter();
+        characterManager = null;
+        currentCharacter = null;
+    }
+
+    private void BindManager()
+    {
+        CharacterManager manager = CharacterManager.Instance;
+        if (manager == null)
             return;
+
+        if (characterManager != manager)
+        {
+            if (characterManager != null)
+                characterManager.OnCurrentCharacterChanged -= HandleCharacterChanged;
+
+            characterManager = manager;
+            characterManager.OnCurrentCharacterChanged += HandleCharacterChanged;
         }
 
-        CharacterRunTime character =
-            CharacterManager.Instance.CurrentCharacter;
+        // UI가 나중에 활성화되더라도 현재 선택된 캐릭터를 표시.
+        if (currentCharacter != manager.CurrentCharacter)
+            HandleCharacterChanged(manager.CurrentCharacter);
+    }
 
-        if (character == null)
-        {
+    private void HandleCharacterChanged(CharacterRunTime character)
+    {
+        UnsubscribeCharacter();
+        currentCharacter = character;
+
+        if (currentCharacter == null)
             return;
-        }
 
-        // 캐릭터가 변경됐을 때 아이콘 변경
-        if (currentCharacter != character)
-        {
-            currentCharacter = character;
+        currentCharacter.OnEnergyChanged += RefreshEnergy;
+        currentCharacter.OnSkillCooldownChanged += RefreshSkillCoolDown;
+        currentCharacter.OnBurstCooldownChanged += RefreshBurstCoolDown;
 
-            RefreshCharacter();
-        }
+        // 새 캐릭터의 텍스트를 반드시 한 번 갱신.
+        lastCurrentEnergyInt = int.MinValue;
+        lastMaxEnergyInt = int.MinValue;
+        lastSkillTenths = int.MinValue;
+        lastBurstTenths = int.MinValue;
 
+        RefreshCharacter();
         RefreshEnergy();
         RefreshSkillCoolDown();
         RefreshBurstCoolDown();
     }
 
+    private void UnsubscribeCharacter()
+    {
+        if (currentCharacter == null)
+            return;
+
+        currentCharacter.OnEnergyChanged -= RefreshEnergy;
+        currentCharacter.OnSkillCooldownChanged -= RefreshSkillCoolDown;
+        currentCharacter.OnBurstCooldownChanged -= RefreshBurstCoolDown;
+    }
+
     private void RefreshCharacter()
     {
-        Sprite skillIcon = currentCharacter.Data.SkillIcon;
+        if (currentCharacter == null)
+            return;
 
+        Sprite skillIcon = currentCharacter.Data.SkillIcon;
         skillCooldownBG.sprite = skillIcon;
         skillCoolDownFill.sprite = skillIcon;
 
         Sprite burstIcon = currentCharacter.Data.BurstIcon;
-
         burstCooldownBG.sprite = burstIcon;
         burstCoolDownFill.sprite = burstIcon;
     }
 
     private void RefreshEnergy()
     {
-        float currentEnergy =
-            currentCharacter.CurrentEnergy;
+        if (currentCharacter == null)
+            return;
 
-        float maxEnergy =
-            currentCharacter.MaxEnergy;
+        float currentEnergy = currentCharacter.CurrentEnergy;
+        float maxEnergy = currentCharacter.MaxEnergy;
 
-        energyBarFill.fillAmount =
-            maxEnergy > 0f
-                ? currentEnergy / maxEnergy
-                : 0f;
+        energyBarFill.fillAmount = maxEnergy > 0f
+            ? currentEnergy / maxEnergy
+            : 0f;
 
-        currentEnergyText.text =
-            Mathf.RoundToInt(currentEnergy).ToString();
-
-        maxEnergyText.text =
-            Mathf.RoundToInt(maxEnergy).ToString();
+        // 눈에 보이는 정수 값이 바뀔 때만 텍스트를 다시 작성.
+        int roundedCurrent = Mathf.RoundToInt(currentEnergy);
+        int roundedMax = Mathf.RoundToInt(maxEnergy);
+        if (lastCurrentEnergyInt != roundedCurrent)
+        {
+            currentEnergyText.text = roundedCurrent.ToString();
+            lastCurrentEnergyInt = roundedCurrent;
+        }
+        if (lastMaxEnergyInt != roundedMax)
+        {
+            maxEnergyText.text = roundedMax.ToString();
+            lastMaxEnergyInt = roundedMax;
+        }
     }
+
     private void RefreshSkillCoolDown()
     {
-        float remaining =
-            currentCharacter.SkillCoolDown;
+        if (currentCharacter == null)
+            return;
 
-        float total =
-            currentCharacter.Data.SkillCooldown;
+        float remaining = currentCharacter.SkillCoolDown;
+        float total = currentCharacter.Data.SkillCooldown;
 
-        skillCoolDownFill.fillAmount =
-            total > 0f
-                ? 1f - (remaining / total)
-                : 1f;
+        skillCoolDownFill.fillAmount = total > 0f
+            ? 1f - (remaining / total)
+            : 1f;
 
-        if (remaining > 0f)
+        bool isCoolingDown = remaining > 0f;
+        if (skillCoolDownText.gameObject.activeSelf != isCoolingDown)
+            skillCoolDownText.gameObject.SetActive(isCoolingDown);
+
+        if (!isCoolingDown)
+            return;
+
+        // 게이지는 매 틱 부드럽게 갱신하되, 소수 1자리 숫자가 바뀔 때만 문자열 갱신.
+        int tenths = Mathf.RoundToInt(remaining * 10f);
+        if (lastSkillTenths != tenths)
         {
-            skillCoolDownText.gameObject.SetActive(true);
             skillCoolDownText.text = remaining.ToString("0.0");
-        }
-        else
-        {
-            skillCoolDownText.gameObject.SetActive(false);
+            lastSkillTenths = tenths;
         }
     }
+
     private void RefreshBurstCoolDown()
     {
-        float remaining =
-            currentCharacter.BurstCoolDown;
+        if (currentCharacter == null)
+            return;
 
-        float total =
-            currentCharacter.Data.BurstCooldown;
+        float remaining = currentCharacter.BurstCoolDown;
+        float total = currentCharacter.Data.BurstCooldown;
 
-        burstCoolDownFill.fillAmount =
-            total > 0f
-                ? 1f - (remaining / total)
-                : 1f;
+        burstCoolDownFill.fillAmount = total > 0f
+            ? 1f - (remaining / total)
+            : 1f;
 
-        if (remaining > 0f)
+        bool isCoolingDown = remaining > 0f;
+        if (burstCoolDownText.gameObject.activeSelf != isCoolingDown)
+            burstCoolDownText.gameObject.SetActive(isCoolingDown);
+
+        if (!isCoolingDown)
+            return;
+
+        int tenths = Mathf.RoundToInt(remaining * 10f);
+        if (lastBurstTenths != tenths)
         {
-            burstCoolDownText.gameObject.SetActive(true);
             burstCoolDownText.text = remaining.ToString("0.0");
-        }
-        else
-        {
-            burstCoolDownText.gameObject.SetActive(false);
+            lastBurstTenths = tenths;
         }
     }
 }
