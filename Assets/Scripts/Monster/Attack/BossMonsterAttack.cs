@@ -8,14 +8,12 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
     private bool attackStarted;
     private bool isFinished;
     public bool IsFinished => isFinished;
-    private AttackHitbox[] hitboxes;
+    [SerializeField] private AttackHitbox[] hitboxes;
     private readonly HashSet<Health> hitTargets = new();
 
     public void Enter(MonsterController monster)
     {
         this.monster = monster;
-
-        hitboxes = GetComponentsInChildren<AttackHitbox>(true);
 
         attackStarted = false;
         isFinished = false;

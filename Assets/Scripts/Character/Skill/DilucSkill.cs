@@ -10,7 +10,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
 
     private CharacterRunTime character;
     private PlayerAnimationController playerAnimationController;
-    private AttackHitbox attackHitbox;
+    [SerializeField] private AttackHitbox attackHitbox;
 
     public bool IsFinished => isFinished;
     private bool gainedEnergyThisHit;
@@ -25,8 +25,6 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
         skillIndex = 1;
         nextSkillInput = false;
         isFinished = false;
-
-        attackHitbox = GetComponentInChildren<AttackHitbox>(true);
         attackHitbox.OnHit += HandleSkillHit;
 
         playerAnimationController.SetSkillIndex(skillIndex);

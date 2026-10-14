@@ -8,7 +8,7 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
 
     private CharacterRunTime character;
     private PlayerAnimationController playerAnimationController;
-    private AttackHitbox attackHitbox;
+    [SerializeField] private AttackHitbox attackHitbox;
 
     public bool IsFinished => isFinished;
 
@@ -22,8 +22,6 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
         normalAttackIndex = 1;
         nextAttackInput = false;
         isFinished = false;
-
-        attackHitbox = GetComponentInChildren<AttackHitbox>(true);
 
         playerAnimationController.SetNormalAttackIndex(normalAttackIndex);
 

@@ -60,10 +60,7 @@ public class AttackHitbox : MonoBehaviour
 
         Vector3 center = transform.TransformPoint(hitboxCollider.center);
         Vector3 scale = transform.lossyScale;
-        Vector3 halfExtents = Vector3.Scale(
-            hitboxCollider.size * 0.5f,
-            new Vector3(Mathf.Abs(scale.x), Mathf.Abs(scale.y), Mathf.Abs(scale.z))
-        );
+        Vector3 halfExtents = Vector3.Scale(hitboxCollider.size * 0.5f,new Vector3(Mathf.Abs(scale.x), Mathf.Abs(scale.y), Mathf.Abs(scale.z)));
 
         int count;
         while (true)

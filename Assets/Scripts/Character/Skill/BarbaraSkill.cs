@@ -56,7 +56,6 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 
     private void SpawnSkillProjectile()
     {
-        // 회복량 계산
         float healPercent =
             character.Data.CharacterCombatData
                 .GetSkillMultipliers(0);

@@ -5,14 +5,12 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
     private MonsterController monster;
     private bool attackStarted;
     private bool isFinished;
-    private AttackHitbox attackHitbox;
+    [SerializeField] private AttackHitbox attackHitbox;
 
     public bool IsFinished => isFinished;
 
     public void Enter(MonsterController monster)
     {
-        attackHitbox = GetComponentInChildren<AttackHitbox>(true);
-
         this.monster = monster;
 
         attackStarted = false;

@@ -1,3 +1,4 @@
+using System.Runtime.ExceptionServices;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -32,6 +33,11 @@ public class MonsterController : MonoBehaviour
     [Header("Element")]
     [SerializeField] private ElementType elementType;
 
+    [Header("NavMesh")]
+    [SerializeField] private NavMeshAgent agent;
+
+    [Header("Animation")]
+    [SerializeField] private MonsterAnimationController monsterAnimationController;
     public string MonsterName => monsterName;
     public bool IsBoss => isBoss;
     public float MaxHP => maxHP;
@@ -50,10 +56,10 @@ public class MonsterController : MonoBehaviour
     public ElementType ElementType => elementType;
 
     public Vector3 SpawnPosition { get; private set; }
-    public NavMeshAgent Agent { get; private set; }
+    public NavMeshAgent Agent => agent;
     public StateMachine<MonsterStateType> StateMachine { get; private set; }
     public Transform Target { get; private set; }
-    public MonsterAnimationController Animation { get; private set; }
+    public MonsterAnimationController MonsterAnimationController => monsterAnimationController;
     public AttackHitbox[] Hitbox { get; private set; }
     public Health Health { get; private set; }
     public MonsterRunTime Runtime { get; private set; }
@@ -62,9 +68,7 @@ public class MonsterController : MonoBehaviour
 
     private void Awake()
     {
-        Agent = GetComponent<NavMeshAgent>();
         StateMachine = new StateMachine<MonsterStateType>();
-        Animation = GetComponent<MonsterAnimationController>();
         Hitbox = GetComponentsInChildren<AttackHitbox>(true);
 
         Runtime = new MonsterRunTime(maxHP);
