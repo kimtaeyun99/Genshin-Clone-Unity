@@ -2,58 +2,39 @@ public static class ElementReaction
 {
     public static ElementReactionType GetReaction(ElementType hostElement, ElementType guestElement)
     {
-        if(hostElement == guestElement)
-        {
+        if (hostElement == guestElement)
             return ElementReactionType.None;
-        }
 
-        if((hostElement == ElementType.Pyro && guestElement == ElementType.Hydro) ||
-            (hostElement == ElementType.Hydro && guestElement == ElementType.Pyro))
-        {
+        if (IsPair(hostElement, guestElement, ElementType.Pyro, ElementType.Hydro))
             return ElementReactionType.Vaporize;
-        }
 
-        if((hostElement == ElementType.Pyro && guestElement == ElementType.Cryo) ||
-            (hostElement == ElementType.Cryo && guestElement == ElementType.Pyro))
-        {
+        if (IsPair(hostElement, guestElement, ElementType.Pyro, ElementType.Cryo))
             return ElementReactionType.Melt;
-        }
 
-        if((hostElement == ElementType.Pyro && guestElement == ElementType.Electro) ||
-            (hostElement == ElementType.Electro && guestElement == ElementType.Pyro))
-        {
+        if (IsPair(hostElement, guestElement, ElementType.Pyro, ElementType.Electro))
             return ElementReactionType.Overloaded;
-        }
 
-        if((hostElement == ElementType.Hydro && guestElement == ElementType.Cryo) ||
-            (hostElement == ElementType.Cryo && guestElement == ElementType.Hydro))
-        {
+        if (IsPair(hostElement, guestElement, ElementType.Hydro, ElementType.Cryo))
             return ElementReactionType.Frozen;
-        }
 
-        if((hostElement == ElementType.Hydro && guestElement == ElementType.Electro) ||
-            (hostElement == ElementType.Electro && guestElement == ElementType.Hydro))
-        {
+        if (IsPair(hostElement, guestElement, ElementType.Hydro, ElementType.Electro))
             return ElementReactionType.ElectroCharged;
-        }
 
         return ElementReactionType.None;
-
     }
+
     public static float GetElementDamageMultiplier(ElementReactionType elementReactionType)
     {
-        if(elementReactionType == ElementReactionType.None)
-        {
-            return 1f;
-        }
+        return elementReactionType == ElementReactionType.Vaporize ? 2f : 1f;
+    }
 
-        if(elementReactionType == ElementReactionType.Vaporize)
-        {
-            return 2f;
-        }
-        else
-        {
-            return 1f;
-        }
+    private static bool IsPair(
+        ElementType hostElement,
+        ElementType guestElement,
+        ElementType first,
+        ElementType second)
+    {
+        return (hostElement == first && guestElement == second) ||
+               (hostElement == second && guestElement == first);
     }
 }
