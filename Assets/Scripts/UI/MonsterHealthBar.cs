@@ -28,6 +28,10 @@ public class MonsterHealthBar : MonoBehaviour
     private float delayTimer;
     private float delayVelocity;
 
+    // HP 변화가 발생한 동안에만 지연 체력바를 보간한다.
+    private bool isDelayAnimating;
+    private bool isVisible;
+
     private void Awake()
     {
         monster = GetComponentInParent<MonsterController>();
@@ -53,6 +57,7 @@ public class MonsterHealthBar : MonoBehaviour
         hpFill.fillAmount = hpPercent;
         delayHpFill.fillAmount = hpPercent;
         targetFillAmount = hpPercent;
+        isDelayAnimating = false;
 
         UpdateElementIcon(health.HostElement);
         SetVisible(false);
@@ -72,11 +77,16 @@ public class MonsterHealthBar : MonoBehaviour
 
     private void Update()
     {
-        UpdateDelayHP();
+        if (isDelayAnimating)
+            UpdateDelayHP();
     }
 
     private void LateUpdate()
     {
+        // 숨겨진 HP 바는 카메라 방향으로 회전할 필요가 없다.
+        if (!isVisible)
+            return;
+
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
@@ -91,6 +101,7 @@ public class MonsterHealthBar : MonoBehaviour
     public void SetVisible(bool visible)
     {
         Subscribe();
+        isVisible = visible;
         healthBarBG.SetActive(visible);
         hpFill.gameObject.SetActive(visible);
         delayHpFill.gameObject.SetActive(visible);
@@ -116,6 +127,7 @@ public class MonsterHealthBar : MonoBehaviour
             targetFillAmount = newFillAmount;
             delayVelocity = 0f;
             delayTimer = 0f;
+            isDelayAnimating = false;
             return;
         }
 
@@ -123,6 +135,7 @@ public class MonsterHealthBar : MonoBehaviour
         hpFill.fillAmount = targetFillAmount;
         delayTimer = delayTime;
         delayVelocity = 0f;
+        isDelayAnimating = delayHpFill.fillAmount > targetFillAmount;
     }
 
     private void UpdateDelayHP()
@@ -130,6 +143,7 @@ public class MonsterHealthBar : MonoBehaviour
         if (delayHpFill.fillAmount <= targetFillAmount)
         {
             delayHpFill.fillAmount = targetFillAmount;
+            isDelayAnimating = false;
             return;
         }
 
@@ -150,6 +164,7 @@ public class MonsterHealthBar : MonoBehaviour
         {
             delayHpFill.fillAmount = targetFillAmount;
             delayVelocity = 0f;
+            isDelayAnimating = false;
         }
     }
 

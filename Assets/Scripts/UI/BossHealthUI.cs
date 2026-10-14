@@ -29,6 +29,9 @@ public class BossHealthUI : MonoBehaviour
     private float delayTimer;
     private float delayVelocity;
 
+    // 보스 HP가 변한 동안에만 지연 체력바를 보간한다.
+    private bool isDelayAnimating;
+
     private void Awake()
     {
         Instance = this;
@@ -37,7 +40,8 @@ public class BossHealthUI : MonoBehaviour
 
     private void Update()
     {
-        UpdateDelayHealth();
+        if (isDelayAnimating)
+            UpdateDelayHealth();
     }
 
     public void ShowBoss(MonsterRunTime boss, Health health, string bossName)
@@ -59,6 +63,7 @@ public class BossHealthUI : MonoBehaviour
         targetFillAmount = hpPercent;
         delayTimer = 0f;
         delayVelocity = 0f;
+        isDelayAnimating = false;
 
         UpdateElementIcon(currentHealth.HostElement);
         currentBoss.OnHPChanged += UpdateHealth;
@@ -70,6 +75,7 @@ public class BossHealthUI : MonoBehaviour
     public void HideBoss()
     {
         Unsubscribe();
+        isDelayAnimating = false;
         hostElementIcon.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
@@ -101,6 +107,7 @@ public class BossHealthUI : MonoBehaviour
             targetFillAmount = newFillAmount;
             delayTimer = 0f;
             delayVelocity = 0f;
+            isDelayAnimating = false;
             return;
         }
 
@@ -108,6 +115,7 @@ public class BossHealthUI : MonoBehaviour
         healthBarFill.fillAmount = targetFillAmount;
         delayTimer = delayTime;
         delayVelocity = 0f;
+        isDelayAnimating = delayHealthBarFill.fillAmount > targetFillAmount;
     }
 
     private void UpdateDelayHealth()
@@ -115,6 +123,7 @@ public class BossHealthUI : MonoBehaviour
         if (delayHealthBarFill.fillAmount <= targetFillAmount)
         {
             delayHealthBarFill.fillAmount = targetFillAmount;
+            isDelayAnimating = false;
             return;
         }
 
@@ -135,6 +144,7 @@ public class BossHealthUI : MonoBehaviour
         {
             delayHealthBarFill.fillAmount = targetFillAmount;
             delayVelocity = 0f;
+            isDelayAnimating = false;
         }
     }
 

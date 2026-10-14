@@ -39048,8 +39048,6 @@ MonoBehaviour:
   partyMembers:
   - {fileID: 11400000, guid: 8bb34734300b948408f86931d183681e, type: 2}
   - {fileID: 11400000, guid: a2990ebf092e8eb4481cf677a1c65a66, type: 2}
-  - {fileID: 11400000, guid: 216f34f5d97c3db4c99b9439bc44d5aa, type: 2}
-  - {fileID: 11400000, guid: ca4abe074adf2bf49a764e150e855adc, type: 2}
 --- !u!4 &814247881
 Transform:
   m_ObjectHideFlags: 0
