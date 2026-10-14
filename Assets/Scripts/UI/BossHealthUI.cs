@@ -4,11 +4,7 @@ using UnityEngine.UI;
 
 public class BossHealthUI : MonoBehaviour
 {
-    public static BossHealthUI Instance
-    {
-        get;
-        private set;
-    }
+    public static BossHealthUI Instance { get; private set; }
 
     [Header("HP")]
     [SerializeField] private TMP_Text bossNameText;
@@ -26,7 +22,8 @@ public class BossHealthUI : MonoBehaviour
     [SerializeField] private Sprite cryoIcon;
     [SerializeField] private Sprite electroIcon;
 
-    private MonsterHealth currentBoss;
+    private MonsterRunTime currentBoss;
+    private Health currentHealth;
 
     private float targetFillAmount;
     private float delayTimer;
@@ -35,7 +32,6 @@ public class BossHealthUI : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
         gameObject.SetActive(false);
     }
 
@@ -44,101 +40,72 @@ public class BossHealthUI : MonoBehaviour
         UpdateDelayHealth();
     }
 
-    public void ShowBoss(
-        MonsterHealth boss,
-        string bossName)
+    public void ShowBoss(MonsterRunTime boss, Health health, string bossName)
     {
         if (currentBoss == boss)
-        {
             return;
-        }
 
-        if (currentBoss != null)
-        {
-            currentBoss.OnHPChanged -= UpdateHealth;
-            currentBoss.OnHostElementChanged -= UpdateElementIcon;
-            currentBoss.OnDead -= HideBoss;
-        }
-
+        Unsubscribe();
         currentBoss = boss;
+        currentHealth = health;
 
         bossNameText.text = bossName;
-
-        float hpPercent =
-            currentBoss.MaxHP > 0f
-                ? currentBoss.CurrentHP / currentBoss.MaxHP
-                : 0f;
+        float hpPercent = currentBoss.MaxHP > 0f
+            ? currentBoss.CurrentHP / currentBoss.MaxHP
+            : 0f;
 
         healthBarFill.fillAmount = hpPercent;
         delayHealthBarFill.fillAmount = hpPercent;
         targetFillAmount = hpPercent;
-
         delayTimer = 0f;
         delayVelocity = 0f;
 
-        UpdateElementIcon(
-            currentBoss.HostElement
-        );
-
+        UpdateElementIcon(currentHealth.HostElement);
         currentBoss.OnHPChanged += UpdateHealth;
-        currentBoss.OnHostElementChanged += UpdateElementIcon;
         currentBoss.OnDead += HideBoss;
-
+        currentHealth.OnHostElementChanged += UpdateElementIcon;
         gameObject.SetActive(true);
     }
 
     public void HideBoss()
     {
-        if (currentBoss != null)
-        {
-            currentBoss.OnHPChanged -= UpdateHealth;
-            currentBoss.OnHostElementChanged -= UpdateElementIcon;
-            currentBoss.OnDead -= HideBoss;
-
-            currentBoss = null;
-        }
-
+        Unsubscribe();
         hostElementIcon.gameObject.SetActive(false);
-
         gameObject.SetActive(false);
     }
 
-    private void UpdateHealth(
-        float currentHP,
-        float maxHP)
+    private void Unsubscribe()
     {
-        float newFillAmount =
-            maxHP > 0f
-                ? currentHP / maxHP
-                : 0f;
+        if (currentBoss != null)
+        {
+            currentBoss.OnHPChanged -= UpdateHealth;
+            currentBoss.OnDead -= HideBoss;
+            currentBoss = null;
+        }
 
-        // 체력 회복
+        if (currentHealth != null)
+        {
+            currentHealth.OnHostElementChanged -= UpdateElementIcon;
+            currentHealth = null;
+        }
+    }
+
+    private void UpdateHealth(float currentHP, float maxHP)
+    {
+        float newFillAmount = maxHP > 0f ? currentHP / maxHP : 0f;
+
         if (newFillAmount > targetFillAmount)
         {
-            healthBarFill.fillAmount =
-                newFillAmount;
-
-            delayHealthBarFill.fillAmount =
-                newFillAmount;
-
-            targetFillAmount =
-                newFillAmount;
-
+            healthBarFill.fillAmount = newFillAmount;
+            delayHealthBarFill.fillAmount = newFillAmount;
+            targetFillAmount = newFillAmount;
             delayTimer = 0f;
             delayVelocity = 0f;
-
             return;
         }
 
-        // 데미지
-        targetFillAmount =
-            newFillAmount;
-
-        // 초록색 체력은 즉시 감소
-        healthBarFill.fillAmount =
-            targetFillAmount;
-
-        // 주황색 체력은 잠시 후 감소
+        targetFillAmount = newFillAmount;
+        healthBarFill.fillAmount = targetFillAmount;
         delayTimer = delayTime;
         delayVelocity = 0f;
     }
@@ -147,9 +114,7 @@ public class BossHealthUI : MonoBehaviour
     {
         if (delayHealthBarFill.fillAmount <= targetFillAmount)
         {
-            delayHealthBarFill.fillAmount =
-                targetFillAmount;
-
+            delayHealthBarFill.fillAmount = targetFillAmount;
             return;
         }
 
@@ -159,46 +124,36 @@ public class BossHealthUI : MonoBehaviour
             return;
         }
 
-        delayHealthBarFill.fillAmount =
-            Mathf.SmoothDamp(
-                delayHealthBarFill.fillAmount,
-                targetFillAmount,
-                ref delayVelocity,
-                smoothTime
-            );
+        delayHealthBarFill.fillAmount = Mathf.SmoothDamp(
+            delayHealthBarFill.fillAmount,
+            targetFillAmount,
+            ref delayVelocity,
+            smoothTime
+        );
 
-        if (Mathf.Abs(
-                delayHealthBarFill.fillAmount -
-                targetFillAmount) < 0.001f)
+        if (Mathf.Abs(delayHealthBarFill.fillAmount - targetFillAmount) < 0.001f)
         {
-            delayHealthBarFill.fillAmount =
-                targetFillAmount;
-
+            delayHealthBarFill.fillAmount = targetFillAmount;
             delayVelocity = 0f;
         }
     }
 
-    private void UpdateElementIcon(
-        ElementType elementType)
+    private void UpdateElementIcon(ElementType elementType)
     {
         switch (elementType)
         {
             case ElementType.Pyro:
                 hostElementIcon.sprite = pyroIcon;
                 break;
-
             case ElementType.Hydro:
                 hostElementIcon.sprite = hydroIcon;
                 break;
-
             case ElementType.Cryo:
                 hostElementIcon.sprite = cryoIcon;
                 break;
-
             case ElementType.Electro:
                 hostElementIcon.sprite = electroIcon;
                 break;
-
             default:
                 hostElementIcon.sprite = null;
                 hostElementIcon.gameObject.SetActive(false);
@@ -210,16 +165,8 @@ public class BossHealthUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (currentBoss != null)
-        {
-            currentBoss.OnHPChanged -= UpdateHealth;
-            currentBoss.OnHostElementChanged -= UpdateElementIcon;
-            currentBoss.OnDead -= HideBoss;
-        }
-
+        Unsubscribe();
         if (Instance == this)
-        {
             Instance = null;
-        }
     }
 }

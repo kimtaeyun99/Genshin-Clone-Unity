@@ -28,21 +28,14 @@ public class BossWaveSpawner : MonoBehaviour
     [Header("Wave Delay")]
     [SerializeField] private float nextWaveDelay = 2f;
 
-    // 지금까지 생성한 몬스터를 보관한다. 마지막 OnDead 이후에도
-    // 사망 연출 중인 오브젝트를 ResetSpawner()에서 정리하기 위함이다.
     private readonly List<GameObject> spawnedMonsters = new();
-
-    // MonsterHealth.OnDead는 발생한 몬스터를 인자로 넘기지 않는다.
-    // 몬스터별 콜백을 저장하여 중복 집계를 막고 구독을 정확히 해제한다.
-    private readonly Dictionary<MonsterHealth, Action> deathHandlers = new();
+    private readonly Dictionary<MonsterRunTime, Action> deathHandlers = new();
 
     private int currentWaveIndex;
-
     private bool isStarted;
     private bool isWaveActive;
     private bool isWaitingNextWave;
     private bool isCleared;
-
     private float waveDelayTimer;
 
     private void Update()
@@ -56,7 +49,6 @@ public class BossWaveSpawner : MonoBehaviour
             return;
         }
 
-        // 활성 웨이브는 OnDead 이벤트로만 전멸을 판정한다.
         if (isWaveActive)
             return;
 
@@ -106,8 +98,6 @@ public class BossWaveSpawner : MonoBehaviour
 
         UnsubscribeFromMonsterDeaths();
 
-        // 이전 웨이브에서 파괴된 참조만 정리한다.
-        // 아직 사망 연출 중인 오브젝트는 그대로 두고 ResetSpawner()에서 관리한다.
         for (int i = spawnedMonsters.Count - 1; i >= 0; i--)
         {
             if (spawnedMonsters[i] == null)
@@ -115,23 +105,19 @@ public class BossWaveSpawner : MonoBehaviour
         }
 
         WaveData wave = waves[currentWaveIndex];
-
         if (wave != null && wave.spawnDatas != null)
         {
             foreach (SpawnData spawnData in wave.spawnDatas)
             {
-                if (spawnData == null ||
-                    spawnData.monsterPrefab == null ||
+                if (spawnData == null || spawnData.monsterPrefab == null ||
                     spawnData.spawnPoint == null)
-                {
                     continue;
-                }
 
-                // MonsterController가 요구하는 루트 MonsterHealth를 확인한다.
-                if (!spawnData.monsterPrefab.TryGetComponent<MonsterHealth>(out _))
+                if (!spawnData.monsterPrefab.TryGetComponent<MonsterController>(out _) ||
+                    !spawnData.monsterPrefab.TryGetComponent<Health>(out _))
                 {
                     Debug.LogError(
-                        $"[BossWaveSpawner] '{spawnData.monsterPrefab.name}' 프리팹 루트에 MonsterHealth가 없어 OnDead를 구독할 수 없습니다.",
+                        $"[BossWaveSpawner] '{spawnData.monsterPrefab.name}' 프리팹 루트에 MonsterController와 Health가 필요합니다.",
                         this);
                     continue;
                 }
@@ -142,34 +128,30 @@ public class BossWaveSpawner : MonoBehaviour
                     spawnData.spawnPoint.rotation
                 );
 
+                MonsterRunTime runtime = monster.GetComponent<MonsterController>().Runtime;
                 spawnedMonsters.Add(monster);
 
-                MonsterHealth health = monster.GetComponent<MonsterHealth>();
-                Action handler = () => HandleMonsterDead(health);
-                deathHandlers.Add(health, handler);
-                health.OnDead += handler;
+                Action handler = () => HandleMonsterDead(runtime);
+                deathHandlers.Add(runtime, handler);
+                runtime.OnDead += handler;
             }
         }
 
         isWaveActive = true;
         isWaitingNextWave = false;
 
-        // 비어 있거나 유효한 소환 데이터가 없는 웨이브는 다음 단계로 넘긴다.
-        // 과거에는 다음 프레임의 CheckWaveClear()에서 비어 있음을 확인했다.
+        // 기존 버전처럼 비어 있는 웨이브는 한 단계 넘긴다.
         if (deathHandlers.Count == 0)
             OnWaveClear();
     }
 
-    private void HandleMonsterDead(MonsterHealth health)
+    private void HandleMonsterDead(MonsterRunTime runtime)
     {
-        // 중복 OnDead를 동일 몬스터에 대해 두 번 집계하지 않는다.
-        if (!deathHandlers.TryGetValue(health, out Action handler))
+        if (!deathHandlers.TryGetValue(runtime, out Action handler))
             return;
 
-        if (health != null)
-            health.OnDead -= handler;
-
-        deathHandlers.Remove(health);
+        runtime.OnDead -= handler;
+        deathHandlers.Remove(runtime);
 
         if (isWaveActive && deathHandlers.Count == 0)
             OnWaveClear();
@@ -177,8 +159,6 @@ public class BossWaveSpawner : MonoBehaviour
 
     private void OnWaveClear()
     {
-        // 마지막 OnDead 즉시 다음 웨이브 대기 또는 최종 클리어 처리.
-        // 사망 애니메이션/Destroy(delay)는 MonsterDeadState가 계속 담당한다.
         isWaveActive = false;
         currentWaveIndex++;
 
@@ -195,7 +175,6 @@ public class BossWaveSpawner : MonoBehaviour
     private void UpdateWaveDelay()
     {
         waveDelayTimer -= Time.deltaTime;
-
         if (waveDelayTimer > 0f)
             return;
 
@@ -214,7 +193,6 @@ public class BossWaveSpawner : MonoBehaviour
 
     public void ResetSpawner()
     {
-        // Destroy 전에 먼저 구독을 해제하여 이전 웨이브의 콜백을 무효화한다.
         UnsubscribeFromMonsterDeaths();
 
         foreach (GameObject monster in spawnedMonsters)
@@ -234,11 +212,8 @@ public class BossWaveSpawner : MonoBehaviour
 
     private void UnsubscribeFromMonsterDeaths()
     {
-        foreach (KeyValuePair<MonsterHealth, Action> entry in deathHandlers)
-        {
-            if (entry.Key != null)
-                entry.Key.OnDead -= entry.Value;
-        }
+        foreach (KeyValuePair<MonsterRunTime, Action> entry in deathHandlers)
+            entry.Key.OnDead -= entry.Value;
 
         deathHandlers.Clear();
     }

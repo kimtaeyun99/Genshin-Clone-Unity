@@ -70499,9 +70499,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2097096002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9df444fe1ea80144ae7163d32bc601f, type: 3}
+  m_Script: {fileID: 11500000, guid: be0a03af3c34abe43a0438105602bb1b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  m_EditorClassIdentifier: Assembly-CSharp::Health
   hostElement: -1
   damageUIHeight: 2
   switchInvincibleDuration: 0.5

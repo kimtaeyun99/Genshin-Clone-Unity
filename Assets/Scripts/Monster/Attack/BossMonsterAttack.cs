@@ -9,7 +9,7 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
     private bool isFinished;
     public bool IsFinished => isFinished;
     private AttackHitbox[] hitboxes;
-    private readonly HashSet<IAttackable> hitTargets = new();
+    private readonly HashSet<Health> hitTargets = new();
 
     public void Enter(MonsterController monster)
     {

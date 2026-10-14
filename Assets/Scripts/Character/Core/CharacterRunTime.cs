@@ -11,23 +11,17 @@ public class CharacterRunTime
     private int ascensionPhase;
     private int maxHP;
     private int currentHP;
-
     private float currentEnergy;
-
     private float skillCoolDown;
     private float burstCoolDown;
 
-    // CombatUI가 매 프레임 확인하지 않아도 상태 변화를 알 수 있도록 알림 제공.
     public event Action OnEnergyChanged;
     public event Action OnSkillCooldownChanged;
     public event Action OnBurstCooldownChanged;
-
-    // HP가 실제로 변경된 경우에만 UI 등에 알림.
     public event Action<int, int> OnHealthChanged;
 
     public float CurrentEnergy => currentEnergy;
     public float MaxEnergy => data.MaxEnergy;
-
     public float SkillCoolDown => skillCoolDown;
     public float BurstCoolDown => burstCoolDown;
 
@@ -40,19 +34,15 @@ public class CharacterRunTime
     public int AscensionPhase => ascensionPhase;
     public int MaxHP => maxHP;
     public int CurrentHP => currentHP;
-
-    public bool IsDead;
+    public bool IsDead { get; private set; }
 
     public CharacterRunTime(CharacterData data)
     {
         this.data = data;
-
         level = 1;
         ascensionPhase = 0;
-
         maxHP = data.HP;
         currentHP = 1;
-
         currentEnergy = 100f;
         skillCoolDown = 0f;
         burstCoolDown = 0f;
@@ -90,11 +80,9 @@ public class CharacterRunTime
     {
         int previousHP = currentHP;
         int previousMaxHP = maxHP;
-
         int hpShift = newMaxHP - maxHP;
         maxHP = newMaxHP;
         currentHP += hpShift;
-
         if (currentHP > maxHP)
             currentHP = maxHP;
 
@@ -107,7 +95,6 @@ public class CharacterRunTime
             return;
 
         int previousHP = currentHP;
-
         currentHP += amount;
         if (currentHP > maxHP)
             currentHP = maxHP;
@@ -117,11 +104,10 @@ public class CharacterRunTime
 
     public void TakeDamage(float damage)
     {
-        if (IsDead || damage <= 0)
+        if (IsDead || damage <= 0f)
             return;
 
         int previousHP = currentHP;
-
         currentHP -= Mathf.RoundToInt(damage);
         if (currentHP <= 0)
         {
@@ -134,7 +120,14 @@ public class CharacterRunTime
 
     public void Revive()
     {
+        // 전투 중 부활 기능은 없으며, 부활 시에는 HP를 완전히 회복한다.
+        if (!IsDead)
+            return;
+
+        int previousHP = currentHP;
         IsDead = false;
+        currentHP = maxHP;
+        NotifyHealthChangedIfNeeded(previousHP, maxHP);
     }
 
     public void StartSkillCoolDown(float coolDown)
@@ -241,6 +234,8 @@ public class CharacterRunTime
         bool energyChanged = this.currentEnergy != newEnergy;
         this.currentEnergy = newEnergy;
 
+        // 기존 저장 파일의 사망 상태와 HP 값은 이번 작업에서 임의 보정하지 않는다.
+        // 기존 LoadStateData 규칙 유지. 저장 데이터 검증은 SaveManager 단계에서 진행.
         IsDead = isDead;
 
         NotifyHealthChangedIfNeeded(previousHP, previousMaxHP);

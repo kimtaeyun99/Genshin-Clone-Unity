@@ -12,19 +12,15 @@ public class AttackProjectile : MonoBehaviour
     private float damage;
     private ElementType elementType;
 
-    private readonly HashSet<IAttackable> hitTargets = new();
+    private readonly HashSet<Health> hitTargets = new();
 
-    public void Initialize(
-        float damage,
-        ElementType elementType,
-        Vector3 direction)
+    public void Initialize(float damage, ElementType elementType, Vector3 direction)
     {
         this.damage = damage;
         this.elementType = elementType;
         this.direction = direction;
 
         hitTargets.Clear();
-
         Destroy(gameObject, lifeTime);
     }
 
@@ -35,39 +31,27 @@ public class AttackProjectile : MonoBehaviour
 
     private void Move()
     {
-        transform.position +=
-            direction * moveSpeed * Time.deltaTime;
+        transform.position += direction * moveSpeed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if ((targetLayer.value & (1 << other.gameObject.layer)) == 0)
-        {
             return;
-        }
-        if (!other.TryGetComponent<IAttackable>(out IAttackable attackable))
-        {
+
+        if (!other.TryGetComponent<Health>(out Health health))
             return;
-        }
 
-        if (hitTargets.Contains(attackable))
-        {
+        if (hitTargets.Contains(health))
             return;
-        }
 
-        hitTargets.Add(attackable);
-
-        AttackData attackData = new AttackData(damage, elementType);
-
-        attackable.TakeAttack(attackData);
+        hitTargets.Add(health);
+        health.TakeAttack(new AttackData(damage, elementType));
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-
-        Gizmos.DrawRay(
-            transform.position,
-            transform.forward * 3f
-        );
+        Gizmos.DrawRay(transform.position, transform.forward * 3f);
     }
 }
