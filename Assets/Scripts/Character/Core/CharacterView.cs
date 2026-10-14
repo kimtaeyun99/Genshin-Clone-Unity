@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterView : MonoBehaviour
@@ -5,51 +6,93 @@ public class CharacterView : MonoBehaviour
     [Header("Model")]
     [SerializeField] private Transform modelRoot;
 
-    private GameObject currentView;
-    private Animator currentAnimator;
-    private AttackHitbox currentAttackHitbox;
-    private ICharacterAttack currentAttack;
-    private ICharacterSkill currentSkill;
-    private ICharacterBurst currentBurst;
+    private readonly Dictionary<CharacterData, CachedView> cachedViews = new();
+    private CachedView current;
 
-    public GameObject CurrentView => currentView;
-    public Animator CurrentAnimator => currentAnimator;
-    public AttackHitbox CurrentAttackHitbox => currentAttackHitbox;
-    public ICharacterAttack CurrentAttack => currentAttack;
-    public ICharacterSkill CurrentSkill => currentSkill;
-    public ICharacterBurst CurrentBurst => currentBurst;
+    public GameObject CurrentView => current?.Instance;
+    public Animator CurrentAnimator => current?.Animator;
+    public AttackHitbox CurrentAttackHitbox => current?.AttackHitbox;
+    public ICharacterAttack CurrentAttack => current?.Attack;
+    public ICharacterSkill CurrentSkill => current?.Skill;
+    public ICharacterBurst CurrentBurst => current?.Burst;
+
     public void ChangeView(CharacterData data)
     {
-        if (data == null || data.Prefab == null)
-        {
+        if (data == null || data.Prefab == null || modelRoot == null)
             return;
-        }
 
-        if (currentView != null)
+        // 처음 등장한 캐릭터만 Instantiate / GetComponentInChildren 실행.
+        if (!cachedViews.TryGetValue(data, out CachedView next) || next.Instance == null)
         {
-            Destroy(currentView);
+            next = CreateCachedView(data);
+            cachedViews[data] = next;
         }
 
-        currentView = Instantiate(data.Prefab, modelRoot);
+        if (current != null && current != next && current.Instance != null)
+            current.Instance.SetActive(false);
 
-        currentView.transform.localPosition = Vector3.zero;
-        currentView.transform.localRotation = Quaternion.identity;
-        currentView.transform.localScale = Vector3.one;
+        current = next;
+        ResetLocalTransform(next.Instance.transform);
 
+        if (!next.Instance.activeSelf)
+            next.Instance.SetActive(true);
 
-        currentAttackHitbox = currentView.GetComponentInChildren<AttackHitbox>(true);
+        // 애니메이션 초기화는 CharacterManager의 변경 이벤트를 구독하는
+        // PlayerAnimationController에서 처리한다.
+    }
 
-        currentAnimator = currentView.GetComponentInChildren<Animator>();
-        currentAttack = currentView.GetComponentInChildren<ICharacterAttack>();
-        currentSkill = currentView.GetComponentInChildren<ICharacterSkill>();
-        currentBurst = currentView.GetComponentInChildren<ICharacterBurst>();
-        
-        if (currentAnimator == null)
+    private CachedView CreateCachedView(CharacterData data)
+    {
+        GameObject model = Instantiate(data.Prefab, modelRoot);
+        ResetLocalTransform(model.transform);
+
+        Animator animator = model.GetComponentInChildren<Animator>(true);
+        if (animator == null)
+            animator = model.AddComponent<Animator>();
+
+        animator.avatar = data.Avatar;
+        animator.runtimeAnimatorController = data.AnimatorController;
+
+        return new CachedView(
+            model,
+            animator,
+            model.GetComponentInChildren<AttackHitbox>(true),
+            model.GetComponentInChildren<ICharacterAttack>(true),
+            model.GetComponentInChildren<ICharacterSkill>(true),
+            model.GetComponentInChildren<ICharacterBurst>(true)
+        );
+    }
+
+    private static void ResetLocalTransform(Transform model)
+    {
+        model.localPosition = Vector3.zero;
+        model.localRotation = Quaternion.identity;
+        model.localScale = Vector3.one;
+    }
+
+    private sealed class CachedView
+    {
+        public readonly GameObject Instance;
+        public readonly Animator Animator;
+        public readonly AttackHitbox AttackHitbox;
+        public readonly ICharacterAttack Attack;
+        public readonly ICharacterSkill Skill;
+        public readonly ICharacterBurst Burst;
+
+        public CachedView(
+            GameObject instance,
+            Animator animator,
+            AttackHitbox attackHitbox,
+            ICharacterAttack attack,
+            ICharacterSkill skill,
+            ICharacterBurst burst)
         {
-            currentAnimator = currentView.AddComponent<Animator>();
+            Instance = instance;
+            Animator = animator;
+            AttackHitbox = attackHitbox;
+            Attack = attack;
+            Skill = skill;
+            Burst = burst;
         }
-
-        currentAnimator.avatar = data.Avatar;
-        currentAnimator.runtimeAnimatorController = data.AnimatorController;
     }
 }

@@ -11,9 +11,6 @@ public class CharacterParty : MonoBehaviour
     [Header("Party")]
     [SerializeField] private List<CharacterData> partyMembers = new();
 
-    [Header("Manager")]
-    [SerializeField] private CharacterManager characterManager;
-
     public event Action OnPartyChanged;
     public event Action OnSelectionChanged;
 
@@ -80,7 +77,8 @@ public class CharacterParty : MonoBehaviour
         if (data == null)
             return false;
 
-        if (!characterManager.SetCurrentCharacter(data))
+        CharacterManager manager = CharacterManager.Instance;
+        if (manager == null || !manager.SetCurrentCharacter(data))
             return false;
 
         // Unlike CharacterManager's event, this notification fires
@@ -92,9 +90,13 @@ public class CharacterParty : MonoBehaviour
 
     public bool SelectNextAlive()
     {
+        CharacterManager manager = CharacterManager.Instance;
+        if (manager == null)
+            return false;
+
         for (int i = 0; i < partyMembers.Count; i++)
         {
-            CharacterRunTime runTime = characterManager.GetCharacter(partyMembers[i]);
+            CharacterRunTime runTime = manager.GetCharacter(partyMembers[i]);
             if (runTime == null || runTime.IsDead)
                 continue;
 

@@ -38872,7 +38872,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 37f0a3eca74ce384380640f221ec2fda, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: d1ba40b795c17c94ca93ceaef89626af, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &808170862
 GameObject:
@@ -39050,7 +39050,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a2990ebf092e8eb4481cf677a1c65a66, type: 2}
   - {fileID: 11400000, guid: 216f34f5d97c3db4c99b9439bc44d5aa, type: 2}
   - {fileID: 11400000, guid: ca4abe074adf2bf49a764e150e855adc, type: 2}
-  characterManager: {fileID: 63624474}
 --- !u!4 &814247881
 Transform:
   m_ObjectHideFlags: 0
@@ -70424,8 +70423,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   switchCoolDown: 3
   switchCoolDownTimer: 0
-  characterParty: {fileID: 814247880}
-  characterManager: {fileID: 63624474}
 --- !u!143 &2097096006
 CharacterController:
   m_ObjectHideFlags: 0
@@ -70493,7 +70490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfaefc5dec5d0104e8601a81fa8b1846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
-  characterManager: {fileID: 63624474}
 --- !u!114 &2097096014
 MonoBehaviour:
   m_ObjectHideFlags: 0
