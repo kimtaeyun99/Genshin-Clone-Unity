@@ -22,6 +22,9 @@ public class CharacterRunTime
     public event Action OnSkillCooldownChanged;
     public event Action OnBurstCooldownChanged;
 
+    // HP가 실제로 변경된 경우에만 UI 등에 알림.
+    public event Action<int, int> OnHealthChanged;
+
     public float CurrentEnergy => currentEnergy;
     public float MaxEnergy => data.MaxEnergy;
 
@@ -85,12 +88,17 @@ public class CharacterRunTime
 
     public void SetMaxHP(int newMaxHP)
     {
+        int previousHP = currentHP;
+        int previousMaxHP = maxHP;
+
         int hpShift = newMaxHP - maxHP;
         maxHP = newMaxHP;
         currentHP += hpShift;
 
         if (currentHP > maxHP)
             currentHP = maxHP;
+
+        NotifyHealthChangedIfNeeded(previousHP, previousMaxHP);
     }
 
     public void Heal(int amount)
@@ -98,9 +106,13 @@ public class CharacterRunTime
         if (IsDead || amount <= 0)
             return;
 
+        int previousHP = currentHP;
+
         currentHP += amount;
         if (currentHP > maxHP)
             currentHP = maxHP;
+
+        NotifyHealthChangedIfNeeded(previousHP, maxHP);
     }
 
     public void TakeDamage(float damage)
@@ -108,12 +120,16 @@ public class CharacterRunTime
         if (IsDead || damage <= 0)
             return;
 
+        int previousHP = currentHP;
+
         currentHP -= Mathf.RoundToInt(damage);
         if (currentHP <= 0)
         {
             currentHP = 0;
             IsDead = true;
         }
+
+        NotifyHealthChangedIfNeeded(previousHP, maxHP);
     }
 
     public void Revive()
@@ -191,6 +207,8 @@ public class CharacterRunTime
 
     public void Respawn()
     {
+        int previousHP = currentHP;
+        int previousMaxHP = maxHP;
         bool energyChanged = currentEnergy != 0f;
         bool skillChanged = skillCoolDown != 0f;
         bool burstChanged = burstCoolDown != 0f;
@@ -201,6 +219,7 @@ public class CharacterRunTime
         skillCoolDown = 0f;
         burstCoolDown = 0f;
 
+        NotifyHealthChangedIfNeeded(previousHP, previousMaxHP);
         if (energyChanged) OnEnergyChanged?.Invoke();
         if (skillChanged) OnSkillCooldownChanged?.Invoke();
         if (burstChanged) OnBurstCooldownChanged?.Invoke();
@@ -214,6 +233,8 @@ public class CharacterRunTime
 
     public void LoadStateData(int currentHP, float currentEnergy, bool isDead)
     {
+        int previousHP = this.currentHP;
+        int previousMaxHP = maxHP;
         this.currentHP = Mathf.Clamp(currentHP, 0, maxHP);
 
         float newEnergy = Mathf.Clamp(currentEnergy, 0f, MaxEnergy);
@@ -222,7 +243,16 @@ public class CharacterRunTime
 
         IsDead = isDead;
 
+        NotifyHealthChangedIfNeeded(previousHP, previousMaxHP);
         if (energyChanged)
             OnEnergyChanged?.Invoke();
+    }
+
+    private void NotifyHealthChangedIfNeeded(int previousHP, int previousMaxHP)
+    {
+        if (currentHP == previousHP && maxHP == previousMaxHP)
+            return;
+
+        OnHealthChanged?.Invoke(currentHP, maxHP);
     }
 }
