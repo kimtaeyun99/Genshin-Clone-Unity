@@ -52,20 +52,28 @@ public class CharacterView : MonoBehaviour
         ResetLocalTransform(model.transform);
 
         Animator animator = model.GetComponentInChildren<Animator>(true);
+
         if (animator == null)
-        {
             animator = model.AddComponent<Animator>();
-        }
 
         animator.avatar = data.Avatar;
         animator.runtimeAnimatorController = data.AnimatorController;
 
+        ICharacterAttack attack =
+            model.GetComponentInChildren<ICharacterAttack>(true);
+
+        ICharacterSkill skill =
+            model.GetComponentInChildren<ICharacterSkill>(true);
+
+        ICharacterBurst burst =
+            model.GetComponentInChildren<ICharacterBurst>(true);
+
         return new CachedView(
             model,
             animator,
-            data.CharacterAttack,
-            data.CharacterSkill,
-            data.CharacterBurst
+            attack,
+            skill,
+            burst
         );
     }
 

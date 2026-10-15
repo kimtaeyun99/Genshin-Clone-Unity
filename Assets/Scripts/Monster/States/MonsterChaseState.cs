@@ -50,7 +50,7 @@ public class MonsterChaseState : MonsterStateBase
             return;
         }
 
-        if (distanceSqr <= attackRangeSqr && attackTimer >= monster.AttackDelay)
+        if (distanceSqr <= attackRangeSqr && attackTimer >= monster.AttackDelay && monster.MonsterAttack != null)
         {
             stateMachine.ChangeState(MonsterStateType.Attack);
             return;

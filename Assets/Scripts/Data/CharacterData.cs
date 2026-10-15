@@ -17,17 +17,14 @@ public class CharacterData : ScriptableObject
     [SerializeField] private int maxHp;
 
     [Header("Attack")]
-    [SerializeField] private ICharacterAttack characterAttack;
     [SerializeField] private float[] attackMultipliers;
 
     [Header("Skill")]
-    [SerializeField] private ICharacterSkill characterSkill;
     [SerializeField] private float[] skillMultipliers;
     [SerializeField] private float skillCoolDown;
 
     [Header("Burst")]
     [SerializeField] private int burstEnergyCost;
-    [SerializeField] private ICharacterBurst characterBurst;
     [SerializeField] private float[] burstMultipliers;
     [SerializeField] private float burstCoolDown;
 
@@ -44,13 +41,10 @@ public class CharacterData : ScriptableObject
     public Sprite BurstIcon => burstIcon;
     public int ATK => atk;
     public int MaxHP => maxHp;
-    public ICharacterAttack CharacterAttack => characterAttack;
     public float[] AttackMultipliers => attackMultipliers;
-    public ICharacterSkill CharacterSkill => characterSkill;
     public float[] SkillMultipliers => skillMultipliers;
     public float SkillCoolDown => skillCoolDown;
     public int BurstEnergyCost => burstEnergyCost;
-    public ICharacterBurst CharacterBurst => characterBurst;
     public float[] BurstMultipliers => burstMultipliers;
     public float BurstCoolDown => burstCoolDown;
     public Avatar Avatar => avatar;
