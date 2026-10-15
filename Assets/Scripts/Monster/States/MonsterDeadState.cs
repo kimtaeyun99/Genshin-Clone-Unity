@@ -10,12 +10,9 @@ public class MonsterDeadState : MonsterStateBase
         monster.Agent.ResetPath();
         monster.Agent.enabled = false;
         monster.ClearTarget();
+        monster.BodyCollider.enabled = false;
 
-        foreach(Collider col in monster.GetComponentsInChildren<Collider>())
-        {
-            col.enabled = false;
-        }
-        monster.Animation.PlayDead();
+        monster.MonsterAnimationController.PlayDead();
         Object.Destroy(monster.gameObject, monster.DeadDestroyDelay);
     }
 }

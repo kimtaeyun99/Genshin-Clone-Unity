@@ -17,7 +17,7 @@ public class MonsterPatrolState : MonsterStateBase
 
     public override void Enter()
     {
-        monster.Animation.PlayPatrol();
+        monster.MonsterAnimationController.PlayPatrol();
         SetRandomDestination();
     }
 

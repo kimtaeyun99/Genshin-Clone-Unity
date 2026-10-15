@@ -19,10 +19,10 @@ public class MonsterHealthBar : MonoBehaviour
     [SerializeField] private Sprite cryoIcon;
     [SerializeField] private Sprite electroIcon;
 
-    private MonsterController monster;
+    [SerializeField] private MonsterController monster;
     private MonsterRunTime runtime;
     private Health health;
-    private Camera mainCamera;
+    [SerializeField] private Camera mainCamera;
 
     private float targetFillAmount;
     private float delayTimer;
@@ -30,12 +30,6 @@ public class MonsterHealthBar : MonoBehaviour
 
     private bool isDelayAnimating;
     private bool isVisible;
-
-    private void Awake()
-    {
-        monster = GetComponentInParent<MonsterController>();
-        mainCamera = Camera.main;
-    }
 
     private void OnEnable()
     {

@@ -24,7 +24,7 @@ public class PlayerSkillState : PlayerStateBase
             return;
         }
 
-        currentSkill.Enter(skillOwner, player.Animation);
+        currentSkill.Enter(skillOwner, player.PlayerAnimationController);
         InputManager.Instance.OnSkill += OnSkill;
     }
 

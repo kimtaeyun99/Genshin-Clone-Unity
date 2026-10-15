@@ -19,7 +19,7 @@ public class MonsterChaseState : MonsterStateBase
 
     public override void Enter()
     {
-        monster.Animation.PlayChase();
+        monster.MonsterAnimationController.PlayChase();
         attackTimer = 0f;
         hasRequestedDestination = false;
         monster.Agent.isStopped = false;

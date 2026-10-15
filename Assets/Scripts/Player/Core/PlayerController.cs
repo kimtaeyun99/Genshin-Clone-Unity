@@ -9,24 +9,24 @@ public class PlayerController : MonoBehaviour
 
     public event Action<float, float> OnSwitchCooldownChanged;
 
+    [SerializeField] private PlayerMovement movement;
+    [SerializeField] private PlayerStamina stamina;
+    [SerializeField] private PlayerAnimationController playerAnimationController;
+    [SerializeField] private Health health;
+
     public float SwitchCoolDownTimer => switchCoolDownTimer;
     public float SwitchCoolDown => switchCoolDown;
     public bool CanSwitchCharacter => switchCoolDownTimer <= 0f;
     public StateMachine<PlayerStateType> StateMachine { get; private set; }
-    public PlayerMovement Movement { get; private set; }
+    public PlayerMovement Movement => movement;
 
-    public PlayerStamina Stamina { get; private set; }
-    public PlayerAnimationController Animation { get; private set; }
+    public PlayerStamina Stamina => stamina;
+    public PlayerAnimationController PlayerAnimationController => playerAnimationController;
     public CharacterManager CharacterManager => CharacterManager.Instance;
-    public Health Health { get; private set; }
+    public Health Health => health;
 
     private void Awake()
     {
-        Movement = GetComponent<PlayerMovement>();
-        Stamina = GetComponent<PlayerStamina>();
-        Animation = GetComponent<PlayerAnimationController>();
-        Health = GetComponent<Health>();
-
         StateMachine = new StateMachine<PlayerStateType>();
         InitializeStates();
     }

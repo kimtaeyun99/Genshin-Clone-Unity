@@ -26,7 +26,7 @@ public class PlayerBurstState : PlayerStateBase
 
         currentBurst.Enter(
             character,
-            player.Animation
+            player.PlayerAnimationController
         );
 
     }

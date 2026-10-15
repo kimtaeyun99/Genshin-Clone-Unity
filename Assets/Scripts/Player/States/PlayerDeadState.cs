@@ -16,7 +16,7 @@ public class PlayerDeadState : PlayerStateBase
         finished = false;
 
         player.Health.ResetElement();
-        player.Animation.PlayDead();
+        player.PlayerAnimationController.PlayDead();
     }
 
     public override void Update()
@@ -38,13 +38,13 @@ public class PlayerDeadState : PlayerStateBase
 
     private bool IsDeadAnimationEnd()
     {
-        if (player.Animation.IsTransition())
+        if (player.PlayerAnimationController.IsTransition())
         {
             return false;
         }
 
         AnimatorStateInfo info =
-            player.Animation.GetCurrentStateInfo();
+            player.PlayerAnimationController.GetCurrentStateInfo();
 
         return info.normalizedTime >= 1f;
     }

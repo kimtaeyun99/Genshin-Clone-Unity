@@ -7,9 +7,8 @@ public class MonsterController : MonoBehaviour
     [Header("Monster")]
     [SerializeField] private string monsterName;
     [SerializeField] private bool isBoss;
-
-    [Header("HP")]
     [SerializeField] private float maxHP = 100f;
+    [SerializeField] private Collider bodyCollider;
 
     [Header("Idle")]
     [SerializeField] private float idleTime = 2f;
@@ -22,6 +21,7 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private float chaseRange = 15f;
 
     [Header("Attack")]
+    [SerializeField] private IMonsterAttack monsterAttack;
     [SerializeField] private float attack = 100f;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackDelay = 3f;
@@ -38,9 +38,17 @@ public class MonsterController : MonoBehaviour
 
     [Header("Animation")]
     [SerializeField] private MonsterAnimationController monsterAnimationController;
+
+    [Header("Hitbox")]
+    [SerializeField] private AttackHitbox[] hitboxes;
+
+    [Header("Health")]
+    [SerializeField] private Health health;
+    [SerializeField] private MonsterHealthBar healthBar;
+
     public string MonsterName => monsterName;
     public bool IsBoss => isBoss;
-    public float MaxHP => maxHP;
+    public Collider BodyCollider => bodyCollider;
 
     public float IdleTime => idleTime;
     public float PatrolRadius => patrolRadius;
@@ -60,23 +68,18 @@ public class MonsterController : MonoBehaviour
     public StateMachine<MonsterStateType> StateMachine { get; private set; }
     public Transform Target { get; private set; }
     public MonsterAnimationController MonsterAnimationController => monsterAnimationController;
-    public AttackHitbox[] Hitbox { get; private set; }
-    public Health Health { get; private set; }
+    public AttackHitbox[] Hitboxes => hitboxes;
+    public Health Health => health;
     public MonsterRunTime Runtime { get; private set; }
-    public IMonsterAttack MonsterAttack { get; private set; }
-    public MonsterHealthBar HealthBar { get; private set; }
+    public IMonsterAttack MonsterAttack => monsterAttack;
+    public MonsterHealthBar HealthBar => healthBar;
 
     private void Awake()
     {
         StateMachine = new StateMachine<MonsterStateType>();
-        Hitbox = GetComponentsInChildren<AttackHitbox>(true);
-
         Runtime = new MonsterRunTime(maxHP);
-        Health = GetComponent<Health>();
-        Health.BindMonsterRunTime(Runtime);
 
-        MonsterAttack = GetComponent<IMonsterAttack>();
-        HealthBar = GetComponentInChildren<MonsterHealthBar>(true);
+        Health.BindMonsterRunTime(Runtime);
 
         InitializeStates();
     }
@@ -136,7 +139,6 @@ public class MonsterController : MonoBehaviour
     {
         Target = null;
 
-        // 사망 상태에서 호출되는 경우 HP=0 및 IsDead=true를 유지한다.
         if (!Runtime.IsDead)
             Runtime.ResetCombatState();
 

@@ -9,7 +9,7 @@ public class PlayerIdleState : PlayerStateBase
 
     public override void Enter()
     {
-        player.Animation.PlayIdle();
+        player.PlayerAnimationController.PlayIdle();
 
         InputManager.Instance.OnJump += HandleJump;
         InputManager.Instance.OnDodge += HandleDodge;

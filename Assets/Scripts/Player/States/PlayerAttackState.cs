@@ -23,7 +23,7 @@ public class PlayerAttackState : PlayerStateBase
 
         currentAttack.Enter(
             player.CharacterManager.CurrentCharacter,
-            player.Animation
+            player.PlayerAnimationController
         );
 
         InputManager.Instance.OnAttack += OnAttack;

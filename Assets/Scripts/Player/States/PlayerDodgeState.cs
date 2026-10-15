@@ -15,7 +15,7 @@ public class PlayerDodgeState : PlayerStateBase
     public override void Enter()
     {
         player.Stamina.ConsumeStaminaInstant(player.Stamina.DodgeStaminaCost);
-        player.Animation.PlayDodge();
+        player.PlayerAnimationController.PlayDodge();
         player.Health.StartDodgeInvincible(player.Movement.DodgeDuration);
         InputManager.Instance.OnAttack += HandleAttack;
 

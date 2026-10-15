@@ -16,7 +16,7 @@ public class PlayerMoveState : PlayerStateBase
         InputManager.Instance.OnSkill += HandleSkill;
         InputManager.Instance.OnBurst += HandleBurst;
 
-        player.Animation.PlayMove();
+        player.PlayerAnimationController.PlayMove();
         sprintHoldTimer = 0f;
     }
 

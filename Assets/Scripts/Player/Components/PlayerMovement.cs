@@ -39,19 +39,8 @@ public class PlayerMovement : MonoBehaviour
 
     private float verticalVelocity;
 
-    private CharacterController characterController;
-    private Transform cameraTransform;
-
-    private void Awake()
-    {
-        characterController = GetComponent<CharacterController>();
-
-        if (Camera.main != null)
-        {
-            cameraTransform = Camera.main.transform;
-        }
-    }
-
+    [SerializeField] private CharacterController characterController;
+    [SerializeField] private Transform cameraTransform;
     public void Move(Vector2 input)
     {
         MoveInternal(input, moveSpeed);
@@ -170,19 +159,5 @@ public class PlayerMovement : MonoBehaviour
         characterController.enabled = true;
 
         CheckGround();
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        CharacterController controller = GetComponent<CharacterController>();
-
-        if (controller == null)
-        {
-            return;
-        }
-
-        Vector3 origin = transform.position + controller.center + Vector3.down * (controller.height * 0.5f - controller.radius);
-
-        Gizmos.DrawWireSphere(origin + Vector3.down * groundCheckDistance, groundCheckRadius);
     }
 }
