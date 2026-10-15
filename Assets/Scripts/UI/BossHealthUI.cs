@@ -8,12 +8,6 @@ public class BossHealthUI : MonoBehaviour
 
     [Header("HP")]
     [SerializeField] private TMP_Text bossNameText;
-    [SerializeField] private Image healthBarFill;
-    [SerializeField] private Image delayHealthBarFill;
-
-    [Header("HP Delay")]
-    [SerializeField] private float delayTime = 0.3f;
-    [SerializeField] private float smoothTime = 0.3f;
 
     [Header("Element")]
     [SerializeField] private Image hostElementIcon;
@@ -22,25 +16,16 @@ public class BossHealthUI : MonoBehaviour
     [SerializeField] private Sprite cryoIcon;
     [SerializeField] private Sprite electroIcon;
 
+    [Header("HP")]
+    [SerializeField] private DelayedHealthBar delayedHealthBar;
+
     private MonsterRunTime currentBoss;
     private Health currentHealth;
-
-    private float targetFillAmount;
-    private float delayTimer;
-    private float delayVelocity;
-
-    private bool isDelayAnimating;
 
     private void Awake()
     {
         Instance = this;
         gameObject.SetActive(false);
-    }
-
-    private void Update()
-    {
-        if (isDelayAnimating)
-            UpdateDelayHealth();
     }
 
     public void ShowBoss(MonsterRunTime boss, Health health, string bossName)
@@ -53,16 +38,7 @@ public class BossHealthUI : MonoBehaviour
         currentHealth = health;
 
         bossNameText.text = bossName;
-        float hpPercent = currentBoss.MaxHP > 0f
-            ? currentBoss.CurrentHP / currentBoss.MaxHP
-            : 0f;
-
-        healthBarFill.fillAmount = hpPercent;
-        delayHealthBarFill.fillAmount = hpPercent;
-        targetFillAmount = hpPercent;
-        delayTimer = 0f;
-        delayVelocity = 0f;
-        isDelayAnimating = false;
+        delayedHealthBar.Initialize(currentBoss.CurrentHP,currentBoss.MaxHP);
 
         UpdateElementIcon(currentHealth.HostElement);
         currentBoss.OnHPChanged += UpdateHealth;
@@ -78,7 +54,6 @@ public class BossHealthUI : MonoBehaviour
 
         Unsubscribe();
 
-        isDelayAnimating = false;
         hostElementIcon.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
@@ -101,54 +76,7 @@ public class BossHealthUI : MonoBehaviour
 
     private void UpdateHealth(float currentHP, float maxHP)
     {
-        float newFillAmount = maxHP > 0f ? currentHP / maxHP : 0f;
-
-        if (newFillAmount > targetFillAmount)
-        {
-            healthBarFill.fillAmount = newFillAmount;
-            delayHealthBarFill.fillAmount = newFillAmount;
-            targetFillAmount = newFillAmount;
-            delayTimer = 0f;
-            delayVelocity = 0f;
-            isDelayAnimating = false;
-            return;
-        }
-
-        targetFillAmount = newFillAmount;
-        healthBarFill.fillAmount = targetFillAmount;
-        delayTimer = delayTime;
-        delayVelocity = 0f;
-        isDelayAnimating = delayHealthBarFill.fillAmount > targetFillAmount;
-    }
-
-    private void UpdateDelayHealth()
-    {
-        if (delayHealthBarFill.fillAmount <= targetFillAmount)
-        {
-            delayHealthBarFill.fillAmount = targetFillAmount;
-            isDelayAnimating = false;
-            return;
-        }
-
-        if (delayTimer > 0f)
-        {
-            delayTimer -= Time.deltaTime;
-            return;
-        }
-
-        delayHealthBarFill.fillAmount = Mathf.SmoothDamp(
-            delayHealthBarFill.fillAmount,
-            targetFillAmount,
-            ref delayVelocity,
-            smoothTime
-        );
-
-        if (Mathf.Abs(delayHealthBarFill.fillAmount - targetFillAmount) < 0.001f)
-        {
-            delayHealthBarFill.fillAmount = targetFillAmount;
-            delayVelocity = 0f;
-            isDelayAnimating = false;
-        }
+        delayedHealthBar.SetHealth(currentHP, maxHP);
     }
 
     private void UpdateElementIcon(ElementType elementType)
