@@ -20,7 +20,7 @@ public class AttackHitbox : MonoBehaviour
 
     public float Damage => damage;
     public ElementType Element => element;
-    public event Action<Health> OnHit;
+    public event Action OnHit;
 
     private void OnEnable()
     {
@@ -97,7 +97,7 @@ public class AttackHitbox : MonoBehaviour
                 continue;
 
             health.TakeAttack(new AttackData(damage, element));
-            OnHit?.Invoke(health);
+            OnHit?.Invoke();
         }
     }
 }

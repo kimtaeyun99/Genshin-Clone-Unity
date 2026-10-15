@@ -42,7 +42,8 @@ public class CharacterParty : MonoBehaviour
 
     public bool SelectCharacter(int index)
     {
-        CharacterData data = partyMembers[index];
+        CharacterData data = GetCharacterData(index);
+
         if (data == null)
         {
             return false;

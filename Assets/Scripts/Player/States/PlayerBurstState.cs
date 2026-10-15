@@ -22,7 +22,11 @@ public class PlayerBurstState : PlayerStateBase
             ChangeNextState();
             return;
         }
-        character.ConsumeBurstEnergy();
+        if (!character.ConsumeBurstEnergy())
+        {
+            ChangeNextState();
+            return;
+        }
 
         currentBurst.Enter(
             character,

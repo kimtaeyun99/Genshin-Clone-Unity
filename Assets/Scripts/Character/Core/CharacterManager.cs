@@ -118,7 +118,7 @@ public class CharacterManager : MonoBehaviour
 
         if (CharacterParty.Instance.PartyMembers.Count > 0)
         {
-            SetCurrentCharacter(CharacterParty.Instance.PartyMembers[0]);
+            CharacterParty.Instance.SelectCharacter(0);
         }
     }
 

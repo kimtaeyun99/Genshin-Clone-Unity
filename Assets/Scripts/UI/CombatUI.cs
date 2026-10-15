@@ -118,24 +118,22 @@ public class CombatUI : MonoBehaviour
         if (currentCharacter == null)
             return;
 
-        float currentEnergy = currentCharacter.CurrentEnergy;
-        float maxEnergy = currentCharacter.BurstEnergyCost;
+        int currentEnergy = currentCharacter.CurrentEnergy;
+        int maxEnergy = currentCharacter.BurstEnergyCost;
 
         energyBarFill.fillAmount = maxEnergy > 0f
             ? currentEnergy / maxEnergy
             : 0f;
 
-        int roundedCurrent = Mathf.RoundToInt(currentEnergy);
-        int roundedMax = Mathf.RoundToInt(maxEnergy);
-        if (lastCurrentEnergyInt != roundedCurrent)
+        if (lastCurrentEnergyInt != currentEnergy)
         {
-            currentEnergyText.text = roundedCurrent.ToString();
-            lastCurrentEnergyInt = roundedCurrent;
+            currentEnergyText.text = currentEnergy.ToString();
+            lastCurrentEnergyInt = currentEnergy;
         }
-        if (lastMaxEnergyInt != roundedMax)
+        if (lastMaxEnergyInt != maxEnergy)
         {
-            maxEnergyText.text = roundedMax.ToString();
-            lastMaxEnergyInt = roundedMax;
+            maxEnergyText.text = maxEnergy.ToString();
+            lastMaxEnergyInt = maxEnergy;
         }
     }
 

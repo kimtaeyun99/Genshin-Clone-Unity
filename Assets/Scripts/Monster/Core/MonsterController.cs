@@ -1,5 +1,3 @@
-using System.Runtime.ExceptionServices;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,7 +20,6 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private float chaseRange = 15f;
 
     [Header("Attack")]
-    [SerializeField] private IMonsterAttack monsterAttack;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackDelay = 3f;
     [SerializeField] private float attackMultiplier = 1f;
@@ -48,7 +45,6 @@ public class MonsterController : MonoBehaviour
     public float PatrolRadius => patrolRadius;
     public float DetectionRadius => detectionRadius;
     public float ChaseRange => chaseRange;
-    public IMonsterAttack MonsterAttack => monsterAttack;
     public float AttackRange => attackRange;
     public float AttackDelay => attackDelay;
     public float AttackMultiplier => attackMultiplier;

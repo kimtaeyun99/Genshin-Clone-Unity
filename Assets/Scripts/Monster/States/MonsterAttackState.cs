@@ -14,7 +14,7 @@ public class MonsterAttackState : MonsterStateBase
     {
         monster.Agent.ResetPath();
 
-        currentAttack = monster.MonsterAttack;
+        currentAttack = monster.Data.MonsterAttack;
 
         currentAttack.Enter(monster);
     }

@@ -92,7 +92,7 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
         Vector3 direction = characterTransform.forward;
 
         Vector3 target =
-            source + direction * 10f;
+            source + direction * projectileRange;
 
         ProjectileVfx waterBullet =
             Instantiate(waterBulletPrefab);

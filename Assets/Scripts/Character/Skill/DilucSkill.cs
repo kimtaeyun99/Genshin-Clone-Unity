@@ -102,7 +102,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
         attackHitbox.gameObject.SetActive(false);
         attackHitbox.ClearHitbox();
     }
-    private void HandleSkillHit(Health target)
+    private void HandleSkillHit()
     {
         if (gainedEnergyThisHit)
         {

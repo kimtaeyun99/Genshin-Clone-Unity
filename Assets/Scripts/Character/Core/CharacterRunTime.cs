@@ -36,21 +36,14 @@ public class CharacterRunTime
     public void Heal(int amount)
     {
         if (IsDead || amount <= 0)
-        {
             return;
-        }
 
         int previousHP = CurrentHP;
-        CurrentHP += amount;
-        if (CurrentHP > MaxHP)
-        {
-            CurrentHP = MaxHP;
-        }
 
-        if(CurrentHP != MaxHP)
-        {
+        CurrentHP = Mathf.Min(CurrentHP + amount, MaxHP);
+
+        if (CurrentHP != previousHP)
             OnHealthChanged?.Invoke(CurrentHP, MaxHP);
-        }
     }
 
     public void TakeDamage(float damage)

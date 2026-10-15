@@ -14,15 +14,9 @@ public class MonsterData : ScriptableObject
     [Header("Attack")]
     [SerializeField] private IMonsterAttack monsterAttack;
 
-    [Header("Animation")]
-    [SerializeField] private Avatar avatar;
-    [SerializeField] private RuntimeAnimatorController animatorController;
-
     public string MonsterName => monsterName;
     public ElementType ElementType => elementType;
     public int ATK => atk;
     public int MaxHP => maxHp;
     public IMonsterAttack MonsterAttack => monsterAttack;
-    public Avatar Avatar => avatar;
-    public RuntimeAnimatorController AnimatorController => animatorController;
 }
