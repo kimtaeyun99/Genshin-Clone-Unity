@@ -53,4 +53,6 @@ public class CharacterData : ScriptableObject
     public ICharacterBurst CharacterBurst => characterBurst;
     public float[] BurstMultipliers => burstMultipliers;
     public float BurstCoolDown => burstCoolDown;
+    public Avatar Avatar => avatar;
+    public RuntimeAnimatorController AnimatorController => animatorController;
 }
