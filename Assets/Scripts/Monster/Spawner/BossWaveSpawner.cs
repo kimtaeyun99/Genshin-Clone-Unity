@@ -14,7 +14,6 @@ public class BossWaveSpawner : MonoBehaviour
     [Serializable]
     private class WaveData
     {
-        public string waveName;
         public SpawnData[] spawnDatas;
     }
 

@@ -5,7 +5,6 @@ public class MonsterController : MonoBehaviour
 {
     [Header("Monster")]
     [SerializeField] private MonsterData data;
-    [SerializeField] private string monsterName;
     [SerializeField] private bool isBoss;
 
     [SerializeField] private Collider bodyCollider;
@@ -40,7 +39,6 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private MonsterHealthBar healthBar;
 
     public MonsterData Data => data;
-    public string MonsterName => monsterName;
     public bool IsBoss => isBoss;
     public Collider BodyCollider => bodyCollider;
     public float IdleTime => idleTime;
@@ -61,6 +59,7 @@ public class MonsterController : MonoBehaviour
     public Transform Target { get; private set; }
     public MonsterRunTime Runtime { get; private set; }
     public Vector3 SpawnPosition { get; private set; }
+    public string MonsterName => data.MonsterName;
 
     private void Awake()
     {
@@ -115,7 +114,7 @@ public class MonsterController : MonoBehaviour
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-                BossHealthUI.Instance.ShowBoss(Runtime, Health, monsterName);
+                BossHealthUI.Instance.ShowBoss(Runtime, Health, MonsterName);
             return;
         }
 

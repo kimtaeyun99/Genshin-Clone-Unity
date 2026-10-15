@@ -49,16 +49,17 @@ public class CharacterRunTime
     public void TakeDamage(float damage)
     {
         if (IsDead || damage <= 0f)
-        {
             return;
-        }
 
-        CurrentHP -= Mathf.RoundToInt(damage);
-        if (CurrentHP <= 0)
-        {
-            CurrentHP = 0;
+        int appliedDamage = Mathf.RoundToInt(damage);
+
+        if (appliedDamage <= 0)
+            return;
+
+        CurrentHP = Mathf.Max(0, CurrentHP - appliedDamage);
+
+        if (CurrentHP == 0)
             IsDead = true;
-        }
 
         OnHealthChanged?.Invoke(CurrentHP, MaxHP);
     }
@@ -120,17 +121,18 @@ public class CharacterRunTime
 
     public void AddEnergy(int amount)
     {
-        if (amount <= 0f)
-        {
+        if (amount <= 0)
             return;
-        }
 
-        CurrentEnergy += amount;
-        if(CurrentEnergy > BurstEnergyCost)
-        {
-            CurrentEnergy = BurstEnergyCost;
-        }
-       
+        int newEnergy = Mathf.Min(
+            CurrentEnergy + amount,
+            BurstEnergyCost
+        );
+
+        if (newEnergy == CurrentEnergy)
+            return;
+
+        CurrentEnergy = newEnergy;
         OnEnergyChanged?.Invoke();
     }
 
@@ -160,13 +162,14 @@ public class CharacterRunTime
         OnBurstCoolDownChanged?.Invoke();
     }
 
-    public void LoadStateData(int CurrentHP, int CurrentEnergy)
+    public void LoadStateData(int currentHP, int currentEnergy)
     {
-        this.CurrentHP = Mathf.Clamp(CurrentHP, 0, MaxHP);
-        this.CurrentEnergy = Mathf.Clamp(CurrentEnergy, 0, BurstEnergyCost);
+        CurrentHP = Mathf.Clamp(currentHP, 0, MaxHP);
+        CurrentEnergy = Mathf.Clamp(currentEnergy, 0, BurstEnergyCost);
+
         IsDead = CurrentHP <= 0;
 
-        OnHealthChanged?.Invoke(this.CurrentHP, MaxHP);
+        OnHealthChanged?.Invoke(CurrentHP, MaxHP);
         OnEnergyChanged?.Invoke();
     }
 }

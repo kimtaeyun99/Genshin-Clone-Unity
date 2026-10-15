@@ -100,6 +100,9 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
     }
     private void SpawnAttackProjectile()
     {
+        if (monster == null || monster.Target == null)
+            return;
+
         Vector3 targetPosition = monster.Target.position;
 
         targetPosition.y = spawnPoint.position.y;
