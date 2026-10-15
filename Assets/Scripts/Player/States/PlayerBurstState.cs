@@ -4,7 +4,7 @@ public class PlayerBurstState : PlayerStateBase
 {
     private ICharacterBurst currentBurst;
     private CharacterRunTime character;
-
+    private bool burstStarted;
     public PlayerBurstState(
         PlayerController player,
         StateMachine<PlayerStateType> stateMachine)
@@ -14,21 +14,29 @@ public class PlayerBurstState : PlayerStateBase
 
     public override void Enter()
     {
-        character = player.CharacterManager.CurrentCharacter;
-        currentBurst = player.CharacterManager.CurrentBurst;
+        burstStarted = false;
+
+        character = CharacterManager.Instance.CurrentCharacter;
+        currentBurst = CharacterManager.Instance.CurrentBurst;
 
         if (character == null || currentBurst == null)
         {
             ChangeNextState();
             return;
         }
-        character.ConsumeBurstEnergy();
+
+        if (!character.ConsumeBurstEnergy())
+        {
+            ChangeNextState();
+            return;
+        }
+
+        burstStarted = true;
 
         currentBurst.Enter(
             character,
-            player.Animation
+            player.PlayerAnimationController
         );
-
     }
 
     public override void Update()
@@ -48,17 +56,17 @@ public class PlayerBurstState : PlayerStateBase
 
     public override void Exit()
     {
-        currentBurst?.Exit();
-
-        if (character != null)
+        if (burstStarted)
         {
+            currentBurst?.Exit();
+
             character.StartBurstCoolDown(
-                character.Data.BurstCooldown
+                character.Data.BurstCoolDown
             );
         }
 
+        burstStarted = false;
         currentBurst = null;
         character = null;
-
     }
 }

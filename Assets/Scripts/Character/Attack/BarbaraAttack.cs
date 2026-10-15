@@ -8,7 +8,7 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private float projectileRange = 10f;
 
-    private int normalAttackIndex;
+    private int attackIndex;
     private bool nextAttackInput;
     private bool isFinished;
 
@@ -24,23 +24,18 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
         character = characterRunTime;
         this.playerAnimationController = playerAnimationController;
 
-        normalAttackIndex = 1;
+        attackIndex = 0;
         nextAttackInput = false;
         isFinished = false;
 
-        playerAnimationController.SetNormalAttackIndex(normalAttackIndex);
-        playerAnimationController.PlayNormalAttack();
+        playerAnimationController.SetAttackIndex(attackIndex);
+        playerAnimationController.PlayAttack();
     }
 
     public void AttackUpdate()
     {
         AnimatorStateInfo stateInfo =
             playerAnimationController.GetCurrentStateInfo();
-
-        if (!stateInfo.IsTag("NormalAttack"))
-        {
-            return;
-        }
 
         if (playerAnimationController.IsTransition())
         {
@@ -49,13 +44,13 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
 
         if (stateInfo.normalizedTime >= 1f)
         {
-            if (nextAttackInput && normalAttackIndex < 4)
+            if (nextAttackInput && attackIndex < 3)
             {
-                normalAttackIndex++;
+                attackIndex++;
                 nextAttackInput = false;
 
-                playerAnimationController.SetNormalAttackIndex(
-                    normalAttackIndex
+                playerAnimationController.SetAttackIndex(
+                    attackIndex
                 );
             }
             else
@@ -67,7 +62,7 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
 
     public void OnAttackInput()
     {
-        if (normalAttackIndex >= 4)
+        if (attackIndex >= 3)
         {
             return;
         }
@@ -80,13 +75,12 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
         nextAttackInput = false;
     }
 
-    private void SpawnNormalAttackProjectile()
+    private void SpawnAttackProjectile()
     {
-        float atk = character.Stat.ATK;
+        float atk = character.ATK;
 
         float multiplier =
-            character.Data.CharacterCombatData
-                .GetNormalAttackMultipliers(normalAttackIndex - 1);
+            character.Data.AttackMultipliers[attackIndex];
 
         float damage = atk * multiplier;
 
@@ -98,7 +92,7 @@ public class BarbaraAttack : MonoBehaviour, ICharacterAttack
         Vector3 direction = characterTransform.forward;
 
         Vector3 target =
-            source + direction * 10f;
+            source + direction * projectileRange;
 
         ProjectileVfx waterBullet =
             Instantiate(waterBulletPrefab);

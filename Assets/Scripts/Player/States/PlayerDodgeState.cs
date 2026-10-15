@@ -15,9 +15,8 @@ public class PlayerDodgeState : PlayerStateBase
     public override void Enter()
     {
         player.Stamina.ConsumeStaminaInstant(player.Stamina.DodgeStaminaCost);
-        player.Animation.PlayDodge();
+        player.PlayerAnimationController.PlayDodge();
         player.Health.StartDodgeInvincible(player.Movement.DodgeDuration);
-        InputManager.Instance.OnAttack += HandleAttack;
 
         timer = 0f;
 
@@ -43,18 +42,6 @@ public class PlayerDodgeState : PlayerStateBase
         if (timer >= player.Movement.DodgeDuration)
         {
             ChangeNextState();
-        }
-    }
-
-    public override void Exit()
-    {
-        InputManager.Instance.OnAttack -= HandleAttack;
-    }
-    private void HandleAttack()
-    {
-        if(player.Movement.IsGrounded)
-        {
-            stateMachine.ChangeState(PlayerStateType.Attack);
         }
     }
 }

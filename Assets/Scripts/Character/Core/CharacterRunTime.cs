@@ -4,79 +4,46 @@ using UnityEngine;
 [Serializable]
 public class CharacterRunTime
 {
-    private CharacterData data;
-    private CharacterStat stat;
-
-    private int level;
-    private int ascensionPhase;
-    private int maxHP;
-    private int currentHP;
-    private float currentEnergy;
-    private float skillCoolDown;
-    private float burstCoolDown;
-
+    public CharacterData Data { get; private set; }
+    public int ATK { get; private set; }
+    public int MaxHP { get; private set; }
+    public int CurrentHP { get; private set; }
+    public int CurrentEnergy { get; private set; }
+    public int BurstEnergyCost { get; private set; }
+    public float SkillCoolDown { get; private set; }
+    public float BurstCoolDown { get; private set; }
+    
     public event Action OnEnergyChanged;
-    public event Action OnSkillCooldownChanged;
-    public event Action OnBurstCooldownChanged;
+    public event Action OnSkillCoolDownChanged;
+    public event Action OnBurstCoolDownChanged;
     public event Action<int, int> OnHealthChanged;
 
-    public float CurrentEnergy => currentEnergy;
-    public float MaxEnergy => data.MaxEnergy;
-    public float SkillCoolDown => skillCoolDown;
-    public float BurstCoolDown => burstCoolDown;
-
-    public bool IsSkillReady => skillCoolDown <= 0f;
-    public bool IsBurstReady => burstCoolDown <= 0f && currentEnergy >= MaxEnergy;
-
-    public CharacterData Data => data;
-    public CharacterStat Stat => stat;
-    public int Level => level;
-    public int AscensionPhase => ascensionPhase;
-    public int MaxHP => maxHP;
-    public int CurrentHP => currentHP;
+    public bool IsSkillReady => SkillCoolDown <= 0f;
+    public bool IsBurstReady => BurstCoolDown <= 0f && CurrentEnergy >= BurstEnergyCost;
     public bool IsDead { get; private set; }
 
     public CharacterRunTime(CharacterData data)
     {
-        this.data = data;
-        level = 1;
-        ascensionPhase = 0;
-        maxHP = data.HP;
-        currentHP = maxHP;
-        currentEnergy = 0f;
-        skillCoolDown = 0f;
-        burstCoolDown = 0f;
+        Data = data;
+        ATK = data.ATK;
+        MaxHP = data.MaxHP;
+        CurrentHP = MaxHP;
+        CurrentEnergy = 0;
+        BurstEnergyCost = data.BurstEnergyCost;
+        SkillCoolDown = 0;
+        BurstCoolDown = 0;
     }
-
-    public void SetStat(CharacterStat stat)
-    {
-        this.stat = stat;
-    }
-
-    public void SetMaxHP(int newMaxHP)
-    {
-        int previousHP = currentHP;
-        int previousMaxHP = maxHP;
-        int hpShift = newMaxHP - maxHP;
-        maxHP = newMaxHP;
-        currentHP += hpShift;
-        if (currentHP > maxHP)
-            currentHP = maxHP;
-
-        NotifyHealthChangedIfNeeded(previousHP, previousMaxHP);
-    }
-
     public void Heal(int amount)
     {
         if (IsDead || amount <= 0)
             return;
 
-        int previousHP = currentHP;
-        currentHP += amount;
-        if (currentHP > maxHP)
-            currentHP = maxHP;
+        int previousHP = CurrentHP;
 
-        NotifyHealthChangedIfNeeded(previousHP, maxHP);
+        CurrentHP = Mathf.Min(CurrentHP + amount, MaxHP);
+
+        if (CurrentHP != previousHP)
+            OnHealthChanged?.Invoke(CurrentHP, MaxHP);
     }
 
     public void TakeDamage(float damage)
@@ -84,133 +51,125 @@ public class CharacterRunTime
         if (IsDead || damage <= 0f)
             return;
 
-        int previousHP = currentHP;
-        currentHP -= Mathf.RoundToInt(damage);
-        if (currentHP <= 0)
-        {
-            currentHP = 0;
-            IsDead = true;
-        }
+        int appliedDamage = Mathf.RoundToInt(damage);
 
-        NotifyHealthChangedIfNeeded(previousHP, maxHP);
+        if (appliedDamage <= 0)
+            return;
+
+        CurrentHP = Mathf.Max(0, CurrentHP - appliedDamage);
+
+        if (CurrentHP == 0)
+            IsDead = true;
+
+        OnHealthChanged?.Invoke(CurrentHP, MaxHP);
     }
 
     public void StartSkillCoolDown(float coolDown)
     {
-        if (skillCoolDown == coolDown)
+        if (SkillCoolDown == coolDown)
+        {
             return;
+        }
 
-        skillCoolDown = coolDown;
-        OnSkillCooldownChanged?.Invoke();
+        SkillCoolDown = coolDown;
+        OnSkillCoolDownChanged?.Invoke();
     }
 
     public void StartBurstCoolDown(float coolDown)
     {
-        if (burstCoolDown == coolDown)
+        if (BurstCoolDown == coolDown)
+        {
             return;
+        }
 
-        burstCoolDown = coolDown;
-        OnBurstCooldownChanged?.Invoke();
+        BurstCoolDown = coolDown;
+        OnBurstCoolDownChanged?.Invoke();
     }
 
     public void UpdateCoolDown(float deltaTime)
     {
-        if (skillCoolDown > 0f)
+        if (SkillCoolDown > 0f)
         {
-            float oldCooldown = skillCoolDown;
-            skillCoolDown -= deltaTime;
-            if (skillCoolDown < 0f)
-                skillCoolDown = 0f;
+            float oldCooldown = SkillCoolDown;
+            SkillCoolDown -= deltaTime;
+            if (SkillCoolDown < 0f)
+            {
+                SkillCoolDown = 0f;
+            }
 
-            if (skillCoolDown != oldCooldown)
-                OnSkillCooldownChanged?.Invoke();
+            if (SkillCoolDown != oldCooldown)
+            {
+                OnSkillCoolDownChanged?.Invoke();
+            }
         }
 
-        if (burstCoolDown > 0f)
+        if (BurstCoolDown > 0f)
         {
-            float oldCooldown = burstCoolDown;
-            burstCoolDown -= deltaTime;
-            if (burstCoolDown < 0f)
-                burstCoolDown = 0f;
+            float oldCooldown = BurstCoolDown;
+            BurstCoolDown -= deltaTime;
+            if (BurstCoolDown < 0f)
+            {
+                BurstCoolDown = 0f;
+            }
 
-            if (burstCoolDown != oldCooldown)
-                OnBurstCooldownChanged?.Invoke();
+            if (BurstCoolDown != oldCooldown)
+            {
+                OnBurstCoolDownChanged?.Invoke();
+            }
         }
     }
 
-    public void AddEnergy(float amount)
+    public void AddEnergy(int amount)
     {
-        if (amount <= 0f)
+        if (amount <= 0)
             return;
 
-        float newEnergy = Mathf.Min(currentEnergy + amount, MaxEnergy);
-        if (newEnergy == currentEnergy)
+        int newEnergy = Mathf.Min(
+            CurrentEnergy + amount,
+            BurstEnergyCost
+        );
+
+        if (newEnergy == CurrentEnergy)
             return;
 
-        currentEnergy = newEnergy;
+        CurrentEnergy = newEnergy;
         OnEnergyChanged?.Invoke();
     }
 
     public bool ConsumeBurstEnergy()
     {
-        if (currentEnergy < MaxEnergy)
+        if (CurrentEnergy < BurstEnergyCost)
+        {
             return false;
+        }
 
-        bool energyChanged = currentEnergy != 0f;
-        currentEnergy = 0f;
-        if (energyChanged)
-            OnEnergyChanged?.Invoke();
+        CurrentEnergy = 0;
+        OnEnergyChanged?.Invoke();
         return true;
     }
 
     public void Respawn()
     {
-        int previousHP = currentHP;
-        int previousMaxHP = maxHP;
-        bool energyChanged = currentEnergy != 0f;
-        bool skillChanged = skillCoolDown != 0f;
-        bool burstChanged = burstCoolDown != 0f;
-
         IsDead = false;
-        currentHP = maxHP;
-        currentEnergy = 0f;
-        skillCoolDown = 0f;
-        burstCoolDown = 0f;
+        CurrentHP = MaxHP;
+        CurrentEnergy = 0;
+        SkillCoolDown = 0f;
+        BurstCoolDown = 0f;
 
-        NotifyHealthChangedIfNeeded(previousHP, previousMaxHP);
-        if (energyChanged) OnEnergyChanged?.Invoke();
-        if (skillChanged) OnSkillCooldownChanged?.Invoke();
-        if (burstChanged) OnBurstCooldownChanged?.Invoke();
+        OnHealthChanged?.Invoke(CurrentHP, MaxHP);
+        OnEnergyChanged?.Invoke();
+        OnSkillCoolDownChanged?.Invoke();
+        OnBurstCoolDownChanged?.Invoke();
     }
 
-    public void LoadGrowthData(int level, int ascensionPhase)
+    public void LoadStateData(int currentHP, int currentEnergy)
     {
-        this.level = level;
-        this.ascensionPhase = ascensionPhase;
-    }
+        CurrentHP = Mathf.Clamp(currentHP, 0, MaxHP);
+        CurrentEnergy = Mathf.Clamp(currentEnergy, 0, BurstEnergyCost);
 
-    public void LoadStateData(int currentHP, float currentEnergy, bool isDead)
-    {
-        int previousHP = this.currentHP;
-        int previousMaxHP = maxHP;
-        this.currentHP = Mathf.Clamp(currentHP, 0, maxHP);
+        IsDead = CurrentHP <= 0;
 
-        float newEnergy = Mathf.Clamp(currentEnergy, 0f, MaxEnergy);
-        bool energyChanged = this.currentEnergy != newEnergy;
-        this.currentEnergy = newEnergy;
-
-        IsDead = isDead;
-
-        NotifyHealthChangedIfNeeded(previousHP, previousMaxHP);
-        if (energyChanged)
-            OnEnergyChanged?.Invoke();
-    }
-
-    private void NotifyHealthChangedIfNeeded(int previousHP, int previousMaxHP)
-    {
-        if (currentHP == previousHP && maxHP == previousMaxHP)
-            return;
-
-        OnHealthChanged?.Invoke(currentHP, maxHP);
+        OnHealthChanged?.Invoke(CurrentHP, MaxHP);
+        OnEnergyChanged?.Invoke();
     }
 }

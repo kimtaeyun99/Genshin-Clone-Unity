@@ -4,11 +4,10 @@ using UnityEngine.AI;
 public class MonsterController : MonoBehaviour
 {
     [Header("Monster")]
-    [SerializeField] private string monsterName;
+    [SerializeField] private MonsterData data;
     [SerializeField] private bool isBoss;
 
-    [Header("HP")]
-    [SerializeField] private float maxHP = 100f;
+    [SerializeField] private Collider bodyCollider;
 
     [Header("Idle")]
     [SerializeField] private float idleTime = 2f;
@@ -21,7 +20,7 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private float chaseRange = 15f;
 
     [Header("Attack")]
-    [SerializeField] private float attack = 100f;
+    [SerializeField] private IMonsterAttack monsterAttack;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackDelay = 3f;
     [SerializeField] private float attackMultiplier = 1f;
@@ -29,50 +28,45 @@ public class MonsterController : MonoBehaviour
     [Header("Dead")]
     [SerializeField] private float deadDestroyDelay = 3f;
 
-    [Header("Element")]
-    [SerializeField] private ElementType elementType;
+    [Header("NavMesh")]
+    [SerializeField] private NavMeshAgent agent;
 
-    public string MonsterName => monsterName;
+    [Header("Animation")]
+    [SerializeField] private MonsterAnimationController monsterAnimationController;
+
+    [Header("Health")]
+    [SerializeField] private Health health;
+    [SerializeField] private MonsterHealthBar healthBar;
+
+    public MonsterData Data => data;
     public bool IsBoss => isBoss;
-    public float MaxHP => maxHP;
-
+    public Collider BodyCollider => bodyCollider;
     public float IdleTime => idleTime;
     public float PatrolRadius => patrolRadius;
     public float DetectionRadius => detectionRadius;
     public float ChaseRange => chaseRange;
-
-    public float Attack => attack;
+    public IMonsterAttack MonsterAttack => monsterAttack;
     public float AttackRange => attackRange;
     public float AttackDelay => attackDelay;
     public float AttackMultiplier => attackMultiplier;
 
     public float DeadDestroyDelay => deadDestroyDelay;
-    public ElementType ElementType => elementType;
-
-    public Vector3 SpawnPosition { get; private set; }
-    public NavMeshAgent Agent { get; private set; }
+    public NavMeshAgent Agent => agent;
+    public MonsterAnimationController MonsterAnimationController => monsterAnimationController;
+    public Health Health => health;
+    public MonsterHealthBar HealthBar => healthBar;
     public StateMachine<MonsterStateType> StateMachine { get; private set; }
     public Transform Target { get; private set; }
-    public MonsterAnimationController Animation { get; private set; }
-    public AttackHitbox[] Hitbox { get; private set; }
-    public Health Health { get; private set; }
     public MonsterRunTime Runtime { get; private set; }
-    public IMonsterAttack MonsterAttack { get; private set; }
-    public MonsterHealthBar HealthBar { get; private set; }
+    public Vector3 SpawnPosition { get; private set; }
+    public string MonsterName => data.MonsterName;
 
     private void Awake()
     {
-        Agent = GetComponent<NavMeshAgent>();
         StateMachine = new StateMachine<MonsterStateType>();
-        Animation = GetComponent<MonsterAnimationController>();
-        Hitbox = GetComponentsInChildren<AttackHitbox>(true);
+        Runtime = new MonsterRunTime(data);
 
-        Runtime = new MonsterRunTime(maxHP);
-        Health = GetComponent<Health>();
         Health.BindMonsterRunTime(Runtime);
-
-        MonsterAttack = GetComponent<IMonsterAttack>();
-        HealthBar = GetComponentInChildren<MonsterHealthBar>(true);
 
         InitializeStates();
     }
@@ -120,7 +114,7 @@ public class MonsterController : MonoBehaviour
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-                BossHealthUI.Instance.ShowBoss(Runtime, Health, monsterName);
+                BossHealthUI.Instance.ShowBoss(Runtime, Health, MonsterName);
             return;
         }
 
@@ -132,7 +126,6 @@ public class MonsterController : MonoBehaviour
     {
         Target = null;
 
-        // 사망 상태에서 호출되는 경우 HP=0 및 IsDead=true를 유지한다.
         if (!Runtime.IsDead)
             Runtime.ResetCombatState();
 
@@ -141,7 +134,7 @@ public class MonsterController : MonoBehaviour
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-                BossHealthUI.Instance.HideBoss();
+                BossHealthUI.Instance.HideBoss(Runtime);
             return;
         }
 
@@ -149,12 +142,12 @@ public class MonsterController : MonoBehaviour
             HealthBar.SetVisible(false);
     }
 
-    private void HandleDead()
+    private void HandleDead(MonsterRunTime runTime)
     {
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-                BossHealthUI.Instance.HideBoss();
+                BossHealthUI.Instance.HideBoss(runTime);
         }
         else if (HealthBar != null)
         {

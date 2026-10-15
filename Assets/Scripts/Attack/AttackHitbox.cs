@@ -20,7 +20,7 @@ public class AttackHitbox : MonoBehaviour
 
     public float Damage => damage;
     public ElementType Element => element;
-    public event Action<Health> OnHit;
+    public event Action OnHit;
 
     private void OnEnable()
     {
@@ -60,10 +60,7 @@ public class AttackHitbox : MonoBehaviour
 
         Vector3 center = transform.TransformPoint(hitboxCollider.center);
         Vector3 scale = transform.lossyScale;
-        Vector3 halfExtents = Vector3.Scale(
-            hitboxCollider.size * 0.5f,
-            new Vector3(Mathf.Abs(scale.x), Mathf.Abs(scale.y), Mathf.Abs(scale.z))
-        );
+        Vector3 halfExtents = Vector3.Scale(hitboxCollider.size * 0.5f,new Vector3(Mathf.Abs(scale.x), Mathf.Abs(scale.y), Mathf.Abs(scale.z)));
 
         int count;
         while (true)
@@ -100,7 +97,7 @@ public class AttackHitbox : MonoBehaviour
                 continue;
 
             health.TakeAttack(new AttackData(damage, element));
-            OnHit?.Invoke(health);
+            OnHit?.Invoke();
         }
     }
 }

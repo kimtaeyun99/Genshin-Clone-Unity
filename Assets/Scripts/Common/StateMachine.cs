@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public class StateMachine<TKey> where TKey : struct, Enum
+public class StateMachine<TKey> where TKey : Enum
 {
     private readonly Dictionary<TKey, State> states = new();
 

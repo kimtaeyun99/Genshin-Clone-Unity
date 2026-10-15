@@ -27,11 +27,6 @@ public class CharacterSaveData
 {
     public string characterId;
 
-    public int level;
-    public int ascensionPhase;
-
     public int currentHP;
-    public float currentEnergy;
-
-    public bool isDead;
+    public int currentEnergy;
 }

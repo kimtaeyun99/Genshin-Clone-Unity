@@ -15,7 +15,7 @@ public class MonsterIdleState : MonsterStateBase
     {
         idleTimer = monster.IdleTime;
 
-        monster.Animation.PlayIdle();
+        monster.MonsterAnimationController.PlayIdle();
     }
 
     public override void Update()

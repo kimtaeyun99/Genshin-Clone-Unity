@@ -42,7 +42,7 @@ public class PartySlotUI : MonoBehaviour
         if (displayedCharacter != data)
         {
             displayedCharacter = data;
-            characterIcon.sprite = data.Icon;
+            characterIcon.sprite = data.CharacterIcon;
             characterNameText.text = data.CharacterName;
             lastCurrentHP = int.MinValue;
             lastMaxHP = int.MinValue;

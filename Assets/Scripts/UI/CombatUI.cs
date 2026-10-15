@@ -9,23 +9,15 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private TMP_Text currentEnergyText;
     [SerializeField] private TMP_Text maxEnergyText;
 
-    [Header("Skill")]
-    [SerializeField] private Image skillCooldownBG;
-    [SerializeField] private Image skillCoolDownFill;
-    [SerializeField] private TMP_Text skillCoolDownText;
-
-    [Header("Burst")]
-    [SerializeField] private Image burstCooldownBG;
-    [SerializeField] private Image burstCoolDownFill;
-    [SerializeField] private TMP_Text burstCoolDownText;
+    [Header("Cooldown")]
+    [SerializeField] private CooldownUI skillCooldownUI;
+    [SerializeField] private CooldownUI burstCooldownUI;
 
     private CharacterManager characterManager;
     private CharacterRunTime currentCharacter;
 
-    private int lastCurrentEnergyInt = int.MinValue;
-    private int lastMaxEnergyInt = int.MinValue;
-    private int lastSkillTenths = int.MinValue;
-    private int lastBurstTenths = int.MinValue;
+    private int lastCurrentEnergy = int.MinValue;
+    private int lastMaxEnergy = int.MinValue;
 
     private void OnEnable()
     {
@@ -43,6 +35,7 @@ public class CombatUI : MonoBehaviour
             characterManager.OnCurrentCharacterChanged -= HandleCharacterChanged;
 
         UnsubscribeCharacter();
+
         characterManager = null;
         currentCharacter = null;
     }
@@ -50,6 +43,7 @@ public class CombatUI : MonoBehaviour
     private void BindManager()
     {
         CharacterManager manager = CharacterManager.Instance;
+
         if (manager == null)
             return;
 
@@ -75,13 +69,14 @@ public class CombatUI : MonoBehaviour
             return;
 
         currentCharacter.OnEnergyChanged += RefreshEnergy;
-        currentCharacter.OnSkillCooldownChanged += RefreshSkillCoolDown;
-        currentCharacter.OnBurstCooldownChanged += RefreshBurstCoolDown;
+        currentCharacter.OnSkillCoolDownChanged += RefreshSkillCoolDown;
+        currentCharacter.OnBurstCoolDownChanged += RefreshBurstCoolDown;
 
-        lastCurrentEnergyInt = int.MinValue;
-        lastMaxEnergyInt = int.MinValue;
-        lastSkillTenths = int.MinValue;
-        lastBurstTenths = int.MinValue;
+        lastCurrentEnergy = int.MinValue;
+        lastMaxEnergy = int.MinValue;
+
+        skillCooldownUI.ResetCache();
+        burstCooldownUI.ResetCache();
 
         RefreshCharacter();
         RefreshEnergy();
@@ -95,8 +90,8 @@ public class CombatUI : MonoBehaviour
             return;
 
         currentCharacter.OnEnergyChanged -= RefreshEnergy;
-        currentCharacter.OnSkillCooldownChanged -= RefreshSkillCoolDown;
-        currentCharacter.OnBurstCooldownChanged -= RefreshBurstCoolDown;
+        currentCharacter.OnSkillCoolDownChanged -= RefreshSkillCoolDown;
+        currentCharacter.OnBurstCoolDownChanged -= RefreshBurstCoolDown;
     }
 
     private void RefreshCharacter()
@@ -104,13 +99,8 @@ public class CombatUI : MonoBehaviour
         if (currentCharacter == null)
             return;
 
-        Sprite skillIcon = currentCharacter.Data.SkillIcon;
-        skillCooldownBG.sprite = skillIcon;
-        skillCoolDownFill.sprite = skillIcon;
-
-        Sprite burstIcon = currentCharacter.Data.BurstIcon;
-        burstCooldownBG.sprite = burstIcon;
-        burstCoolDownFill.sprite = burstIcon;
+        skillCooldownUI.SetIcon(currentCharacter.Data.SkillIcon);
+        burstCooldownUI.SetIcon(currentCharacter.Data.BurstIcon);
     }
 
     private void RefreshEnergy()
@@ -118,24 +108,23 @@ public class CombatUI : MonoBehaviour
         if (currentCharacter == null)
             return;
 
-        float currentEnergy = currentCharacter.CurrentEnergy;
-        float maxEnergy = currentCharacter.MaxEnergy;
+        int currentEnergy = currentCharacter.CurrentEnergy;
+        int maxEnergy = currentCharacter.BurstEnergyCost;
 
-        energyBarFill.fillAmount = maxEnergy > 0f
-            ? currentEnergy / maxEnergy
+        energyBarFill.fillAmount = maxEnergy > 0
+            ? (float)currentEnergy / maxEnergy
             : 0f;
 
-        int roundedCurrent = Mathf.RoundToInt(currentEnergy);
-        int roundedMax = Mathf.RoundToInt(maxEnergy);
-        if (lastCurrentEnergyInt != roundedCurrent)
+        if (lastCurrentEnergy != currentEnergy)
         {
-            currentEnergyText.text = roundedCurrent.ToString();
-            lastCurrentEnergyInt = roundedCurrent;
+            currentEnergyText.text = currentEnergy.ToString();
+            lastCurrentEnergy = currentEnergy;
         }
-        if (lastMaxEnergyInt != roundedMax)
+
+        if (lastMaxEnergy != maxEnergy)
         {
-            maxEnergyText.text = roundedMax.ToString();
-            lastMaxEnergyInt = roundedMax;
+            maxEnergyText.text = maxEnergy.ToString();
+            lastMaxEnergy = maxEnergy;
         }
     }
 
@@ -144,26 +133,10 @@ public class CombatUI : MonoBehaviour
         if (currentCharacter == null)
             return;
 
-        float remaining = currentCharacter.SkillCoolDown;
-        float total = currentCharacter.Data.SkillCooldown;
-
-        skillCoolDownFill.fillAmount = total > 0f
-            ? 1f - (remaining / total)
-            : 1f;
-
-        bool isCoolingDown = remaining > 0f;
-        if (skillCoolDownText.gameObject.activeSelf != isCoolingDown)
-            skillCoolDownText.gameObject.SetActive(isCoolingDown);
-
-        if (!isCoolingDown)
-            return;
-
-        int tenths = Mathf.RoundToInt(remaining * 10f);
-        if (lastSkillTenths != tenths)
-        {
-            skillCoolDownText.text = remaining.ToString("0.0");
-            lastSkillTenths = tenths;
-        }
+        skillCooldownUI.SetCooldown(
+            currentCharacter.SkillCoolDown,
+            currentCharacter.Data.SkillCoolDown
+        );
     }
 
     private void RefreshBurstCoolDown()
@@ -171,25 +144,9 @@ public class CombatUI : MonoBehaviour
         if (currentCharacter == null)
             return;
 
-        float remaining = currentCharacter.BurstCoolDown;
-        float total = currentCharacter.Data.BurstCooldown;
-
-        burstCoolDownFill.fillAmount = total > 0f
-            ? 1f - (remaining / total)
-            : 1f;
-
-        bool isCoolingDown = remaining > 0f;
-        if (burstCoolDownText.gameObject.activeSelf != isCoolingDown)
-            burstCoolDownText.gameObject.SetActive(isCoolingDown);
-
-        if (!isCoolingDown)
-            return;
-
-        int tenths = Mathf.RoundToInt(remaining * 10f);
-        if (lastBurstTenths != tenths)
-        {
-            burstCoolDownText.text = remaining.ToString("0.0");
-            lastBurstTenths = tenths;
-        }
+        burstCooldownUI.SetCooldown(
+            currentCharacter.BurstCoolDown,
+            currentCharacter.Data.BurstCoolDown
+        );
     }
 }

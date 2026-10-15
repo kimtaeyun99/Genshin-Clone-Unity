@@ -16,7 +16,7 @@ public class PlayerMoveState : PlayerStateBase
         InputManager.Instance.OnSkill += HandleSkill;
         InputManager.Instance.OnBurst += HandleBurst;
 
-        player.Animation.PlayMove();
+        player.PlayerAnimationController.PlayMove();
         sprintHoldTimer = 0f;
     }
 
@@ -134,7 +134,7 @@ public class PlayerMoveState : PlayerStateBase
         }
 
         CharacterRunTime character =
-            player.CharacterManager.CurrentCharacter;
+            CharacterManager.Instance.CurrentCharacter;
 
         if (character == null || !character.IsSkillReady)
         {
@@ -152,7 +152,7 @@ public class PlayerMoveState : PlayerStateBase
         }
 
         CharacterRunTime character =
-            player.CharacterManager.CurrentCharacter;
+            CharacterManager.Instance.CurrentCharacter;
 
         if (character == null || !character.IsBurstReady)
         {

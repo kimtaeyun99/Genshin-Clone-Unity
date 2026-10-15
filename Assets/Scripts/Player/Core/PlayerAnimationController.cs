@@ -2,55 +2,30 @@ using UnityEngine;
 
 public class PlayerAnimationController : MonoBehaviour
 {
-    private CharacterManager subscribedManager;
-
     private Animator Animator => CharacterManager.Instance != null ? CharacterManager.Instance.CurrentAnimator : null;
 
     private static readonly int StateHash = Animator.StringToHash("State");
     private static readonly int JumpHash = Animator.StringToHash("Jump");
     private static readonly int DodgeHash = Animator.StringToHash("Dodge");
-    private static readonly int NormalAttackHash = Animator.StringToHash("NormalAttack");
-    private static readonly int NormalAttackIndexHash = Animator.StringToHash("NormalAttackIndex");
+    private static readonly int AttackHash = Animator.StringToHash("Attack");
+    private static readonly int AttackIndexHash = Animator.StringToHash("AttackIndex");
     private static readonly int SkillHash = Animator.StringToHash("Skill");
     private static readonly int SkillIndexHash = Animator.StringToHash("SkillIndex");
     private static readonly int BurstHash = Animator.StringToHash("Burst");
     private static readonly int DeadHash = Animator.StringToHash("Dead");
 
-    private void OnEnable()
-    {
-        BindManager();
-    }
 
     private void Start()
     {
-        BindManager();
+        CharacterManager.Instance.OnCurrentCharacterChanged += HandleCharacterChanged;
+        ResetAnimatorToIdle();
     }
-
-    private void OnDisable()
+    private void OnDestroy()
     {
-        if (subscribedManager != null)
-            subscribedManager.OnCurrentCharacterChanged -= HandleCharacterChanged;
-
-        subscribedManager = null;
+        CharacterManager.Instance.OnCurrentCharacterChanged -= HandleCharacterChanged;
     }
 
-    private void BindManager()
-    {
-        CharacterManager manager = CharacterManager.Instance;
-        if (manager == null || manager == subscribedManager)
-            return;
-
-        if (subscribedManager != null)
-            subscribedManager.OnCurrentCharacterChanged -= HandleCharacterChanged;
-
-        subscribedManager = manager;
-        subscribedManager.OnCurrentCharacterChanged += HandleCharacterChanged;
-
-        if (manager.CurrentCharacter != null)
-            ResetAnimatorToIdle();
-    }
-
-    private void HandleCharacterChanged(CharacterRunTime character)
+    private void HandleCharacterChanged(CharacterRunTime _)
     {
         ResetAnimatorToIdle();
     }
@@ -68,11 +43,11 @@ public class PlayerAnimationController : MonoBehaviour
 
         animator.ResetTrigger(JumpHash);
         animator.ResetTrigger(DodgeHash);
-        animator.ResetTrigger(NormalAttackHash);
+        animator.ResetTrigger(AttackHash);
         animator.ResetTrigger(SkillHash);
         animator.ResetTrigger(BurstHash);
         animator.ResetTrigger(DeadHash);
-        animator.SetInteger(NormalAttackIndexHash, 0);
+        animator.SetInteger(AttackIndexHash, 0);
         animator.SetInteger(SkillIndexHash, 0);
         animator.SetInteger(StateHash, 0);
         animator.Update(0f);
@@ -98,14 +73,14 @@ public class PlayerAnimationController : MonoBehaviour
         Animator.SetTrigger(DodgeHash);
     }
 
-    public void PlayNormalAttack()
+    public void PlayAttack()
     {
-        Animator.SetTrigger(NormalAttackHash);
+        Animator.SetTrigger(AttackHash);
     }
 
-    public void SetNormalAttackIndex(int index)
+    public void SetAttackIndex(int index)
     {
-        Animator.SetInteger(NormalAttackIndexHash, index);
+        Animator.SetInteger(AttackIndexHash, index);
     }
 
     public void PlaySkill()

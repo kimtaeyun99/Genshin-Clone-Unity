@@ -8,14 +8,12 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
     private bool attackStarted;
     private bool isFinished;
     public bool IsFinished => isFinished;
-    private AttackHitbox[] hitboxes;
+    [SerializeField] private AttackHitbox[] hitboxes;
     private readonly HashSet<Health> hitTargets = new();
 
     public void Enter(MonsterController monster)
     {
         this.monster = monster;
-
-        hitboxes = GetComponentsInChildren<AttackHitbox>(true);
 
         attackStarted = false;
         isFinished = false;
@@ -27,9 +25,9 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
             hitbox.SetSharedHitTargets(hitTargets);
 
             hitbox.SetAttack(
-                monster.Attack,
+                monster.Runtime.ATK,
                 monster.AttackMultiplier,
-                monster.ElementType
+                monster.Data.ElementType
             );
         }
 
@@ -37,12 +35,12 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
 
         int attackIndex = Random.Range(0, 3);
 
-        monster.Animation.PlayAttack(attackIndex);
+        monster.MonsterAnimationController.PlayAttack(attackIndex);
     }
 
     public void AttackUpdate()
     {
-        if (monster.Animation.IsTransition())
+        if (monster.MonsterAnimationController.IsTransition())
         {
             return;
         }
@@ -54,7 +52,7 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
         }
 
         AnimatorStateInfo stateInfo =
-            monster.Animation.GetCurrentStateInfo();
+            monster.MonsterAnimationController.GetCurrentStateInfo();
 
         if (stateInfo.normalizedTime >= 1f)
         {

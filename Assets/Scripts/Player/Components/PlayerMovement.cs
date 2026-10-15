@@ -3,6 +3,12 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Controller")]
+    [SerializeField] private CharacterController characterController;
+
+    [Header("Camera")]
+    [SerializeField] private Transform cameraTransform;
+
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotationSpeed = 10f;
@@ -30,27 +36,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float dashMoveSpeed = 8f;
     [SerializeField] private float dashHoldTime = 0.5f;
 
+    private float verticalVelocity;
     public bool IsGrounded { get; private set; }
     public bool IsDashMode { get; private set; }
 
     public float VerticalVelocity => verticalVelocity;
     public float DodgeDuration => dodgeDuration;
     public float DashHoldTime => dashHoldTime;
-
-    private float verticalVelocity;
-
-    private CharacterController characterController;
-    private Transform cameraTransform;
-
-    private void Awake()
-    {
-        characterController = GetComponent<CharacterController>();
-
-        if (Camera.main != null)
-        {
-            cameraTransform = Camera.main.transform;
-        }
-    }
 
     public void Move(Vector2 input)
     {
@@ -170,19 +162,5 @@ public class PlayerMovement : MonoBehaviour
         characterController.enabled = true;
 
         CheckGround();
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        CharacterController controller = GetComponent<CharacterController>();
-
-        if (controller == null)
-        {
-            return;
-        }
-
-        Vector3 origin = transform.position + controller.center + Vector3.down * (controller.height * 0.5f - controller.radius);
-
-        Gizmos.DrawWireSphere(origin + Vector3.down * groundCheckDistance, groundCheckRadius);
     }
 }

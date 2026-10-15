@@ -3,8 +3,7 @@ using UnityEngine;
 public class MonsterChaseState : MonsterStateBase
 {
     private const float DestinationUpdateDistance = 0.05f;
-    private const float DestinationUpdateDistanceSqr =
-        DestinationUpdateDistance * DestinationUpdateDistance;
+    private const float DestinationUpdateDistanceSqr = DestinationUpdateDistance * DestinationUpdateDistance;
 
     private float attackTimer;
     private Vector3 lastRequestedDestination;
@@ -19,7 +18,7 @@ public class MonsterChaseState : MonsterStateBase
 
     public override void Enter()
     {
-        monster.Animation.PlayChase();
+        monster.MonsterAnimationController.PlayChase();
         attackTimer = 0f;
         hasRequestedDestination = false;
         monster.Agent.isStopped = false;
@@ -51,7 +50,7 @@ public class MonsterChaseState : MonsterStateBase
             return;
         }
 
-        if (distanceSqr <= attackRangeSqr && attackTimer >= monster.AttackDelay)
+        if (distanceSqr <= attackRangeSqr && attackTimer >= monster.AttackDelay && monster.MonsterAttack != null)
         {
             stateMachine.ChangeState(MonsterStateType.Attack);
             return;

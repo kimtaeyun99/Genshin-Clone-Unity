@@ -10,7 +10,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
 
     private CharacterRunTime character;
     private PlayerAnimationController playerAnimationController;
-    private AttackHitbox attackHitbox;
+    [SerializeField] private AttackHitbox attackHitbox;
 
     public bool IsFinished => isFinished;
     private bool gainedEnergyThisHit;
@@ -22,11 +22,9 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
         character = characterRunTime;
         this.playerAnimationController = playerAnimationController;
         fireVFX.gameObject.SetActive(true);
-        skillIndex = 1;
+        skillIndex = 0;
         nextSkillInput = false;
         isFinished = false;
-
-        attackHitbox = GetComponentInChildren<AttackHitbox>(true);
         attackHitbox.OnHit += HandleSkillHit;
 
         playerAnimationController.SetSkillIndex(skillIndex);
@@ -40,11 +38,6 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
     {
         AnimatorStateInfo stateInfo = playerAnimationController.GetCurrentStateInfo();
 
-        if (!stateInfo.IsTag("Skill"))
-        {
-            return;
-        }
-
         if (playerAnimationController.IsTransition())
         {
             return;
@@ -52,7 +45,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
 
         if (stateInfo.normalizedTime >= 1f)
         {
-            if (nextSkillInput && skillIndex < 3)
+            if (nextSkillInput && skillIndex < 2)
             {
                 skillIndex++;
                 nextSkillInput = false;
@@ -70,7 +63,7 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
 
     public void OnSkillInput()
     {
-        if (skillIndex >= 3)
+        if (skillIndex >= 2)
         {
             return;
         }
@@ -88,11 +81,10 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
 
     private void SetSkillData()
     {
-        float atk = character.Stat.ATK;
+        float atk = character.ATK;
 
         float multiplier =
-            character.Data.CharacterCombatData
-                .GetSkillMultipliers(skillIndex - 1);
+            character.Data.SkillMultipliers[skillIndex];
 
         attackHitbox.SetAttack(
             atk,
@@ -110,13 +102,13 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
         attackHitbox.gameObject.SetActive(false);
         attackHitbox.ClearHitbox();
     }
-    private void HandleSkillHit(Health target)
+    private void HandleSkillHit()
     {
         if (gainedEnergyThisHit)
         {
             return;
         }
-        character.AddEnergy(17f);
+        character.AddEnergy(17);
         gainedEnergyThisHit = true;
     }
 }

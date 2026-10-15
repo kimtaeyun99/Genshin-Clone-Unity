@@ -5,14 +5,12 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
     private MonsterController monster;
     private bool attackStarted;
     private bool isFinished;
-    private AttackHitbox attackHitbox;
+    [SerializeField] private AttackHitbox attackHitbox;
 
     public bool IsFinished => isFinished;
 
     public void Enter(MonsterController monster)
     {
-        attackHitbox = GetComponentInChildren<AttackHitbox>(true);
-
         this.monster = monster;
 
         attackStarted = false;
@@ -20,16 +18,16 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
 
         LookTarget();
 
-        attackHitbox.SetAttack(monster.Attack, monster.AttackMultiplier, monster.ElementType);
+        attackHitbox.SetAttack(monster.Runtime.ATK, monster.AttackMultiplier, monster.Data.ElementType);
 
         int attackIndex = Random.Range(0, 2);
 
-        monster.Animation.PlayAttack(attackIndex);
+        monster.MonsterAnimationController.PlayAttack(attackIndex);
     }
 
     public void AttackUpdate()
     {
-        if (monster.Animation.IsTransition())
+        if (monster.MonsterAnimationController.IsTransition())
         {
             return;
         }
@@ -40,7 +38,7 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
             return;
         }
 
-        AnimatorStateInfo stateInfo = monster.Animation.GetCurrentStateInfo();
+        AnimatorStateInfo stateInfo = monster.MonsterAnimationController.GetCurrentStateInfo();
 
         if (stateInfo.normalizedTime >= 1f)
         {

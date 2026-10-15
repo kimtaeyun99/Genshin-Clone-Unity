@@ -14,7 +14,6 @@ public class BossWaveSpawner : MonoBehaviour
     [Serializable]
     private class WaveData
     {
-        public string waveName;
         public SpawnData[] spawnDatas;
     }
 
@@ -29,7 +28,7 @@ public class BossWaveSpawner : MonoBehaviour
     [SerializeField] private float nextWaveDelay = 2f;
 
     private readonly List<GameObject> spawnedMonsters = new();
-    private readonly Dictionary<MonsterRunTime, Action> deathHandlers = new();
+    private readonly Dictionary<MonsterRunTime, Action<MonsterRunTime>> deathHandlers = new();
 
     private int currentWaveIndex;
     private bool isStarted;
@@ -128,7 +127,8 @@ public class BossWaveSpawner : MonoBehaviour
                 MonsterRunTime runtime = monster.GetComponent<MonsterController>().Runtime;
                 spawnedMonsters.Add(monster);
 
-                Action handler = () => HandleMonsterDead(runtime);
+                Action<MonsterRunTime> handler = HandleMonsterDead;
+
                 deathHandlers.Add(runtime, handler);
                 runtime.OnDead += handler;
             }
@@ -143,7 +143,7 @@ public class BossWaveSpawner : MonoBehaviour
 
     private void HandleMonsterDead(MonsterRunTime runtime)
     {
-        if (!deathHandlers.TryGetValue(runtime, out Action handler))
+        if (!deathHandlers.TryGetValue(runtime, out Action<MonsterRunTime> handler))
             return;
 
         runtime.OnDead -= handler;
@@ -208,8 +208,11 @@ public class BossWaveSpawner : MonoBehaviour
 
     private void UnsubscribeFromMonsterDeaths()
     {
-        foreach (KeyValuePair<MonsterRunTime, Action> entry in deathHandlers)
+        foreach (KeyValuePair<MonsterRunTime, Action<MonsterRunTime>> entry
+                 in deathHandlers)
+        {
             entry.Key.OnDead -= entry.Value;
+        }
 
         deathHandlers.Clear();
     }

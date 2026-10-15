@@ -13,7 +13,7 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Enter()
     {
-        currentAttack = player.CharacterManager.CurrentAttack;
+        currentAttack = CharacterManager.Instance.CurrentAttack;
 
         if (currentAttack == null)
         {
@@ -22,8 +22,8 @@ public class PlayerAttackState : PlayerStateBase
         }
 
         currentAttack.Enter(
-            player.CharacterManager.CurrentCharacter,
-            player.Animation
+            CharacterManager.Instance.CurrentCharacter,
+            player.PlayerAnimationController
         );
 
         InputManager.Instance.OnAttack += OnAttack;

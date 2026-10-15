@@ -68,7 +68,7 @@ public class SaveManager : MonoBehaviour
         }
         catch (Exception exception)
         {
-
+            Debug.LogError($"[SaveManager] 저장 실패: {exception}");
         }
     }
 
@@ -140,18 +140,11 @@ public class SaveManager : MonoBehaviour
                 {
                     characterId = data.ID,
 
-                    level = runTime.Level,
-                    ascensionPhase =
-                        runTime.AscensionPhase,
-
                     currentHP =
                         runTime.CurrentHP,
 
                     currentEnergy =
                         runTime.CurrentEnergy,
-
-                    isDead =
-                        runTime.IsDead
                 };
 
             saveData.characters.Add(
@@ -187,6 +180,9 @@ public class SaveManager : MonoBehaviour
             }
             catch (Exception exception)
             {
+                Debug.LogWarning(
+                    $"[SaveManager] 임시 파일 삭제 실패: {exception}"
+                );
             }
         }
     }
@@ -258,6 +254,7 @@ public class SaveManager : MonoBehaviour
         }
         catch (Exception exception)
         {
+            Debug.LogError($"[SaveManager] 불러오기 실패: {exception}");
             return;
         }
 
@@ -301,17 +298,9 @@ public class SaveManager : MonoBehaviour
                 continue;
             }
 
-            runTime.LoadGrowthData(
-                characterSave.level,
-                characterSave.ascensionPhase
-            );
-
-            manager.RefreshCharacterStat(runTime);
-
             runTime.LoadStateData(
                 characterSave.currentHP,
-                characterSave.currentEnergy,
-                characterSave.isDead
+                characterSave.currentEnergy
             );
         }
     }

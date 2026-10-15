@@ -24,7 +24,7 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 
         isFinished = false;
 
-        character.AddEnergy(50f);
+        character.AddEnergy(50);
 
         playerAnimationController.PlaySkill();
 
@@ -34,11 +34,6 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
     {
         AnimatorStateInfo stateInfo =
             playerAnimationController.GetCurrentStateInfo();
-
-        if (!stateInfo.IsTag("Skill"))
-        {
-            return;
-        }
 
         if (stateInfo.normalizedTime >= 0.95f)
         {
@@ -56,10 +51,9 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 
     private void SpawnSkillProjectile()
     {
-        // 회복량 계산
         float healPercent =
-            character.Data.CharacterCombatData
-                .GetSkillMultipliers(0);
+            character.Data.SkillMultipliers[0];
+
 
         int healAmount = Mathf.RoundToInt(
             character.MaxHP * (healPercent / 100f)

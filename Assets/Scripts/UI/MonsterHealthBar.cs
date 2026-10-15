@@ -5,13 +5,7 @@ public class MonsterHealthBar : MonoBehaviour
 {
     [Header("HP")]
     [SerializeField] private GameObject healthBarBG;
-    [SerializeField] private Image hpFill;
-    [SerializeField] private Image delayHpFill;
-
-    [Header("HP Delay")]
-    [SerializeField] private float delayTime = 0.3f;
-    [SerializeField] private float smoothTime = 0.3f;
-
+    [SerializeField] private DelayedHealthBar delayedHealthBar;
     [Header("Element")]
     [SerializeField] private Image hostElementIcon;
     [SerializeField] private Sprite pyroIcon;
@@ -19,23 +13,13 @@ public class MonsterHealthBar : MonoBehaviour
     [SerializeField] private Sprite cryoIcon;
     [SerializeField] private Sprite electroIcon;
 
-    private MonsterController monster;
+
+    [SerializeField] private MonsterController monster;
     private MonsterRunTime runtime;
     private Health health;
-    private Camera mainCamera;
+    [SerializeField] private Camera mainCamera;
 
-    private float targetFillAmount;
-    private float delayTimer;
-    private float delayVelocity;
-
-    private bool isDelayAnimating;
     private bool isVisible;
-
-    private void Awake()
-    {
-        monster = GetComponentInParent<MonsterController>();
-        mainCamera = Camera.main;
-    }
 
     private void OnEnable()
     {
@@ -48,14 +32,7 @@ public class MonsterHealthBar : MonoBehaviour
         if (runtime == null || health == null)
             return;
 
-        float hpPercent = runtime.MaxHP > 0f
-            ? runtime.CurrentHP / runtime.MaxHP
-            : 0f;
-
-        hpFill.fillAmount = hpPercent;
-        delayHpFill.fillAmount = hpPercent;
-        targetFillAmount = hpPercent;
-        isDelayAnimating = false;
+        delayedHealthBar.Initialize(runtime.CurrentHP,runtime.MaxHP);
 
         UpdateElementIcon(health.HostElement);
         SetVisible(false);
@@ -73,15 +50,8 @@ public class MonsterHealthBar : MonoBehaviour
         health.OnHostElementChanged += UpdateElementIcon;
     }
 
-    private void Update()
-    {
-        if (isDelayAnimating)
-            UpdateDelayHP();
-    }
-
     private void LateUpdate()
     {
-        // 숨겨진 HP 바는 카메라 방향으로 회전할 필요가 없다.
         if (!isVisible)
             return;
 
@@ -99,10 +69,9 @@ public class MonsterHealthBar : MonoBehaviour
     public void SetVisible(bool visible)
     {
         Subscribe();
+
         isVisible = visible;
         healthBarBG.SetActive(visible);
-        hpFill.gameObject.SetActive(visible);
-        delayHpFill.gameObject.SetActive(visible);
 
         if (!visible)
         {
@@ -116,56 +85,9 @@ public class MonsterHealthBar : MonoBehaviour
 
     private void UpdateHP(float currentHP, float maxHP)
     {
-        float newFillAmount = maxHP > 0f ? currentHP / maxHP : 0f;
-
-        if (newFillAmount > targetFillAmount)
-        {
-            hpFill.fillAmount = newFillAmount;
-            delayHpFill.fillAmount = newFillAmount;
-            targetFillAmount = newFillAmount;
-            delayVelocity = 0f;
-            delayTimer = 0f;
-            isDelayAnimating = false;
-            return;
-        }
-
-        targetFillAmount = newFillAmount;
-        hpFill.fillAmount = targetFillAmount;
-        delayTimer = delayTime;
-        delayVelocity = 0f;
-        isDelayAnimating = delayHpFill.fillAmount > targetFillAmount;
+        delayedHealthBar.SetHealth(currentHP, maxHP);
     }
-
-    private void UpdateDelayHP()
-    {
-        if (delayHpFill.fillAmount <= targetFillAmount)
-        {
-            delayHpFill.fillAmount = targetFillAmount;
-            isDelayAnimating = false;
-            return;
-        }
-
-        if (delayTimer > 0f)
-        {
-            delayTimer -= Time.deltaTime;
-            return;
-        }
-
-        delayHpFill.fillAmount = Mathf.SmoothDamp(
-            delayHpFill.fillAmount,
-            targetFillAmount,
-            ref delayVelocity,
-            smoothTime
-        );
-
-        if (Mathf.Abs(delayHpFill.fillAmount - targetFillAmount) < 0.001f)
-        {
-            delayHpFill.fillAmount = targetFillAmount;
-            delayVelocity = 0f;
-            isDelayAnimating = false;
-        }
-    }
-
+        
     private void UpdateElementIcon(ElementType elementType)
     {
         switch (elementType)

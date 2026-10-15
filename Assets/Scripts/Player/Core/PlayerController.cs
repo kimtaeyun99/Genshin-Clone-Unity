@@ -6,27 +6,24 @@ public class PlayerController : MonoBehaviour
     [Header("Character Switch")]
     [SerializeField] private float switchCoolDown = 1f;
     [SerializeField] private float switchCoolDownTimer;
+    [SerializeField] private PlayerMovement movement;
+    [SerializeField] private PlayerStamina stamina;
+    [SerializeField] private PlayerAnimationController playerAnimationController;
+    [SerializeField] private Health health;
+
+    public float SwitchCoolDown => switchCoolDown;
+    public float SwitchCoolDownTimer => switchCoolDownTimer;
+    public bool CanSwitchCharacter => switchCoolDownTimer <= 0f;
+    public PlayerMovement Movement => movement;
+    public PlayerStamina Stamina => stamina;
+    public PlayerAnimationController PlayerAnimationController => playerAnimationController;
+    public Health Health => health;
+    public StateMachine<PlayerStateType> StateMachine { get; private set; }
 
     public event Action<float, float> OnSwitchCooldownChanged;
 
-    public float SwitchCoolDownTimer => switchCoolDownTimer;
-    public float SwitchCoolDown => switchCoolDown;
-    public bool CanSwitchCharacter => switchCoolDownTimer <= 0f;
-    public StateMachine<PlayerStateType> StateMachine { get; private set; }
-    public PlayerMovement Movement { get; private set; }
-
-    public PlayerStamina Stamina { get; private set; }
-    public PlayerAnimationController Animation { get; private set; }
-    public CharacterManager CharacterManager => CharacterManager.Instance;
-    public Health Health { get; private set; }
-
     private void Awake()
     {
-        Movement = GetComponent<PlayerMovement>();
-        Stamina = GetComponent<PlayerStamina>();
-        Animation = GetComponent<PlayerAnimationController>();
-        Health = GetComponent<Health>();
-
         StateMachine = new StateMachine<PlayerStateType>();
         InitializeStates();
     }
@@ -80,28 +77,40 @@ public class PlayerController : MonoBehaviour
     private void SwitchCharacter(int index)
     {
         if (StateMachine.CurrentState is PlayerDeadState)
+        {
             return;
+        }
 
         if (!CanSwitchCharacter)
+        {
             return;
+        }
 
-        CharacterParty party = CharacterParty.Instance;
-        if (party == null)
+        if (CharacterParty.Instance == null)
+        {
             return;
+        }
 
         int partyIndex = index - 1;
-        if (partyIndex < 0 || partyIndex >= party.Count)
+        if (partyIndex < 0 || partyIndex >= CharacterParty.Instance.Count)
+        {
             return;
+        }
 
-        if (partyIndex == party.CurrentIndex)
+        if (partyIndex == CharacterParty.Instance.CurrentIndex)
+        {
             return;
+        }
 
-        if (!party.SelectCharacter(partyIndex))
+        if (!CharacterParty.Instance.SelectCharacter(partyIndex))
+        {
             return;
+        }
 
         StateMachine.ChangeState(PlayerStateType.Idle);
 
         switchCoolDownTimer = switchCoolDown;
+
         OnSwitchCooldownChanged?.Invoke(switchCoolDownTimer, switchCoolDown);
 
         Health.StartSwitchInvincible();
@@ -115,11 +124,15 @@ public class PlayerController : MonoBehaviour
     private void UpdateSwitchCoolDown()
     {
         if (switchCoolDownTimer <= 0f)
+        {
             return;
+        }
 
         switchCoolDownTimer -= Time.deltaTime;
         if (switchCoolDownTimer < 0f)
+        {
             switchCoolDownTimer = 0f;
+        }
 
         OnSwitchCooldownChanged?.Invoke(switchCoolDownTimer, switchCoolDown);
     }

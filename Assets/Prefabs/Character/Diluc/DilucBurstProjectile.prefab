@@ -103,6 +103,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
+  projectileCollider: {fileID: 4286329941959892456}
 --- !u!1001 &3756087921436424471
 PrefabInstance:
   m_ObjectHideFlags: 0

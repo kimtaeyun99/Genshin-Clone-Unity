@@ -85,6 +85,10 @@ public class InputManager : MonoBehaviour
 
     private void OnDisable()
     {
+        MoveInput = Vector2.zero;
+        LookInput = Vector2.zero;
+        IsSprintHeld = false;
+
         // Move / Look
         inputActions.Player.Move.performed -= OnMove;
         inputActions.Player.Move.canceled -= OnMove;
@@ -157,20 +161,19 @@ public class InputManager : MonoBehaviour
 
     private void OnSprint(InputAction.CallbackContext context)
     {
-        if (!CanPlayerInput)
+        if (context.canceled)
         {
+            IsSprintHeld = false;
             return;
         }
+
+        if (!CanPlayerInput)
+            return;
 
         if (context.performed)
         {
             IsSprintHeld = true;
             OnDodge?.Invoke();
-        }
-
-        if (context.canceled)
-        {
-            IsSprintHeld = false;
         }
     }
 
