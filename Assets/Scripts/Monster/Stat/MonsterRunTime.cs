@@ -10,7 +10,7 @@ public sealed class MonsterRunTime
     public bool IsDead { get; private set; }
 
     public event Action<float, float> OnHPChanged;
-    public event Action OnDead;
+    public event Action<MonsterRunTime> OnDead;
 
     public MonsterRunTime(MonsterData data)
     {
@@ -37,7 +37,7 @@ public sealed class MonsterRunTime
             return;
 
         IsDead = true;
-        OnDead?.Invoke();
+        OnDead?.Invoke(this);
     }
 
     public void ResetCombatState()

@@ -7,6 +7,7 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private MonsterData data;
     [SerializeField] private string monsterName;
     [SerializeField] private bool isBoss;
+
     [SerializeField] private Collider bodyCollider;
 
     [Header("Idle")]
@@ -132,7 +133,7 @@ public class MonsterController : MonoBehaviour
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-                BossHealthUI.Instance.HideBoss();
+                BossHealthUI.Instance.HideBoss(Runtime);
             return;
         }
 
@@ -140,12 +141,12 @@ public class MonsterController : MonoBehaviour
             HealthBar.SetVisible(false);
     }
 
-    private void HandleDead()
+    private void HandleDead(MonsterRunTime runTime)
     {
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-                BossHealthUI.Instance.HideBoss();
+                BossHealthUI.Instance.HideBoss(runTime);
         }
         else if (HealthBar != null)
         {

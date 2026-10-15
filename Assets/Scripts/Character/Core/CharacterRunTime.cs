@@ -160,11 +160,11 @@ public class CharacterRunTime
         OnBurstCoolDownChanged?.Invoke();
     }
 
-    public void LoadStateData(int CurrentHP, int CurrentEnergy, bool isDead)
+    public void LoadStateData(int CurrentHP, int CurrentEnergy)
     {
         this.CurrentHP = Mathf.Clamp(CurrentHP, 0, MaxHP);
         this.CurrentEnergy = Mathf.Clamp(CurrentEnergy, 0, BurstEnergyCost);
-        IsDead = isDead;
+        IsDead = CurrentHP <= 0;
 
         OnHealthChanged?.Invoke(this.CurrentHP, MaxHP);
         OnEnergyChanged?.Invoke();

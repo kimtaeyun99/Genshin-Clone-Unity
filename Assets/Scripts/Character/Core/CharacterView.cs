@@ -15,11 +15,11 @@ public class CharacterView : MonoBehaviour
     public ICharacterSkill CurrentSkill => current?.Skill;
     public ICharacterBurst CurrentBurst => current?.Burst;
 
-    public void ChangeView(CharacterData data)
+    public bool ChangeView(CharacterData data)
     {
         if (data == null || data.Prefab == null || modelRoot == null)
         {
-            return;
+            return false;
         }
 
         if (!cachedViews.TryGetValue(data, out CachedView next) || next.Instance == null)
@@ -41,6 +41,8 @@ public class CharacterView : MonoBehaviour
         {
             next.Instance.SetActive(true);
         }
+
+        return true;
     }
 
     private CachedView CreateCachedView(CharacterData data)

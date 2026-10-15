@@ -71,9 +71,13 @@ public class BossHealthUI : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void HideBoss()
+    public void HideBoss(MonsterRunTime boss)
     {
+        if (currentBoss != boss)
+            return;
+
         Unsubscribe();
+
         isDelayAnimating = false;
         hostElementIcon.gameObject.SetActive(false);
         gameObject.SetActive(false);

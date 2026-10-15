@@ -29,6 +29,13 @@ public class CharacterParty : MonoBehaviour
 
         Instance = this;
     }
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
 
     public CharacterData GetCharacterData(int index)
     {

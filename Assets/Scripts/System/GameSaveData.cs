@@ -29,6 +29,4 @@ public class CharacterSaveData
 
     public int currentHP;
     public int currentEnergy;
-
-    public bool isDead;
 }

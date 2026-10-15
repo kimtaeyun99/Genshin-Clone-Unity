@@ -86,12 +86,12 @@ public class CharacterManager : MonoBehaviour
         {
             return false;
         }
+        if (!characterView.ChangeView(data))
+            return false;
 
         currentCharacter = runTime;
-
-        characterView.ChangeView(data);
-
         OnCurrentCharacterChanged?.Invoke(currentCharacter);
+
         return true;
     }
 
