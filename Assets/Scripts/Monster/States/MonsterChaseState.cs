@@ -3,8 +3,7 @@ using UnityEngine;
 public class MonsterChaseState : MonsterStateBase
 {
     private const float DestinationUpdateDistance = 0.05f;
-    private const float DestinationUpdateDistanceSqr =
-        DestinationUpdateDistance * DestinationUpdateDistance;
+    private const float DestinationUpdateDistanceSqr = DestinationUpdateDistance * DestinationUpdateDistance;
 
     private float attackTimer;
     private Vector3 lastRequestedDestination;

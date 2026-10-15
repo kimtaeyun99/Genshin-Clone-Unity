@@ -18,7 +18,7 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
 
         LookTarget();
 
-        attackHitbox.SetAttack(monster.Attack, monster.AttackMultiplier, monster.ElementType);
+        attackHitbox.SetAttack(monster.Runtime.ATK, monster.AttackMultiplier, monster.Data.ElementType);
 
         int attackIndex = Random.Range(0, 2);
 

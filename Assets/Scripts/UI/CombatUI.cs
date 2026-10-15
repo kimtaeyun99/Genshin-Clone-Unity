@@ -119,7 +119,7 @@ public class CombatUI : MonoBehaviour
             return;
 
         float currentEnergy = currentCharacter.CurrentEnergy;
-        float maxEnergy = currentCharacter.MaxEnergy;
+        float maxEnergy = currentCharacter.BurstEnergyCost;
 
         energyBarFill.fillAmount = maxEnergy > 0f
             ? currentEnergy / maxEnergy

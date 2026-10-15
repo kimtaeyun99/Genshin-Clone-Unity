@@ -12,7 +12,6 @@ public class MonsterAttackState : MonsterStateBase
 
     public override void Enter()
     {
-
         monster.Agent.ResetPath();
 
         currentAttack = monster.MonsterAttack;

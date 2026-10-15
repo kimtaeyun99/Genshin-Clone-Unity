@@ -25,9 +25,9 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
             hitbox.SetSharedHitTargets(hitTargets);
 
             hitbox.SetAttack(
-                monster.Attack,
+                monster.Runtime.ATK,
                 monster.AttackMultiplier,
-                monster.ElementType
+                monster.Data.ElementType
             );
         }
 

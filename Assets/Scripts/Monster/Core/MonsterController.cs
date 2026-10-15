@@ -1,13 +1,14 @@
 using System.Runtime.ExceptionServices;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class MonsterController : MonoBehaviour
 {
     [Header("Monster")]
+    [SerializeField] private MonsterData data;
     [SerializeField] private string monsterName;
     [SerializeField] private bool isBoss;
-    [SerializeField] private float maxHP = 100f;
     [SerializeField] private Collider bodyCollider;
 
     [Header("Idle")]
@@ -22,7 +23,6 @@ public class MonsterController : MonoBehaviour
 
     [Header("Attack")]
     [SerializeField] private IMonsterAttack monsterAttack;
-    [SerializeField] private float attack = 100f;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackDelay = 3f;
     [SerializeField] private float attackMultiplier = 1f;
@@ -30,54 +30,43 @@ public class MonsterController : MonoBehaviour
     [Header("Dead")]
     [SerializeField] private float deadDestroyDelay = 3f;
 
-    [Header("Element")]
-    [SerializeField] private ElementType elementType;
-
     [Header("NavMesh")]
     [SerializeField] private NavMeshAgent agent;
 
     [Header("Animation")]
     [SerializeField] private MonsterAnimationController monsterAnimationController;
 
-    [Header("Hitbox")]
-    [SerializeField] private AttackHitbox[] hitboxes;
-
     [Header("Health")]
     [SerializeField] private Health health;
     [SerializeField] private MonsterHealthBar healthBar;
 
+    public MonsterData Data => data;
     public string MonsterName => monsterName;
     public bool IsBoss => isBoss;
     public Collider BodyCollider => bodyCollider;
-
     public float IdleTime => idleTime;
     public float PatrolRadius => patrolRadius;
     public float DetectionRadius => detectionRadius;
     public float ChaseRange => chaseRange;
-
-    public float Attack => attack;
+    public IMonsterAttack MonsterAttack => monsterAttack;
     public float AttackRange => attackRange;
     public float AttackDelay => attackDelay;
     public float AttackMultiplier => attackMultiplier;
 
     public float DeadDestroyDelay => deadDestroyDelay;
-    public ElementType ElementType => elementType;
-
-    public Vector3 SpawnPosition { get; private set; }
     public NavMeshAgent Agent => agent;
+    public MonsterAnimationController MonsterAnimationController => monsterAnimationController;
+    public Health Health => health;
+    public MonsterHealthBar HealthBar => healthBar;
     public StateMachine<MonsterStateType> StateMachine { get; private set; }
     public Transform Target { get; private set; }
-    public MonsterAnimationController MonsterAnimationController => monsterAnimationController;
-    public AttackHitbox[] Hitboxes => hitboxes;
-    public Health Health => health;
     public MonsterRunTime Runtime { get; private set; }
-    public IMonsterAttack MonsterAttack => monsterAttack;
-    public MonsterHealthBar HealthBar => healthBar;
+    public Vector3 SpawnPosition { get; private set; }
 
     private void Awake()
     {
         StateMachine = new StateMachine<MonsterStateType>();
-        Runtime = new MonsterRunTime(maxHP);
+        Runtime = new MonsterRunTime(data);
 
         Health.BindMonsterRunTime(Runtime);
 

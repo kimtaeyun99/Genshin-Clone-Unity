@@ -3,16 +3,20 @@ using UnityEngine;
 
 public sealed class MonsterRunTime
 {
-    public event Action<float, float> OnHPChanged;
-    public event Action OnDead;
-
+    public MonsterData data { get; private set; }
+    public int ATK { get; private set; }
     public float MaxHP { get; private set; }
     public float CurrentHP { get; private set; }
     public bool IsDead { get; private set; }
 
-    public MonsterRunTime(float maxHP)
+    public event Action<float, float> OnHPChanged;
+    public event Action OnDead;
+
+    public MonsterRunTime(MonsterData data)
     {
-        MaxHP = Mathf.Max(0f, maxHP);
+        this.data = data;
+        ATK = data.ATK;
+        MaxHP = data.MaxHP;
         CurrentHP = MaxHP;
         IsDead = CurrentHP <= 0f;
     }

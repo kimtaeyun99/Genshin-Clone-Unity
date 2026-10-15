@@ -13,6 +13,7 @@ public class Health : MonoBehaviour
     [SerializeField] private float switchInvincibleDuration = 0.5f;
 
     private float invincibleUntil;
+    private CharacterRunTime characterRunTime = CharacterManager.Instance.CurrentCharacter;
     private MonsterRunTime monsterRunTime;
 
     public event Action OnDead;
@@ -25,7 +26,6 @@ public class Health : MonoBehaviour
     {
         hostElement = ElementType.None;
     }
-
     public void BindMonsterRunTime(MonsterRunTime runtime)
     {
         monsterRunTime = runtime;
@@ -52,17 +52,12 @@ public class Health : MonoBehaviour
         }
         else
         {
-            CharacterManager manager = CharacterManager.Instance;
-            if (manager == null)
+            if (characterRunTime.IsDead)
                 return;
 
-            CharacterRunTime character = manager.CurrentCharacter;
-            if (character == null || character.IsDead)
-                return;
+            characterRunTime.TakeDamage(damage);
 
-            character.TakeDamage(damage);
-
-            if (character.IsDead)
+            if (characterRunTime.IsDead)
                 OnDead?.Invoke();
         }
         if (DamageUIManager.Instance != null)

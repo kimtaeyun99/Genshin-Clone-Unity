@@ -140,10 +140,6 @@ public class SaveManager : MonoBehaviour
                 {
                     characterId = data.ID,
 
-                    level = runTime.Level,
-                    ascensionPhase =
-                        runTime.AscensionPhase,
-
                     currentHP =
                         runTime.CurrentHP,
 
@@ -300,13 +296,6 @@ public class SaveManager : MonoBehaviour
             {
                 continue;
             }
-
-            runTime.LoadGrowthData(
-                characterSave.level,
-                characterSave.ascensionPhase
-            );
-
-            manager.RefreshCharacterStat(runTime);
 
             runTime.LoadStateData(
                 characterSave.currentHP,
