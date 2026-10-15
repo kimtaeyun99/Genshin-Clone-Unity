@@ -7,96 +7,50 @@ public class CharacterData : ScriptableObject
     [SerializeField] private string id;
     [SerializeField] private string characterName;
     [SerializeField] private GameObject prefab;
-    [SerializeField] private Sprite icon;
-
-    [Header("Attack")]
     [SerializeField] private ElementType elementType;
-    [SerializeField] private WeaponType weaponType;
-    [SerializeField] private float skillCooldown;
-    [SerializeField] private float burstCooldown;
-    [SerializeField] private float maxEnergy;
+    [SerializeField] private Sprite characterIcon;
     [SerializeField] private Sprite skillIcon;
     [SerializeField] private Sprite burstIcon;
 
     [Header("Basic Stat")]
-    [SerializeField] private int hp;
-    [SerializeField] private int hpPerLevel;
-
     [SerializeField] private int atk;
-    [SerializeField] private int atkPerLevel;
+    [SerializeField] private int maxHp;
 
-    [SerializeField] private int def;
-    [SerializeField] private int defPerLevel;
+    [Header("Attack")]
+    [SerializeField] private ICharacterAttack characterAttack;
+    [SerializeField] private float[] attackMultipliers;
 
-    [SerializeField] private int elementalMastery;
-    
-    [Header("Ascension Stat")]
-    [SerializeField] private CharacterAscensionData ascensionData;
+    [Header("Skill")]
+    [SerializeField] private ICharacterSkill characterSkill;
+    [SerializeField] private float[] skillMultipliers;
+    [SerializeField] private float skillCoolDown;
+
+    [Header("Burst")]
+    [SerializeField] private int burstEnergyCost;
+    [SerializeField] private ICharacterBurst characterBurst;
+    [SerializeField] private float[] burstMultipliers;
+    [SerializeField] private float burstCoolDown;
 
     [Header("Animation")]
     [SerializeField] private Avatar avatar;
     [SerializeField] private RuntimeAnimatorController animatorController;
 
-    [Header("Combat")]
-    [SerializeField] private CharacterCombatData characterCombatData;
     public string ID => id;
     public string CharacterName => characterName;
     public GameObject Prefab => prefab;
-    public Sprite Icon => icon;
     public ElementType ElementType => elementType;
-    public WeaponType WeaponType => weaponType;
-    public float SkillCooldown => skillCooldown;
-    public float BurstCooldown => burstCooldown;
-    public float MaxEnergy => maxEnergy;
+    public Sprite CharacterIcon => characterIcon;
     public Sprite SkillIcon => skillIcon;
     public Sprite BurstIcon => burstIcon;
-    public int HP => hp;
-    public int HPPerLevel => hpPerLevel;
     public int ATK => atk;
-    public int ATKPerLevel => atkPerLevel;
-    public int DEF => def;
-    public int DEFPerLevel => defPerLevel;
-    public int ElementalMastery => elementalMastery;
-    public CharacterAscensionData AscensionData => ascensionData;
-    public Avatar Avatar => avatar;
-    public RuntimeAnimatorController AnimatorController => animatorController;
-    public CharacterCombatData CharacterCombatData => characterCombatData;
-
-    public void SetData(
-    string id,
-    string characterName,
-    GameObject prefab,
-    ElementType elementType,
-    WeaponType weaponType,
-    int hp,
-    int hpPerLevel,
-    int atk,
-    int atkPerLevel,
-    int def,
-    int defPerLevel,
-    int elementalMastery,
-    CharacterAscensionData ascensionData,
-    RuntimeAnimatorController animatorController)
-    {
-        this.id = id;
-        this.characterName = characterName;
-        this.prefab = prefab;
-
-        this.elementType = elementType;
-        this.weaponType = weaponType;
-
-        this.hp = hp;
-        this.hpPerLevel = hpPerLevel;
-
-        this.atk = atk;
-        this.atkPerLevel = atkPerLevel;
-
-        this.def = def;
-        this.defPerLevel = defPerLevel;
-
-        this.elementalMastery = elementalMastery;
-
-        this.ascensionData = ascensionData;
-        this.animatorController = animatorController;
-    }
+    public int MaxHP => maxHp;
+    public ICharacterAttack CharacterAttack => characterAttack;
+    public float[] AttackMultipliers => attackMultipliers;
+    public ICharacterSkill CharacterSkill => characterSkill;
+    public float[] SkillMultipliers => skillMultipliers;
+    public float SkillCoolDown => skillCoolDown;
+    public int BurstEnergyCost => burstEnergyCost;
+    public ICharacterBurst CharacterBurst => characterBurst;
+    public float[] BurstMultipliers => burstMultipliers;
+    public float BurstCoolDown => burstCoolDown;
 }

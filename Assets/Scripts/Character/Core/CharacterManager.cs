@@ -24,7 +24,6 @@ public class CharacterManager : MonoBehaviour
 
     private CharacterRunTime currentCharacter;
 
-    private CharacterStatCalculator statCalculator;
     public CharacterRunTime CurrentCharacter => currentCharacter;
 
     private Dictionary<CharacterData, CharacterRunTime> characterRunTimes;
@@ -43,7 +42,6 @@ public class CharacterManager : MonoBehaviour
         }
 
         Instance = this;
-        statCalculator = new CharacterStatCalculator();
         InitializeCharacters();
     }
 
@@ -86,9 +84,6 @@ public class CharacterManager : MonoBehaviour
             return false;
 
         currentCharacter = runTime;
-
-        CharacterStat stat = statCalculator.ApplyStat(currentCharacter);
-        currentCharacter.SetStat(stat);
 
         characterView.ChangeView(data);
 
@@ -145,14 +140,5 @@ public class CharacterManager : MonoBehaviour
         }
 
         return null;
-    }
-
-    public void RefreshCharacterStat(CharacterRunTime runTime)
-    {
-        if (runTime == null)
-            return;
-
-        CharacterStat stat = statCalculator.ApplyStat(runTime);
-        runTime.SetStat(stat);
     }
 }
