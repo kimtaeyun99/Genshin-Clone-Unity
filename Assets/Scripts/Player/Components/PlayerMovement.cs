@@ -3,6 +3,12 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Controller")]
+    [SerializeField] private CharacterController characterController;
+
+    [Header("Camera")]
+    [SerializeField] private Transform cameraTransform;
+
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotationSpeed = 10f;
@@ -30,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float dashMoveSpeed = 8f;
     [SerializeField] private float dashHoldTime = 0.5f;
 
+    private float verticalVelocity;
     public bool IsGrounded { get; private set; }
     public bool IsDashMode { get; private set; }
 
@@ -37,10 +44,6 @@ public class PlayerMovement : MonoBehaviour
     public float DodgeDuration => dodgeDuration;
     public float DashHoldTime => dashHoldTime;
 
-    private float verticalVelocity;
-
-    [SerializeField] private CharacterController characterController;
-    [SerializeField] private Transform cameraTransform;
     public void Move(Vector2 input)
     {
         MoveInternal(input, moveSpeed);
@@ -84,14 +87,14 @@ public class PlayerMovement : MonoBehaviour
         forward.y = 0f;
         right.y = 0f;
 
-        forward.Normalize();
-        right.Normalize();
+        forward.ize();
+        right.ize();
 
         Vector3 moveDirection = forward * input.y + right * input.x;
 
         if (moveDirection.sqrMagnitude > 1f)
         {
-            moveDirection.Normalize();
+            moveDirection.ize();
         }
 
         return moveDirection;

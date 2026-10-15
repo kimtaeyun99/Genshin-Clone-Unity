@@ -7,7 +7,6 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
     [SerializeField] private Transform spawnPoint;
 
     private bool isFinished;
-    private bool enteredBurstAnimation;
     private CharacterRunTime character;
     private PlayerAnimationController playerAnimationController;
 
@@ -21,7 +20,6 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
         this.playerAnimationController = playerAnimationController;
 
         isFinished = false;
-        enteredBurstAnimation = false;
 
         playerAnimationController.PlayBurst();
 
@@ -31,21 +29,6 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
     {
         AnimatorStateInfo stateInfo =
             playerAnimationController.GetCurrentStateInfo();
-
-        if (!enteredBurstAnimation)
-        {
-            if (stateInfo.IsTag("Burst"))
-            {
-                enteredBurstAnimation = true;
-            }
-
-            return;
-        }
-
-        if (!stateInfo.IsTag("Burst"))
-        {
-            return;
-        }
 
         if (stateInfo.normalizedTime >= 0.95f)
         {
@@ -59,9 +42,9 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
     }
     private void SpawnBurstProjectile()
     {
-        float atk = character.Stat.ATK;
+        float atk = character.ATK;
         float multiplier =
-            character.Data.CharacterCombatData.GetBurstMultipliers(0);
+            character.Data.BurstMultipliers[0];
 
         float damage = atk * multiplier;
 

@@ -30,72 +30,49 @@ public class CharacterParty : MonoBehaviour
         Instance = this;
     }
 
-    public bool AddPartyMember(CharacterData data)
-    {
-        if (data == null || partyMembers.Count >= MaxPartyCount || partyMembers.Contains(data))
-            return false;
-
-        partyMembers.Add(data);
-        OnPartyChanged?.Invoke();
-        return true;
-    }
-
-    public bool RemovePartyMember(CharacterData data)
-    {
-        if (data == null)
-            return false;
-
-        bool removed = partyMembers.Remove(data);
-        if (removed)
-            OnPartyChanged?.Invoke();
-
-        return true;
-    }
-
-    public bool ChangePartyMember(int index, CharacterData data)
-    {
-        if (data == null || index < 0 || index >= partyMembers.Count || partyMembers.Contains(data))
-            return false;
-
-        partyMembers[index] = data;
-        OnPartyChanged?.Invoke();
-        return true;
-    }
-
     public CharacterData GetCharacterData(int index)
     {
         if (index < 0 || index >= partyMembers.Count)
+        {
             return null;
+        }
 
         return partyMembers[index];
     }
 
     public bool SelectCharacter(int index)
     {
-        CharacterData data = GetCharacterData(index);
+        CharacterData data = partyMembers[index];
         if (data == null)
+        {
             return false;
+        }
 
-        CharacterManager manager = CharacterManager.Instance;
-        if (manager == null || !manager.SetCurrentCharacter(data))
+        if (CharacterManager.Instance == null || !CharacterManager.Instance.SetCurrentCharacter(data))
+        {
             return false;
-
+        }
         currentIndex = index;
+
         OnSelectionChanged?.Invoke();
+
         return true;
     }
 
     public bool SelectNextAlive()
     {
-        CharacterManager manager = CharacterManager.Instance;
-        if (manager == null)
+        if (CharacterManager.Instance == null)
+        {
             return false;
+        }
 
         for (int i = 0; i < partyMembers.Count; i++)
         {
-            CharacterRunTime runTime = manager.GetCharacter(partyMembers[i]);
+            CharacterRunTime runTime = CharacterManager.Instance.GetCharacter(partyMembers[i]);
             if (runTime == null || runTime.IsDead)
+            {
                 continue;
+            }
 
             return SelectCharacter(i);
         }
@@ -117,13 +94,19 @@ public class CharacterParty : MonoBehaviour
         for (int i = 0; i < members.Count; i++)
         {
             if (members[i] == null)
+            {
                 continue;
+            }
 
             if (partyMembers.Count >= MaxPartyCount)
+            {
                 break;
+            }
 
             if (partyMembers.Contains(members[i]))
+            {
                 continue;
+            }
 
             partyMembers.Add(members[i]);
         }
@@ -136,6 +119,7 @@ public class CharacterParty : MonoBehaviour
         }
 
         currentIndex = Mathf.Clamp(savedCurrentIndex, 0, partyMembers.Count - 1);
+
         OnPartyChanged?.Invoke();
     }
 }

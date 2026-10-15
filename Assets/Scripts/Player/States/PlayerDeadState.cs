@@ -43,8 +43,7 @@ public class PlayerDeadState : PlayerStateBase
             return false;
         }
 
-        AnimatorStateInfo info =
-            player.PlayerAnimationController.GetCurrentStateInfo();
+        AnimatorStateInfo info = player.PlayerAnimationController.GetCurrentStateInfo();
 
         return info.normalizedTime >= 1f;
     }

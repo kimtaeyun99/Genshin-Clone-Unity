@@ -16,19 +16,16 @@ public class PlayerStamina : MonoBehaviour
 
     [SerializeField] private float actionLimitPercent = 0.2f;
 
-    public event Action<float, float> OnStaminaChanged;
-
-    public bool CanUseStaminaAction =>
-        CurrentStamina >= MaxStamina * actionLimitPercent;
-
     public float CurrentStamina { get; private set; }
+    private float recoverTimer;
+    public bool CanUseStaminaAction => CurrentStamina >= MaxStamina * actionLimitPercent;
     public float MaxStamina => maxStamina;
     public float DashStaminaCostPerSecond => dashStaminaCostPerSecond;
     public float DodgeStaminaCost => dodgeStaminaCost;
     public bool IsEmpty => CurrentStamina <= 0f;
     public bool IsFull => CurrentStamina >= maxStamina;
 
-    private float recoverTimer;
+    public event Action<float, float> OnStaminaChanged;
 
     private void Awake()
     {

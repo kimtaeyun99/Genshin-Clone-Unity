@@ -9,7 +9,6 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
     [SerializeField] private float burstVfxRadius = 1f;
 
     private bool isFinished;
-    private bool enteredBurstAnimation;
     private CharacterRunTime character;
     private PlayerAnimationController playerAnimationController;
 
@@ -21,7 +20,6 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
     {
         character = characterRunTime;
         this.playerAnimationController = playerAnimationController;
-        enteredBurstAnimation = false;
         isFinished = false;
 
         playerAnimationController.PlayBurst();
@@ -31,21 +29,6 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
     {
         AnimatorStateInfo stateInfo =
             playerAnimationController.GetCurrentStateInfo();
-
-        if (!enteredBurstAnimation)
-        {
-            if (stateInfo.IsTag("Burst"))
-            {
-                enteredBurstAnimation = true;
-            }
-
-            return;
-        }
-
-        if (!stateInfo.IsTag("Burst"))
-        {
-            return;
-        }
 
         if (stateInfo.normalizedTime >= 0.95f)
         {
@@ -61,8 +44,7 @@ public class BarbaraBurst : MonoBehaviour, ICharacterBurst
     private void HealParty()
     {
         float healPercent =
-            character.Data.CharacterCombatData
-                .GetBurstMultipliers(0);
+            character.Data.BurstMultipliers[0];
 
         int healAmount = Mathf.RoundToInt(
             character.MaxHP * (healPercent / 100f)

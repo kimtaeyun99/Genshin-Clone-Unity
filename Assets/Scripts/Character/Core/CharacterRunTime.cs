@@ -4,45 +4,34 @@ using UnityEngine;
 [Serializable]
 public class CharacterRunTime
 {
-    private CharacterData data;
-
-    private int atk;
-    private int maxHP;
-    private int currentHP;
-
-    private int currentEnergy;
-    private int burstEnergyCost;
-    private float skillCoolDown;
-    private float burstCoolDown;
-    
-    public CharacterData Data => data;
-    public int ATK => atk;
-    public int MaxHP => maxHP;
-    public int CurrentHP => currentHP;
-    public int CurrentEnergy => currentEnergy;
-    public int BurstEnergyCost => burstEnergyCost;
-    public float SkillCooldown => skillCoolDown;
-    public float BurstCooldown => burstCoolDown;
+    public CharacterData Data { get; private set; }
+    public int ATK { get; private set; }
+    public int MaxHP { get; private set; }
+    public int CurrentHP { get; private set; }
+    public int CurrentEnergy { get; private set; }
+    public int BurstEnergyCost { get; private set; }
+    public float SkillCoolDown { get; private set; }
+    public float BurstCoolDown { get; private set; }
     
     public event Action OnEnergyChanged;
-    public event Action OnSkillCooldownChanged;
-    public event Action OnBurstCooldownChanged;
+    public event Action OnSkillCoolDownChanged;
+    public event Action OnBurstCoolDownChanged;
     public event Action<int, int> OnHealthChanged;
 
-    public bool IsSkillReady => skillCoolDown <= 0f;
-    public bool IsBurstReady => burstCoolDown <= 0f && currentEnergy >= burstEnergyCost;
+    public bool IsSkillReady => SkillCoolDown <= 0f;
+    public bool IsBurstReady => BurstCoolDown <= 0f && CurrentEnergy >= BurstEnergyCost;
     public bool IsDead { get; private set; }
 
     public CharacterRunTime(CharacterData data)
     {
-        this.data = data;
-        this.atk = data.ATK;
-        this.maxHP = data.MaxHP;
-        this.currentHP = maxHP;
-        this.currentEnergy = 0;
-        this.burstEnergyCost = data.BurstEnergyCost;
-        this.skillCoolDown = 0f;
-        this.burstCoolDown = 0f;
+        Data = data;
+        ATK = data.ATK;
+        MaxHP = data.MaxHP;
+        CurrentHP = MaxHP;
+        CurrentEnergy = 0;
+        BurstEnergyCost = data.BurstEnergyCost;
+        SkillCoolDown = 0;
+        BurstCoolDown = 0;
     }
     public void Heal(int amount)
     {
@@ -51,16 +40,16 @@ public class CharacterRunTime
             return;
         }
 
-        int previousHP = currentHP;
-        currentHP += amount;
-        if (currentHP > maxHP)
+        int previousHP = CurrentHP;
+        CurrentHP += amount;
+        if (CurrentHP > MaxHP)
         {
-            currentHP = maxHP;
+            CurrentHP = MaxHP;
         }
 
-        if(currentHP != maxHP)
+        if(CurrentHP != MaxHP)
         {
-            OnHealthChanged?.Invoke(currentHP, maxHP);
+            OnHealthChanged?.Invoke(CurrentHP, MaxHP);
         }
     }
 
@@ -71,67 +60,67 @@ public class CharacterRunTime
             return;
         }
 
-        currentHP -= Mathf.RoundToInt(damage);
-        if (currentHP <= 0)
+        CurrentHP -= Mathf.RoundToInt(damage);
+        if (CurrentHP <= 0)
         {
-            currentHP = 0;
+            CurrentHP = 0;
             IsDead = true;
         }
 
-        OnHealthChanged?.Invoke(currentHP, maxHP);
+        OnHealthChanged?.Invoke(CurrentHP, MaxHP);
     }
 
     public void StartSkillCoolDown(float coolDown)
     {
-        if (skillCoolDown == coolDown)
+        if (SkillCoolDown == coolDown)
         {
             return;
         }
 
-        skillCoolDown = coolDown;
-        OnSkillCooldownChanged?.Invoke();
+        SkillCoolDown = coolDown;
+        OnSkillCoolDownChanged?.Invoke();
     }
 
     public void StartBurstCoolDown(float coolDown)
     {
-        if (burstCoolDown == coolDown)
+        if (BurstCoolDown == coolDown)
         {
             return;
         }
 
-        burstCoolDown = coolDown;
-        OnBurstCooldownChanged?.Invoke();
+        BurstCoolDown = coolDown;
+        OnBurstCoolDownChanged?.Invoke();
     }
 
     public void UpdateCoolDown(float deltaTime)
     {
-        if (skillCoolDown > 0f)
+        if (SkillCoolDown > 0f)
         {
-            float oldCooldown = skillCoolDown;
-            skillCoolDown -= deltaTime;
-            if (skillCoolDown < 0f)
+            float oldCooldown = SkillCoolDown;
+            SkillCoolDown -= deltaTime;
+            if (SkillCoolDown < 0f)
             {
-                skillCoolDown = 0f;
+                SkillCoolDown = 0f;
             }
 
-            if (skillCoolDown != oldCooldown)
+            if (SkillCoolDown != oldCooldown)
             {
-                OnSkillCooldownChanged?.Invoke();
+                OnSkillCoolDownChanged?.Invoke();
             }
         }
 
-        if (burstCoolDown > 0f)
+        if (BurstCoolDown > 0f)
         {
-            float oldCooldown = burstCoolDown;
-            burstCoolDown -= deltaTime;
-            if (burstCoolDown < 0f)
+            float oldCooldown = BurstCoolDown;
+            BurstCoolDown -= deltaTime;
+            if (BurstCoolDown < 0f)
             {
-                burstCoolDown = 0f;
+                BurstCoolDown = 0f;
             }
 
-            if (burstCoolDown != oldCooldown)
+            if (BurstCoolDown != oldCooldown)
             {
-                OnBurstCooldownChanged?.Invoke();
+                OnBurstCoolDownChanged?.Invoke();
             }
         }
     }
@@ -143,10 +132,10 @@ public class CharacterRunTime
             return;
         }
 
-        currentEnergy += amount;
-        if(currentEnergy > burstEnergyCost)
+        CurrentEnergy += amount;
+        if(CurrentEnergy > BurstEnergyCost)
         {
-            currentEnergy = burstEnergyCost;
+            CurrentEnergy = BurstEnergyCost;
         }
        
         OnEnergyChanged?.Invoke();
@@ -154,12 +143,12 @@ public class CharacterRunTime
 
     public bool ConsumeBurstEnergy()
     {
-        if (currentEnergy < burstEnergyCost)
+        if (CurrentEnergy < BurstEnergyCost)
         {
             return false;
         }
 
-        currentEnergy = 0;
+        CurrentEnergy = 0;
         OnEnergyChanged?.Invoke();
         return true;
     }
@@ -167,24 +156,24 @@ public class CharacterRunTime
     public void Respawn()
     {
         IsDead = false;
-        currentHP = maxHP;
-        currentEnergy = 0;
-        skillCoolDown = 0f;
-        burstCoolDown = 0f;
+        CurrentHP = MaxHP;
+        CurrentEnergy = 0;
+        SkillCoolDown = 0f;
+        BurstCoolDown = 0f;
 
-        OnHealthChanged?.Invoke(currentHP, maxHP);
+        OnHealthChanged?.Invoke(CurrentHP, MaxHP);
         OnEnergyChanged?.Invoke();
-        OnSkillCooldownChanged?.Invoke();
-        OnBurstCooldownChanged?.Invoke();
+        OnSkillCoolDownChanged?.Invoke();
+        OnBurstCoolDownChanged?.Invoke();
     }
 
-    public void LoadStateData(int currentHP, int currentEnergy, bool isDead)
+    public void LoadStateData(int CurrentHP, int CurrentEnergy, bool isDead)
     {
-        this.currentHP = Mathf.Clamp(currentHP, 0, maxHP);
-        this.currentEnergy = Mathf.Clamp(currentEnergy, 0, burstEnergyCost);
+        this.CurrentHP = Mathf.Clamp(CurrentHP, 0, MaxHP);
+        this.CurrentEnergy = Mathf.Clamp(CurrentEnergy, 0, BurstEnergyCost);
         IsDead = isDead;
 
-        OnHealthChanged?.Invoke(this.currentHP, maxHP);
+        OnHealthChanged?.Invoke(this.CurrentHP, MaxHP);
         OnEnergyChanged?.Invoke();
     }
 }

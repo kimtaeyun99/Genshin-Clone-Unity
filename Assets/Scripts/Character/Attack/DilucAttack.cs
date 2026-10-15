@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DilucAttack : MonoBehaviour, ICharacterAttack
 {
-    private int normalAttackIndex;
+    private int attackIndex;
     private bool nextAttackInput;
     private bool isFinished;
 
@@ -19,26 +19,21 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
         character = characterRunTime;
         this.playerAnimationController = playerAnimationController;
 
-        normalAttackIndex = 1;
+        attackIndex = 0;
         nextAttackInput = false;
         isFinished = false;
 
-        playerAnimationController.SetNormalAttackIndex(normalAttackIndex);
+        playerAnimationController.SetAttackIndex(attackIndex);
 
         SetAttackData();
 
-        playerAnimationController.PlayNormalAttack();
+        playerAnimationController.PlayAttack();
     }
 
     public void AttackUpdate()
     {
         AnimatorStateInfo stateInfo =
             playerAnimationController.GetCurrentStateInfo();
-
-        if (!stateInfo.IsTag("NormalAttack"))
-        {
-            return;
-        }
 
         if (playerAnimationController.IsTransition())
         {
@@ -47,13 +42,13 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
 
         if (stateInfo.normalizedTime >= 1f)
         {
-            if (nextAttackInput && normalAttackIndex < 3)
+            if (nextAttackInput && attackIndex < 2)
             {
-                normalAttackIndex++;
+                attackIndex++;
                 nextAttackInput = false;
 
-                playerAnimationController.SetNormalAttackIndex(
-                    normalAttackIndex
+                playerAnimationController.SetAttackIndex(
+                    attackIndex
                 );
 
                 SetAttackData();
@@ -67,7 +62,7 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
 
     public void OnAttackInput()
     {
-        if (normalAttackIndex >= 3)
+        if (attackIndex >= 2)
         {
             return;
         }
@@ -77,18 +72,17 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
 
     public void Exit()
     {
-        DisableNormalAttackHitbox();
+        DisableAttackHitbox();
 
         nextAttackInput = false;
     }
 
     private void SetAttackData()
     {
-        float atk = character.Stat.ATK;
+        float atk = character.ATK;
 
         float multiplier =
-            character.Data.CharacterCombatData
-                .GetNormalAttackMultipliers(normalAttackIndex - 1);
+            character.Data.AttackMultipliers[attackIndex];
 
         attackHitbox.SetAttack(
             atk,
@@ -96,11 +90,11 @@ public class DilucAttack : MonoBehaviour, ICharacterAttack
             ElementType.Physical
         );
     }
-    private void EnableNormalAttackHitbox()
+    private void EnableAttackHitbox()
     {
         attackHitbox.gameObject.SetActive(true);
     }
-    private void DisableNormalAttackHitbox()
+    private void DisableAttackHitbox()
     {
         attackHitbox.gameObject.SetActive(false);
         attackHitbox.ClearHitbox();

@@ -14,8 +14,8 @@ public class PlayerBurstState : PlayerStateBase
 
     public override void Enter()
     {
-        character = player.CharacterManager.CurrentCharacter;
-        currentBurst = player.CharacterManager.CurrentBurst;
+        character = CharacterManager.Instance.CurrentCharacter;
+        currentBurst = CharacterManager.Instance.CurrentBurst;
 
         if (character == null || currentBurst == null)
         {
@@ -53,12 +53,10 @@ public class PlayerBurstState : PlayerStateBase
         if (character != null)
         {
             character.StartBurstCoolDown(
-                character.Data.BurstCooldown
+                character.Data.BurstCoolDown
             );
         }
-
         currentBurst = null;
         character = null;
-
     }
 }

@@ -1,7 +1,7 @@
 public class PlayerSkillState : PlayerStateBase
 {
     private ICharacterSkill currentSkill;
-    private CharacterRunTime skillOwner;
+    private CharacterRunTime character;
 
     public PlayerSkillState(
         PlayerController player,
@@ -12,19 +12,17 @@ public class PlayerSkillState : PlayerStateBase
 
     public override void Enter()
     {
-        CharacterManager manager = CharacterManager.Instance;
-        currentSkill = manager != null ? manager.CurrentSkill : null;
-        skillOwner = manager != null ? manager.CurrentCharacter : null;
+		character = CharacterManager.Instance.CurrentCharacter;
+		currentSkill = CharacterManager.Instance.CurrentSkill;
 
-        if (currentSkill == null || skillOwner == null)
+		if (currentSkill == null || character == null)
         {
-            currentSkill = null;
-            skillOwner = null;
             ChangeNextState();
             return;
         }
 
-        currentSkill.Enter(skillOwner, player.PlayerAnimationController);
+        currentSkill.Enter(character, player.PlayerAnimationController);
+
         InputManager.Instance.OnSkill += OnSkill;
     }
 
@@ -47,12 +45,12 @@ public class PlayerSkillState : PlayerStateBase
         {
             currentSkill.Exit();
 
-            if (skillOwner != null)
-                skillOwner.StartSkillCoolDown(skillOwner.Data.SkillCooldown);
+            if (character != null)
+                character.StartSkillCoolDown(character.Data.SkillCoolDown);
         }
 
         currentSkill = null;
-        skillOwner = null;
+        character = null;
     }
 
     private void OnSkill()

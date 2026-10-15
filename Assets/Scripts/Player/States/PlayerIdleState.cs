@@ -74,7 +74,7 @@ public class PlayerIdleState : PlayerStateBase
             return;
         }
 
-        CharacterRunTime character = player.CharacterManager.CurrentCharacter;
+        CharacterRunTime character = CharacterManager.Instance.CurrentCharacter;
 
         if (character == null)
         {
@@ -95,8 +95,7 @@ public class PlayerIdleState : PlayerStateBase
             return;
         }
 
-        CharacterRunTime character =
-            player.CharacterManager.CurrentCharacter;
+        CharacterRunTime character = CharacterManager.Instance.CurrentCharacter;
 
         if (character == null)
         {

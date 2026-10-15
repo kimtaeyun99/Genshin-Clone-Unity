@@ -10,12 +10,12 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private TMP_Text maxEnergyText;
 
     [Header("Skill")]
-    [SerializeField] private Image skillCooldownBG;
+    [SerializeField] private Image skillCoolDownBG;
     [SerializeField] private Image skillCoolDownFill;
     [SerializeField] private TMP_Text skillCoolDownText;
 
     [Header("Burst")]
-    [SerializeField] private Image burstCooldownBG;
+    [SerializeField] private Image burstCoolDownBG;
     [SerializeField] private Image burstCoolDownFill;
     [SerializeField] private TMP_Text burstCoolDownText;
 
@@ -75,8 +75,8 @@ public class CombatUI : MonoBehaviour
             return;
 
         currentCharacter.OnEnergyChanged += RefreshEnergy;
-        currentCharacter.OnSkillCooldownChanged += RefreshSkillCoolDown;
-        currentCharacter.OnBurstCooldownChanged += RefreshBurstCoolDown;
+        currentCharacter.OnSkillCoolDownChanged += RefreshSkillCoolDown;
+        currentCharacter.OnBurstCoolDownChanged += RefreshBurstCoolDown;
 
         lastCurrentEnergyInt = int.MinValue;
         lastMaxEnergyInt = int.MinValue;
@@ -95,8 +95,8 @@ public class CombatUI : MonoBehaviour
             return;
 
         currentCharacter.OnEnergyChanged -= RefreshEnergy;
-        currentCharacter.OnSkillCooldownChanged -= RefreshSkillCoolDown;
-        currentCharacter.OnBurstCooldownChanged -= RefreshBurstCoolDown;
+        currentCharacter.OnSkillCoolDownChanged -= RefreshSkillCoolDown;
+        currentCharacter.OnBurstCoolDownChanged -= RefreshBurstCoolDown;
     }
 
     private void RefreshCharacter()
@@ -105,11 +105,11 @@ public class CombatUI : MonoBehaviour
             return;
 
         Sprite skillIcon = currentCharacter.Data.SkillIcon;
-        skillCooldownBG.sprite = skillIcon;
+        skillCoolDownBG.sprite = skillIcon;
         skillCoolDownFill.sprite = skillIcon;
 
         Sprite burstIcon = currentCharacter.Data.BurstIcon;
-        burstCooldownBG.sprite = burstIcon;
+        burstCoolDownBG.sprite = burstIcon;
         burstCoolDownFill.sprite = burstIcon;
     }
 
@@ -145,7 +145,7 @@ public class CombatUI : MonoBehaviour
             return;
 
         float remaining = currentCharacter.SkillCoolDown;
-        float total = currentCharacter.Data.SkillCooldown;
+        float total = currentCharacter.Data.SkillCoolDown;
 
         skillCoolDownFill.fillAmount = total > 0f
             ? 1f - (remaining / total)
@@ -172,7 +172,7 @@ public class CombatUI : MonoBehaviour
             return;
 
         float remaining = currentCharacter.BurstCoolDown;
-        float total = currentCharacter.Data.BurstCooldown;
+        float total = currentCharacter.Data.BurstCoolDown;
 
         burstCoolDownFill.fillAmount = total > 0f
             ? 1f - (remaining / total)

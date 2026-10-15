@@ -28,7 +28,7 @@ public class CharacterManager : MonoBehaviour
     public ICharacterSkill CurrentSkill => characterView.CurrentSkill;
     public ICharacterBurst CurrentBurst => characterView.CurrentBurst;
 
-    //public event Action<CharacterRunTime> OnCurrentCharacterChanged;
+    public event Action<CharacterRunTime> OnCurrentCharacterChanged;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -91,7 +91,7 @@ public class CharacterManager : MonoBehaviour
 
         characterView.ChangeView(data);
 
-        //OnCurrentCharacterChanged?.Invoke(currentCharacter);
+        OnCurrentCharacterChanged?.Invoke(currentCharacter);
         return true;
     }
 
