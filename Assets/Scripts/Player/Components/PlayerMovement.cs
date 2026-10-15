@@ -87,14 +87,14 @@ public class PlayerMovement : MonoBehaviour
         forward.y = 0f;
         right.y = 0f;
 
-        forward.ize();
-        right.ize();
+        forward.Normalize();
+        right.Normalize();
 
         Vector3 moveDirection = forward * input.y + right * input.x;
 
         if (moveDirection.sqrMagnitude > 1f)
         {
-            moveDirection.ize();
+            moveDirection.Normalize();
         }
 
         return moveDirection;

@@ -35,12 +35,12 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
 
         int attackIndex = Random.Range(0, 3);
 
-        monster.Animation.PlayAttack(attackIndex);
+        monster.MonsterAnimationController.PlayAttack(attackIndex);
     }
 
     public void AttackUpdate()
     {
-        if (monster.Animation.IsTransition())
+        if (monster.MonsterAnimationController.IsTransition())
         {
             return;
         }
@@ -52,7 +52,7 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
         }
 
         AnimatorStateInfo stateInfo =
-            monster.Animation.GetCurrentStateInfo();
+            monster.MonsterAnimationController.GetCurrentStateInfo();
 
         if (stateInfo.normalizedTime >= 1f)
         {

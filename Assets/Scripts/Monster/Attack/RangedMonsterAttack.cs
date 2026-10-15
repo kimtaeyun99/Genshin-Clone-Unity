@@ -20,7 +20,7 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
         isFinished = false;
 
         LookTarget();
-        monster.Animation.PlayAttack(0);
+        monster.MonsterAnimationController.PlayAttack(0);
     }
 
     public void AttackUpdate()
@@ -30,12 +30,12 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
             return;
         }
 
-        if (monster.Animation.IsTransition())
+        if (monster.MonsterAnimationController.IsTransition())
         {
             return;
         }
 
-        AnimatorStateInfo stateInfo = monster.Animation.GetCurrentStateInfo();
+        AnimatorStateInfo stateInfo = monster.MonsterAnimationController.GetCurrentStateInfo();
 
         if (attackStep == 0)
         {
@@ -48,7 +48,7 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
             {
                 attackStep = 1;
 
-                monster.Animation.PlayAttack(1);
+                monster.MonsterAnimationController.PlayAttack(1);
             }
 
             return;

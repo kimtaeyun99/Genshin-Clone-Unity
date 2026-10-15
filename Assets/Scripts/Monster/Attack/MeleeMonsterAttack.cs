@@ -22,12 +22,12 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
 
         int attackIndex = Random.Range(0, 2);
 
-        monster.Animation.PlayAttack(attackIndex);
+        monster.MonsterAnimationController.PlayAttack(attackIndex);
     }
 
     public void AttackUpdate()
     {
-        if (monster.Animation.IsTransition())
+        if (monster.MonsterAnimationController.IsTransition())
         {
             return;
         }
@@ -38,7 +38,7 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
             return;
         }
 
-        AnimatorStateInfo stateInfo = monster.Animation.GetCurrentStateInfo();
+        AnimatorStateInfo stateInfo = monster.MonsterAnimationController.GetCurrentStateInfo();
 
         if (stateInfo.normalizedTime >= 1f)
         {
