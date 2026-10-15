@@ -117,7 +117,6 @@ public class FieldMonsterSpawner : MonoBehaviour
 
         runtime.OnDead -= handler;
         deathHandlers.Remove(runtime);
-        deathHandlers.Remove(runtime);
 
         if (isSpawned && deathHandlers.Count == 0)
             OnAllMonstersDead();

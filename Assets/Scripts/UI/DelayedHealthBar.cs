@@ -42,7 +42,10 @@ public class DelayedHealthBar : MonoBehaviour
     {
         float fill = GetFillAmount(currentHP, maxHP);
 
-        if (fill >= targetFillAmount)
+        if (Mathf.Approximately(fill, targetFillAmount))
+            return;
+
+        if (fill > targetFillAmount)
         {
             Initialize(currentHP, maxHP);
             return;
