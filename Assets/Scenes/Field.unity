@@ -70464,6 +70464,7 @@ MonoBehaviour:
   stamina: {fileID: 2097096003}
   playerAnimationController: {fileID: 2097096013}
   health: {fileID: 2097096014}
+  lockOnRange: 10
 --- !u!143 &2097096006
 CharacterController:
   m_ObjectHideFlags: 0
