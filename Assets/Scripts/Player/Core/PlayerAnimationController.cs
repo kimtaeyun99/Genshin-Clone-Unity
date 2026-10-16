@@ -75,6 +75,7 @@ public class PlayerAnimationController : MonoBehaviour
 
     public void PlayAttack()
     {
+        Animator.SetInteger(StateHash, 0);
         Animator.SetTrigger(AttackHash);
     }
 
@@ -85,6 +86,7 @@ public class PlayerAnimationController : MonoBehaviour
 
     public void PlaySkill()
     {
+        Animator.SetInteger(StateHash, 0);
         Animator.SetTrigger(SkillHash);
     }
 
@@ -95,12 +97,21 @@ public class PlayerAnimationController : MonoBehaviour
 
     public void PlayBurst()
     {
+        Animator.SetInteger(StateHash, 0);
         Animator.SetTrigger(BurstHash);
     }
 
     public void PlayDead()
     {
-        Animator.SetTrigger(DeadHash);
+        Animator.SetInteger(StateHash, 0);
+
+        Animator.ResetTrigger(JumpHash);
+        Animator.ResetTrigger(DodgeHash);
+        Animator.ResetTrigger(AttackHash);
+        Animator.ResetTrigger(SkillHash);
+        Animator.ResetTrigger(BurstHash);
+
+        Animator.CrossFadeInFixedTime("Dead", 0.1f, 0);
     }
 
     public AnimatorStateInfo GetCurrentStateInfo()

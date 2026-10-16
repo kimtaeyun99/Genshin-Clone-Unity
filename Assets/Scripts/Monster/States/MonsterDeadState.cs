@@ -9,7 +9,7 @@ public class MonsterDeadState : MonsterStateBase
     {
         monster.Agent.ResetPath();
         monster.Agent.enabled = false;
-        monster.ClearTarget();
+        monster.ClearTarget(false);
         monster.BodyCollider.enabled = false;
 
         monster.MonsterAnimationController.PlayDead();

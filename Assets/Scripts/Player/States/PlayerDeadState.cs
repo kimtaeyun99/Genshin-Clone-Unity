@@ -22,28 +22,22 @@ public class PlayerDeadState : PlayerStateBase
     public override void Update()
     {
         if (finished)
-        {
             return;
-        }
 
         if (!IsDeadAnimationEnd())
-        {
             return;
-        }
 
         finished = true;
-
         OnDeadAnimationEnd();
     }
 
     private bool IsDeadAnimationEnd()
     {
         if (player.PlayerAnimationController.IsTransition())
-        {
             return false;
-        }
 
-        AnimatorStateInfo info = player.PlayerAnimationController.GetCurrentStateInfo();
+        AnimatorStateInfo info =
+            player.PlayerAnimationController.GetCurrentStateInfo();
 
         return info.normalizedTime >= 1f;
     }
@@ -52,9 +46,7 @@ public class PlayerDeadState : PlayerStateBase
     {
         if (CharacterParty.Instance.SelectNextAlive())
         {
-            stateMachine.ChangeState(
-                PlayerStateType.Idle
-            );
+            stateMachine.ChangeState(PlayerStateType.Idle);
         }
         else
         {

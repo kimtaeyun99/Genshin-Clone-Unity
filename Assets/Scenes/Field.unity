@@ -1495,63 +1495,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2097096007}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &58074765
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5460657064006050993, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 16.181086
-      objectReference: {fileID: 0}
-    - target: {fileID: 5460657064006050993, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.12499967
-      objectReference: {fileID: 0}
-    - target: {fileID: 5460657064006050993, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.817474
-      objectReference: {fileID: 0}
-    - target: {fileID: 5460657064006050993, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5460657064006050993, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5460657064006050993, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5460657064006050993, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5460657064006050993, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5460657064006050993, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5460657064006050993, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6522937743671018849, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
-      propertyPath: m_Name
-      value: RangedMonster
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ccf80ac218660d5448038521c2aeb756, type: 3}
 --- !u!1001 &58818631
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -71678,4 +71621,3 @@ SceneRoots:
   - {fileID: 1120688630}
   - {fileID: 1538755836}
   - {fileID: 1114656890}
-  - {fileID: 58074765}

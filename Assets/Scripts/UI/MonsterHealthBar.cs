@@ -25,6 +25,15 @@ public class MonsterHealthBar : MonoBehaviour
     {
         Subscribe();
     }
+    private void Awake()
+    {
+        isVisible = false;
+        isDead = false;
+
+        healthBarBG.SetActive(false);
+        delayedHealthBar.SetVisible(false);
+        hostElementIcon.gameObject.SetActive(false);
+    }
 
     private void Start()
     {
@@ -36,7 +45,6 @@ public class MonsterHealthBar : MonoBehaviour
         delayedHealthBar.Initialize(runtime.CurrentHP,runtime.MaxHP);
 
         UpdateElementIcon(health.HostElement);
-        SetVisible(false);
     }
 
     private void Subscribe()
@@ -72,7 +80,9 @@ public class MonsterHealthBar : MonoBehaviour
         Subscribe();
 
         isVisible = visible;
+
         healthBarBG.SetActive(visible);
+        delayedHealthBar.SetVisible(visible);
 
         if (!visible)
         {
@@ -91,7 +101,7 @@ public class MonsterHealthBar : MonoBehaviour
         
     private void UpdateElementIcon(ElementType elementType)
     {
-        if (isDead)
+        if (!isVisible || isDead)
         {
             hostElementIcon.gameObject.SetActive(false);
             return;

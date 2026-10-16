@@ -42,7 +42,6 @@ public class BossHealthUI : MonoBehaviour
 
         UpdateElementIcon(currentHealth.HostElement);
         currentBoss.OnHPChanged += UpdateHealth;
-        currentBoss.OnDead += HideBoss;
         currentHealth.OnHostElementChanged += UpdateElementIcon;
         gameObject.SetActive(true);
     }
@@ -63,7 +62,6 @@ public class BossHealthUI : MonoBehaviour
         if (currentBoss != null)
         {
             currentBoss.OnHPChanged -= UpdateHealth;
-            currentBoss.OnDead -= HideBoss;
             currentBoss = null;
         }
 
@@ -81,6 +79,11 @@ public class BossHealthUI : MonoBehaviour
 
     private void UpdateElementIcon(ElementType elementType)
     {
+        if (currentBoss == null || currentBoss.IsDead)
+        {
+            hostElementIcon.gameObject.SetActive(false);
+            return;
+        }
         switch (elementType)
         {
             case ElementType.Pyro:
@@ -103,7 +106,13 @@ public class BossHealthUI : MonoBehaviour
 
         hostElementIcon.gameObject.SetActive(true);
     }
+    public void HideElementIcon(MonsterRunTime boss)
+    {
+        if (currentBoss != boss)
+            return;
 
+        hostElementIcon.gameObject.SetActive(false);
+    }
     private void OnDestroy()
     {
         Unsubscribe();

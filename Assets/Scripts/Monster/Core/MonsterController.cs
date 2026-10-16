@@ -120,7 +120,7 @@ public class MonsterController : MonoBehaviour
             HealthBar.SetVisible(true);
     }
 
-    public void ClearTarget()
+    public void ClearTarget(bool hideUI = true)
     {
         Target = null;
 
@@ -129,15 +129,18 @@ public class MonsterController : MonoBehaviour
 
         Health.ResetElement();
 
+        if (!hideUI)
+            return;
+
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
                 BossHealthUI.Instance.HideBoss(Runtime);
-            return;
         }
-
-        if (HealthBar != null)
+        else if (HealthBar != null)
+        {
             HealthBar.SetVisible(false);
+        }
     }
 
     private void HandleDead(MonsterRunTime runTime)
@@ -145,7 +148,7 @@ public class MonsterController : MonoBehaviour
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-                BossHealthUI.Instance.HideBoss(runTime);
+                BossHealthUI.Instance.HideElementIcon(runTime);
         }
         else if (HealthBar != null)
         {
@@ -153,5 +156,13 @@ public class MonsterController : MonoBehaviour
         }
 
         StateMachine.ChangeState(MonsterStateType.Dead);
+    }
+    private void OnDestroy()
+    {
+        if (!isBoss)
+            return;
+
+        if (BossHealthUI.Instance != null)
+            BossHealthUI.Instance.HideBoss(Runtime);
     }
 }
