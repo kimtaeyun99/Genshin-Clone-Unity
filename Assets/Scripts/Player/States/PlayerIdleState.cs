@@ -30,6 +30,8 @@ public class PlayerIdleState : PlayerStateBase
         {
             stateMachine.ChangeState(PlayerStateType.Move);
         }
+
+        ChangeNextState();
     }
 
     public override void Exit()

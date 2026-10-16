@@ -40258,6 +40258,7 @@ GameObject:
   m_Component:
   - component: {fileID: 898897971}
   - component: {fileID: 898897972}
+  - component: {fileID: 898897973}
   m_Layer: 5
   m_Name: BossHealthUI
   m_TagString: Untagged
@@ -40307,7 +40308,23 @@ MonoBehaviour:
   hydroIcon: {fileID: 21300000, guid: dbfbdd9aa7cbccd49ae0fa378d2a899e, type: 3}
   cryoIcon: {fileID: 21300000, guid: eefc0b12bae4e49449a9e4ae2017a6cd, type: 3}
   electroIcon: {fileID: 21300000, guid: 76c6899e6f67bac47bcc351d02cd46b5, type: 3}
-  delayedHealthBar: {fileID: 0}
+  delayedHealthBar: {fileID: 898897973}
+--- !u!114 &898897973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898897970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dbd5913ed0b2844b9f07d23c1dd34d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DelayedHealthBar
+  healthBarFill: {fileID: 232189355}
+  delayHealthBarFill: {fileID: 781057433}
+  delayTime: 0.3
+  smoothTime: 0.3
 --- !u!1001 &903467083
 PrefabInstance:
   m_ObjectHideFlags: 0

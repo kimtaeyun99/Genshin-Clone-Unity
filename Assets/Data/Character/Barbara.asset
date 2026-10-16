@@ -19,8 +19,8 @@ MonoBehaviour:
   characterIcon: {fileID: 21300000, guid: 55027a93da4889747aeddea640524fa1, type: 3}
   skillIcon: {fileID: 21300000, guid: 0557c2829a688684cbe64def9e858794, type: 3}
   burstIcon: {fileID: 21300000, guid: f8abeb61e9fb51f478e6ef78f6f11a6f, type: 3}
-  atk: 13
-  maxHp: 0
+  atk: 70
+  maxHp: 1200
   attackMultipliers:
   - 0.6
   - 0.7
