@@ -32,7 +32,7 @@ public class PlayerBurstState : PlayerStateBase
         }
 
         burstStarted = true;
-
+        player.StartLockOn();
         currentBurst.Enter(
             character,
             player.PlayerAnimationController
@@ -43,6 +43,8 @@ public class PlayerBurstState : PlayerStateBase
     {
         if (currentBurst == null)
             return;
+
+        player.UpdateLockOn();
 
         if (player.PlayerAnimationController.IsTransition())
             return;
@@ -55,6 +57,7 @@ public class PlayerBurstState : PlayerStateBase
 
     public override void Exit()
     {
+        player.EndLockOn();
         if (burstStarted)
         {
             currentBurst?.Exit();

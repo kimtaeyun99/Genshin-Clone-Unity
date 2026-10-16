@@ -20,7 +20,7 @@ public class PlayerSkillState : PlayerStateBase
             ChangeNextState();
             return;
         }
-
+        player.StartLockOn();
         currentSkill.Enter(character, player.PlayerAnimationController);
 
         InputManager.Instance.OnSkill += OnSkill;
@@ -30,6 +30,8 @@ public class PlayerSkillState : PlayerStateBase
     {
         if (currentSkill == null)
             return;
+
+        player.UpdateLockOn();
 
         if (player.PlayerAnimationController.IsTransition())
             return;
@@ -42,6 +44,7 @@ public class PlayerSkillState : PlayerStateBase
 
     public override void Exit()
     {
+        player.EndLockOn();
         InputManager.Instance.OnSkill -= OnSkill;
 
         if (currentSkill != null)
