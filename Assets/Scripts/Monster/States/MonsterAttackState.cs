@@ -12,7 +12,9 @@ public class MonsterAttackState : MonsterStateBase
 
     public override void Enter()
     {
+        monster.Agent.isStopped = true;
         monster.Agent.ResetPath();
+        monster.Agent.velocity = Vector3.zero;
 
         currentAttack = monster.MonsterAttack;
 

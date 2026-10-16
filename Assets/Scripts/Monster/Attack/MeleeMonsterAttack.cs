@@ -3,7 +3,6 @@ using UnityEngine;
 public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
 {
     private MonsterController monster;
-    private bool attackStarted;
     private bool isFinished;
     [SerializeField] private AttackHitbox attackHitbox;
 
@@ -13,7 +12,6 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
     {
         this.monster = monster;
 
-        attackStarted = false;
         isFinished = false;
 
         LookTarget();
@@ -32,15 +30,9 @@ public class MeleeMonsterAttack : MonoBehaviour, IMonsterAttack
             return;
         }
 
-        if (!attackStarted)
-        {
-            attackStarted = true;
-            return;
-        }
-
         AnimatorStateInfo stateInfo = monster.MonsterAnimationController.GetCurrentStateInfo();
 
-        if (stateInfo.normalizedTime >= 1f)
+        if (stateInfo.normalizedTime >= 0.95f)
         {
             isFinished = true;
         }

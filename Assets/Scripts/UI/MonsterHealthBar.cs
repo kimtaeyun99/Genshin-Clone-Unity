@@ -20,7 +20,7 @@ public class MonsterHealthBar : MonoBehaviour
     private Camera mainCamera;
 
     private bool isVisible;
-
+    private bool isDead;
     private void OnEnable()
     {
         Subscribe();
@@ -91,6 +91,11 @@ public class MonsterHealthBar : MonoBehaviour
         
     private void UpdateElementIcon(ElementType elementType)
     {
+        if (isDead)
+        {
+            hostElementIcon.gameObject.SetActive(false);
+            return;
+        }
         switch (elementType)
         {
             case ElementType.Pyro:
@@ -111,6 +116,11 @@ public class MonsterHealthBar : MonoBehaviour
         }
 
         hostElementIcon.gameObject.SetActive(true);
+    }
+    public void HideElementIcon()
+    {
+        isDead = true;
+        hostElementIcon.gameObject.SetActive(false);
     }
 
     private void OnDisable()

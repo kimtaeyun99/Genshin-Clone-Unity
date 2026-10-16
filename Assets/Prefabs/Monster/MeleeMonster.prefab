@@ -478,7 +478,7 @@ MonoBehaviour:
   patrolRadius: 6
   detectionRadius: 9
   chaseRange: 16
-  attackRange: 2.2
+  attackRange: 2
   attackDelay: 1.8
   attackMultiplier: 1
   deadDestroyDelay: 2.5
@@ -688,7 +688,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4287768363210063591
 Transform:
   m_ObjectHideFlags: 0
@@ -739,7 +739,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 0.05, z: 0.1}
+  m_Size: {x: 1.5, y: 0.05, z: 0.3}
   m_Center: {x: -1, y: 0, z: 0}
 --- !u!54 &7876922995347126539
 Rigidbody:

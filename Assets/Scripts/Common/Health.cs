@@ -32,7 +32,10 @@ public class Health : MonoBehaviour
 
     public void TakeAttack(AttackData attackData)
     {
-        if (IsInvincible)
+        if (monsterRunTime != null && monsterRunTime.IsDead)
+            return;
+
+        if (IsInvincible || attackData.Damage <= 0f)
             return;
 
         float damage = attackData.Damage;
@@ -74,6 +77,9 @@ public class Health : MonoBehaviour
 
     public ElementReactionType ApplyElement(ElementType guestElement)
     {
+        if (monsterRunTime != null && monsterRunTime.IsDead)
+            return ElementReactionType.None;
+
         if (guestElement == ElementType.None ||
             guestElement == ElementType.Physical)
         {

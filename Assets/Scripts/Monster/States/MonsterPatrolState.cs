@@ -17,6 +17,9 @@ public class MonsterPatrolState : MonsterStateBase
 
     public override void Enter()
     {
+        monster.Agent.isStopped = false;
+        monster.Agent.stoppingDistance = 0.2f;
+
         monster.MonsterAnimationController.PlayPatrol();
         SetRandomDestination();
     }

@@ -19,8 +19,11 @@ public class MonsterChaseState : MonsterStateBase
     public override void Enter()
     {
         monster.MonsterAnimationController.PlayChase();
+
         attackTimer = 0f;
         hasRequestedDestination = false;
+
+        monster.Agent.stoppingDistance = monster.AttackRange;
         monster.Agent.isStopped = false;
 
         if (monster.Target != null)
