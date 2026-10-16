@@ -16,7 +16,6 @@ public class AttackHitbox : MonoBehaviour
     private Collider[] overlapResults = new Collider[InitialOverlapCapacity];
 
     private readonly HashSet<Health> hitTargets = new();
-    private HashSet<Health> sharedHitTargets;
 
     public float Damage => damage;
     public ElementType Element => element;
@@ -36,16 +35,6 @@ public class AttackHitbox : MonoBehaviour
     {
         damage = atk * multiplier;
         element = elementType;
-    }
-
-    public void SetSharedHitTargets(HashSet<Health> sharedHitTargets)
-    {
-        this.sharedHitTargets = sharedHitTargets;
-    }
-
-    public void ClearSharedHitTargets()
-    {
-        sharedHitTargets = null;
     }
 
     public void ClearHitbox()
@@ -80,7 +69,7 @@ public class AttackHitbox : MonoBehaviour
             Array.Resize(ref overlapResults, overlapResults.Length * 2);
         }
 
-        HashSet<Health> targets = sharedHitTargets ?? hitTargets;
+        HashSet<Health> targets = hitTargets;
         for (int i = 0; i < count; i++)
         {
             Collider other = overlapResults[i];

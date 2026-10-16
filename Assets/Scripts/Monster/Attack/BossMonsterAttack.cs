@@ -1,15 +1,16 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
 {
+    [SerializeField] private AttackHitbox longHitbox;
+    [SerializeField] private AttackHitbox shortHitbox;
+    [SerializeField] private float jumpAttackMultiplier = 3f;
     private MonsterController monster;
 
     private bool attackStarted;
     private bool isFinished;
+
     public bool IsFinished => isFinished;
-    [SerializeField] private AttackHitbox[] hitboxes;
-    private readonly HashSet<Health> hitTargets = new();
 
     public void Enter(MonsterController monster)
     {
@@ -18,18 +19,19 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
         attackStarted = false;
         isFinished = false;
 
-        hitTargets.Clear();
+        longHitbox.SetAttack(
+            monster.Runtime.ATK,
+            monster.AttackMultiplier * jumpAttackMultiplier,
+            monster.Data.ElementType
+        );
 
-        foreach (AttackHitbox hitbox in hitboxes)
-        {
-            hitbox.SetSharedHitTargets(hitTargets);
+        shortHitbox.SetAttack(
+            monster.Runtime.ATK,
+            monster.AttackMultiplier,
+            monster.Data.ElementType
+        );
 
-            hitbox.SetAttack(
-                monster.Runtime.ATK,
-                monster.AttackMultiplier,
-                monster.Data.ElementType
-            );
-        }
+        DisableHitboxes();
 
         LookTarget();
 
@@ -41,9 +43,7 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
     public void AttackUpdate()
     {
         if (monster.MonsterAnimationController.IsTransition())
-        {
             return;
-        }
 
         if (!attackStarted)
         {
@@ -63,21 +63,12 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
     public void Exit()
     {
         DisableHitboxes();
-
-        foreach(AttackHitbox hitbox in hitboxes)
-        {
-            hitbox.ClearSharedHitTargets();
-        }
-
-        hitTargets.Clear();
     }
 
     private void LookTarget()
     {
         if (monster.Target == null)
-        {
             return;
-        }
 
         Vector3 direction =
             monster.Target.position - monster.transform.position;
@@ -85,26 +76,39 @@ public class BossMonsterAttack : MonoBehaviour, IMonsterAttack
         direction.y = 0f;
 
         if (direction.sqrMagnitude <= 0.01f)
-        {
             return;
-        }
 
         monster.transform.rotation =
             Quaternion.LookRotation(direction);
     }
-    private void EnableHitboxes()
+
+    private void EnableLongHitbox()
     {
-        foreach(AttackHitbox hitbox in hitboxes)
-        {
-            hitbox.gameObject.SetActive(true);
-        }
+        longHitbox.ClearHitbox();
+        longHitbox.gameObject.SetActive(true);
     }
+
+    private void DisableLongHitbox()
+    {
+        longHitbox.gameObject.SetActive(false);
+        longHitbox.ClearHitbox();
+    }
+
+    private void EnableShortHitbox()
+    {
+        shortHitbox.ClearHitbox();
+        shortHitbox.gameObject.SetActive(true);
+    }
+
+    private void DisableShortHitbox()
+    {
+        shortHitbox.gameObject.SetActive(false);
+        shortHitbox.ClearHitbox();
+    }
+
     private void DisableHitboxes()
     {
-        foreach(AttackHitbox hitbox in hitboxes)
-        {
-            hitbox.gameObject.SetActive(false);
-            hitbox.ClearHitbox();
-        }
+        DisableLongHitbox();
+        DisableShortHitbox();
     }
 }
