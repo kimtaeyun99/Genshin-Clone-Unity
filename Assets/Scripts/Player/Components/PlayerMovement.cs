@@ -141,7 +141,8 @@ public class PlayerMovement : MonoBehaviour
             transform.TransformPoint(characterController.center) +
             Vector3.down *
             (characterController.height * 0.5f -
-             characterController.radius + 0.05f);
+             characterController.radius + 0.05f +
+             groundCheckDistance);
 
         IsGrounded = Physics.CheckSphere(
             groundCheckPosition,
@@ -171,31 +172,5 @@ public class PlayerMovement : MonoBehaviour
         characterController.enabled = true;
 
         CheckGround();
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        CharacterController controller = characterController;
-
-        if (controller == null)
-            controller = GetComponent<CharacterController>();
-
-        if (controller == null)
-            return;
-
-        Vector3 groundCheckPosition =
-            transform.TransformPoint(controller.center) +
-            Vector3.down *
-            (controller.height * 0.5f -
-             controller.radius + 0.05f);
-
-        Gizmos.color = Application.isPlaying
-            ? (IsGrounded ? Color.green : Color.red)
-            : Color.yellow;
-
-        Gizmos.DrawWireSphere(
-            groundCheckPosition,
-            groundCheckRadius
-        );
     }
 }
