@@ -59,10 +59,6 @@ public class PlayerController : MonoBehaviour
         Movement.CheckGround();
         Movement.ApplyGravity();
         StateMachine.Update();
-        Debug.Log(
-    $"State: {StateMachine.CurrentKey}, " +
-    $"IsGrounded: {Movement.IsGrounded}"
-);
     }
 
     private void InitializeStates()
