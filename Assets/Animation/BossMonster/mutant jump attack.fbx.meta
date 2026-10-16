@@ -56,28 +56,28 @@ ModelImporter:
       curves: []
       events:
       - time: 0.14103569
-        functionName: EnableHitboxes
+        functionName: EnableShortHitbox
         data: 
         objectReferenceParameter: {fileID: 1047092964744365345, guid: 4a37cf644c241cf40b90c4740e215309, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.29152837
-        functionName: DisableHitboxes
+        functionName: DisableShortHitbox
         data: 
         objectReferenceParameter: {fileID: 1047092964744365345, guid: 4a37cf644c241cf40b90c4740e215309, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.45960504
-        functionName: EnableHitboxes
+        functionName: EnableLongHitbox
         data: 
         objectReferenceParameter: {fileID: 1047092964744365345, guid: 4a37cf644c241cf40b90c4740e215309, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.77569586
-        functionName: DisableHitboxes
+        functionName: DisableLongHitbox
         data: 
         objectReferenceParameter: {fileID: 1047092964744365345, guid: 4a37cf644c241cf40b90c4740e215309, type: 3}
         floatParameter: 0

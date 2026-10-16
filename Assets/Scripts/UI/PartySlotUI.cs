@@ -63,6 +63,10 @@ public class PartySlotUI : MonoBehaviour
             ? Mathf.Clamp01((float)currentHP / maxHP)
             : 0f;
 
+        characterIcon.color = currentHP <= 0
+            ? Color.gray
+            : Color.white;
+
         lastCurrentHP = currentHP;
         lastMaxHP = maxHP;
     }

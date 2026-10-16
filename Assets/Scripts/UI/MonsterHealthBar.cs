@@ -17,17 +17,27 @@ public class MonsterHealthBar : MonoBehaviour
     [SerializeField] private MonsterController monster;
     private MonsterRunTime runtime;
     private Health health;
-    [SerializeField] private Camera mainCamera;
+    private Camera mainCamera;
 
     private bool isVisible;
-
+    private bool isDead;
     private void OnEnable()
     {
         Subscribe();
     }
+    private void Awake()
+    {
+        isVisible = false;
+        isDead = false;
+
+        healthBarBG.SetActive(false);
+        delayedHealthBar.SetVisible(false);
+        hostElementIcon.gameObject.SetActive(false);
+    }
 
     private void Start()
     {
+        mainCamera = Camera.main;
         Subscribe();
         if (runtime == null || health == null)
             return;
@@ -35,7 +45,6 @@ public class MonsterHealthBar : MonoBehaviour
         delayedHealthBar.Initialize(runtime.CurrentHP,runtime.MaxHP);
 
         UpdateElementIcon(health.HostElement);
-        SetVisible(false);
     }
 
     private void Subscribe()
@@ -71,7 +80,9 @@ public class MonsterHealthBar : MonoBehaviour
         Subscribe();
 
         isVisible = visible;
+
         healthBarBG.SetActive(visible);
+        delayedHealthBar.SetVisible(visible);
 
         if (!visible)
         {
@@ -90,6 +101,11 @@ public class MonsterHealthBar : MonoBehaviour
         
     private void UpdateElementIcon(ElementType elementType)
     {
+        if (!isVisible || isDead)
+        {
+            hostElementIcon.gameObject.SetActive(false);
+            return;
+        }
         switch (elementType)
         {
             case ElementType.Pyro:
@@ -110,6 +126,11 @@ public class MonsterHealthBar : MonoBehaviour
         }
 
         hostElementIcon.gameObject.SetActive(true);
+    }
+    public void HideElementIcon()
+    {
+        isDead = true;
+        hostElementIcon.gameObject.SetActive(false);
     }
 
     private void OnDisable()

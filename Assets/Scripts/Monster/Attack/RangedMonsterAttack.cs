@@ -110,6 +110,6 @@ public class RangedMonsterAttack : MonoBehaviour, IMonsterAttack
         Vector3 direction = targetPosition - spawnPoint.position;
 
         AttackProjectile arrow = Instantiate(arrowPrefab, spawnPoint.position, Quaternion.LookRotation(direction));
-        arrow.Initialize(monster.Runtime.ATK, monster.Data.ElementType, direction);
+        arrow.Initialize(monster.Runtime.ATK * monster.AttackMultiplier, monster.Data.ElementType, direction);
     }
 }

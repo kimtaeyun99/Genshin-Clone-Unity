@@ -56,14 +56,14 @@ ModelImporter:
       curves: []
       events:
       - time: 0.2725
-        functionName: EnableNormalAttackHitbox
+        functionName: EnableAttackHitbox
         data: 
         objectReferenceParameter: {fileID: 8196238054752762640, guid: 606bfc1c3720bcc40ac4709c350287cb, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.47500002
-        functionName: DisableNormalAttackHitbox
+        functionName: DisableAttackHitbox
         data: 
         objectReferenceParameter: {fileID: 8196238054752762640, guid: 606bfc1c3720bcc40ac4709c350287cb, type: 3}
         floatParameter: 0

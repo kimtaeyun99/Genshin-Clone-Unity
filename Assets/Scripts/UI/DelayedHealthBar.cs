@@ -98,4 +98,9 @@ public class DelayedHealthBar : MonoBehaviour
             ? Mathf.Clamp01(currentHP / maxHP)
             : 0f;
     }
+    public void SetVisible(bool visible)
+    {
+        healthBarFill.gameObject.SetActive(visible);
+        delayHealthBarFill.gameObject.SetActive(visible);
+    }
 }

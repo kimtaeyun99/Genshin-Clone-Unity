@@ -36,28 +36,37 @@ public class DilucSkill : MonoBehaviour, ICharacterSkill
 
     public void SkillUpdate()
     {
-        AnimatorStateInfo stateInfo = playerAnimationController.GetCurrentStateInfo();
-
         if (playerAnimationController.IsTransition())
-        {
             return;
-        }
 
-        if (stateInfo.normalizedTime >= 1f)
+        AnimatorStateInfo stateInfo =
+            playerAnimationController.GetCurrentStateInfo();
+
+        string skillName = skillIndex switch
         {
-            if (nextSkillInput && skillIndex < 2)
-            {
-                skillIndex++;
-                nextSkillInput = false;
+            0 => "Skill1",
+            1 => "Skill2",
+            2 => "Skill3",
+            _ => ""
+        };
 
-                playerAnimationController.SetSkillIndex(skillIndex);
+        if (!stateInfo.IsName(skillName))
+            return;
 
-                SetSkillData();
-            }
-            else
-            {
-                isFinished = true;
-            }
+        if (stateInfo.normalizedTime < 1f)
+            return;
+
+        if (nextSkillInput && skillIndex < 2)
+        {
+            skillIndex++;
+            nextSkillInput = false;
+
+            playerAnimationController.SetSkillIndex(skillIndex);
+            SetSkillData();
+        }
+        else
+        {
+            isFinished = true;
         }
     }
 

@@ -35,6 +35,9 @@ public class GameOverManager : MonoBehaviour
     {
         gameOverUI.SetActive(true);
 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         Time.timeScale = 0f;
     }
 
@@ -55,11 +58,17 @@ public class GameOverManager : MonoBehaviour
 
         foreach (FieldMonsterSpawner spawner in fieldMonsterSpawners)
         {
-            spawner.ResetSpawner();
+            if (spawner != null)
+                spawner.ResetSpawner();
         }
-        bossWaveSpawner.ResetSpawner();
+
+        if (bossWaveSpawner != null)
+            bossWaveSpawner.ResetSpawner();
 
         gameOverUI.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void QuitGame()

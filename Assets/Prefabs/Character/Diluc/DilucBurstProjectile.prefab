@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35237a33d5825e34daea1f707d15fade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackProjectile
-  moveSpeed: 15
+  moveSpeed: 14
   lifeTime: 1.5
   targetLayer:
     serializedVersion: 2
@@ -230,7 +230,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFX_Fire_01_Big
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3630983130738417110, guid: e91fa0fac941e714e8c4d5709097019f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -56,14 +56,14 @@ ModelImporter:
       curves: []
       events:
       - time: 0.13009626
-        functionName: EnableHitboxes
+        functionName: EnableShortHitbox
         data: 
         objectReferenceParameter: {fileID: 1047092964744365345, guid: 4a37cf644c241cf40b90c4740e215309, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.8735709
-        functionName: DisableHitboxes
+        functionName: DisableShortHitbox
         data: 
         objectReferenceParameter: {fileID: 1047092964744365345, guid: 4a37cf644c241cf40b90c4740e215309, type: 3}
         floatParameter: 0

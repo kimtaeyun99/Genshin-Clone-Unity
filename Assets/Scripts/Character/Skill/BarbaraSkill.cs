@@ -32,10 +32,14 @@ public class BarbaraSkill : MonoBehaviour, ICharacterSkill
 
     public void SkillUpdate()
     {
+        if (playerAnimationController.IsTransition())
+            return;
+
         AnimatorStateInfo stateInfo =
             playerAnimationController.GetCurrentStateInfo();
 
-        if (stateInfo.normalizedTime >= 0.95f)
+        if (stateInfo.IsName("Skill") &&
+            stateInfo.normalizedTime >= 0.95f)
         {
             isFinished = true;
         }

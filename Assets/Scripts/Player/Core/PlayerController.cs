@@ -59,6 +59,10 @@ public class PlayerController : MonoBehaviour
         Movement.CheckGround();
         Movement.ApplyGravity();
         StateMachine.Update();
+        Debug.Log(
+    $"State: {StateMachine.CurrentKey}, " +
+    $"IsGrounded: {Movement.IsGrounded}"
+);
     }
 
     private void InitializeStates()
@@ -76,7 +80,9 @@ public class PlayerController : MonoBehaviour
 
     private void SwitchCharacter(int index)
     {
-        if (StateMachine.CurrentState is PlayerDeadState)
+        if (StateMachine.CurrentState is PlayerDeadState ||
+            StateMachine.CurrentState is PlayerSkillState ||
+            StateMachine.CurrentState is PlayerBurstState)
         {
             return;
         }

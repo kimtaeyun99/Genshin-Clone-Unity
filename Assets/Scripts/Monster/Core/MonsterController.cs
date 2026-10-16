@@ -20,7 +20,6 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private float chaseRange = 15f;
 
     [Header("Attack")]
-    [SerializeField] private IMonsterAttack monsterAttack;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackDelay = 3f;
     [SerializeField] private float attackMultiplier = 1f;
@@ -45,7 +44,6 @@ public class MonsterController : MonoBehaviour
     public float PatrolRadius => patrolRadius;
     public float DetectionRadius => detectionRadius;
     public float ChaseRange => chaseRange;
-    public IMonsterAttack MonsterAttack => monsterAttack;
     public float AttackRange => attackRange;
     public float AttackDelay => attackDelay;
     public float AttackMultiplier => attackMultiplier;
@@ -57,6 +55,7 @@ public class MonsterController : MonoBehaviour
     public MonsterHealthBar HealthBar => healthBar;
     public StateMachine<MonsterStateType> StateMachine { get; private set; }
     public Transform Target { get; private set; }
+    public IMonsterAttack MonsterAttack { get; private set; }
     public MonsterRunTime Runtime { get; private set; }
     public Vector3 SpawnPosition { get; private set; }
     public string MonsterName => data.MonsterName;
@@ -65,7 +64,7 @@ public class MonsterController : MonoBehaviour
     {
         StateMachine = new StateMachine<MonsterStateType>();
         Runtime = new MonsterRunTime(data);
-
+        MonsterAttack = GetComponent<IMonsterAttack>();
         Health.BindMonsterRunTime(Runtime);
 
         InitializeStates();
@@ -84,7 +83,6 @@ public class MonsterController : MonoBehaviour
     private void Start()
     {
         SpawnPosition = transform.position;
-        Agent.stoppingDistance = AttackRange;
         StateMachine.Initialize(MonsterStateType.Idle);
     }
 
@@ -122,7 +120,7 @@ public class MonsterController : MonoBehaviour
             HealthBar.SetVisible(true);
     }
 
-    public void ClearTarget()
+    public void ClearTarget(bool hideUI = true)
     {
         Target = null;
 
@@ -131,15 +129,18 @@ public class MonsterController : MonoBehaviour
 
         Health.ResetElement();
 
+        if (!hideUI)
+            return;
+
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
                 BossHealthUI.Instance.HideBoss(Runtime);
-            return;
         }
-
-        if (HealthBar != null)
+        else if (HealthBar != null)
+        {
             HealthBar.SetVisible(false);
+        }
     }
 
     private void HandleDead(MonsterRunTime runTime)
@@ -147,13 +148,21 @@ public class MonsterController : MonoBehaviour
         if (isBoss)
         {
             if (BossHealthUI.Instance != null)
-                BossHealthUI.Instance.HideBoss(runTime);
+                BossHealthUI.Instance.HideElementIcon(runTime);
         }
         else if (HealthBar != null)
         {
-            HealthBar.SetVisible(false);
+            HealthBar.HideElementIcon();
         }
 
         StateMachine.ChangeState(MonsterStateType.Dead);
+    }
+    private void OnDestroy()
+    {
+        if (!isBoss)
+            return;
+
+        if (BossHealthUI.Instance != null)
+            BossHealthUI.Instance.HideBoss(Runtime);
     }
 }

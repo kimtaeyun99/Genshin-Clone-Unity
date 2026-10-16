@@ -200,6 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 355653913caf20843aeadb0fa4b0cbcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DilucAttack
+  attackHitbox: {fileID: 4829285429235743021}
 --- !u!114 &342967359088688157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,6 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DilucSkill
   fireVFX: {fileID: 3487268309522107301}
+  attackHitbox: {fileID: 4829285429235743021}
 --- !u!114 &-3422375988742012437
 MonoBehaviour:
   m_ObjectHideFlags: 0
