@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
-
+using System.Collections.Generic;
 public class MonsterController : MonoBehaviour
 {
     [Header("Monster")]
@@ -60,6 +60,8 @@ public class MonsterController : MonoBehaviour
     public Vector3 SpawnPosition { get; private set; }
     public string MonsterName => data.MonsterName;
 
+    public static readonly HashSet<MonsterController> ActiveMonsters = new();
+
     private void Awake()
     {
         StateMachine = new StateMachine<MonsterStateType>();
@@ -73,11 +75,13 @@ public class MonsterController : MonoBehaviour
     private void OnEnable()
     {
         Runtime.OnDead += HandleDead;
+        ActiveMonsters.Add(this);
     }
 
     private void OnDisable()
     {
         Runtime.OnDead -= HandleDead;
+        ActiveMonsters.Remove(this);
     }
 
     private void Start()

@@ -10,7 +10,7 @@ public class ReturnMainUI : MonoBehaviour
     [SerializeField] private GameCursorManager cursorManager;
 
     [Header("Scene")]
-    [SerializeField] private string mainSceneName = "StartScene";
+    [SerializeField] private string mainSceneName = "Main";
 
     private void Start()
     {

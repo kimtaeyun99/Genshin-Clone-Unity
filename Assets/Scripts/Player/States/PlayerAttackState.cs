@@ -20,7 +20,7 @@ public class PlayerAttackState : PlayerStateBase
             ChangeNextState();
             return;
         }
-
+        player.StartLockOn();
         currentAttack.Enter(
             CharacterManager.Instance.CurrentCharacter,
             player.PlayerAnimationController
@@ -33,20 +33,19 @@ public class PlayerAttackState : PlayerStateBase
     public override void Update()
     {
         if (currentAttack == null)
-        {
             return;
-        }
+
+        player.UpdateLockOn();
 
         currentAttack.AttackUpdate();
 
         if (currentAttack.IsFinished)
-        {
             ChangeNextState();
-        }
     }
 
     public override void Exit()
     {
+        player.EndLockOn();
         InputManager.Instance.OnAttack -= OnAttack;
 
         currentAttack?.Exit();

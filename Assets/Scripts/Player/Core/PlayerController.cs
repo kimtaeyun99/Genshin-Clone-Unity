@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStamina stamina;
     [SerializeField] private PlayerAnimationController playerAnimationController;
     [SerializeField] private Health health;
-
+    [Header("Lock On")]
+    [SerializeField] private float lockOnRange = 10f;
     public float SwitchCoolDown => switchCoolDown;
     public float SwitchCoolDownTimer => switchCoolDownTimer;
     public bool CanSwitchCharacter => switchCoolDownTimer <= 0f;
@@ -59,10 +60,6 @@ public class PlayerController : MonoBehaviour
         Movement.CheckGround();
         Movement.ApplyGravity();
         StateMachine.Update();
-        Debug.Log(
-    $"State: {StateMachine.CurrentKey}, " +
-    $"IsGrounded: {Movement.IsGrounded}"
-);
     }
 
     private void InitializeStates()
@@ -141,5 +138,60 @@ public class PlayerController : MonoBehaviour
         }
 
         OnSwitchCooldownChanged?.Invoke(switchCoolDownTimer, switchCoolDown);
+    }
+    public void StartLockOn()
+    {
+        CharacterManager.Instance.LockedTarget = null;
+
+        float nearestDistance = lockOnRange * lockOnRange;
+
+        foreach (MonsterController monster in MonsterController.ActiveMonsters)
+        {
+            if (monster == null || monster.Runtime.IsDead)
+                continue;
+
+            Vector3 direction =
+                monster.transform.position - transform.position;
+
+            direction.y = 0f;
+
+            float distance = direction.sqrMagnitude;
+
+            if (distance > 0.01f && distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                CharacterManager.Instance.LockedTarget = monster;
+            }
+        }
+
+        if (CharacterManager.Instance.LockedTarget != null)
+            UpdateLockOn();
+    }
+
+    public void UpdateLockOn()
+    {
+        MonsterController target = CharacterManager.Instance.LockedTarget;
+
+        if (target == null ||
+            target.Runtime.IsDead ||
+            (target.transform.position - transform.position).sqrMagnitude
+            > lockOnRange * lockOnRange)
+        {
+            StartLockOn();
+            return;
+        }
+
+        Vector3 direction = target.transform.position - transform.position;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude <= 0.01f)
+            return;
+
+        transform.rotation = Quaternion.LookRotation(direction);
+    }
+
+    public void EndLockOn()
+    {
+        CharacterManager.Instance.LockedTarget = null;
     }
 }

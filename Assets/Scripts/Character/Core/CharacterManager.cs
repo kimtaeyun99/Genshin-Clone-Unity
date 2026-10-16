@@ -27,6 +27,7 @@ public class CharacterManager : MonoBehaviour
     public ICharacterAttack CurrentAttack => characterView.CurrentAttack;
     public ICharacterSkill CurrentSkill => characterView.CurrentSkill;
     public ICharacterBurst CurrentBurst => characterView.CurrentBurst;
+    public MonsterController LockedTarget { get; set; }
 
     public event Action<CharacterRunTime> OnCurrentCharacterChanged;
     private void Awake()
