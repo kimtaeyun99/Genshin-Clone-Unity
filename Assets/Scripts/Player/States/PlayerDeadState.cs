@@ -39,6 +39,9 @@ public class PlayerDeadState : PlayerStateBase
         AnimatorStateInfo info =
             player.PlayerAnimationController.GetCurrentStateInfo();
 
+        if (!info.IsName("Dead"))
+            return false;
+
         return info.normalizedTime >= 1f;
     }
 
