@@ -230,7 +230,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFX_Fire_01_Big
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3630983130738417110, guid: e91fa0fac941e714e8c4d5709097019f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

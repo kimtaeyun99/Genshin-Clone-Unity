@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56537b5fd16ffcb44aa7ff73213c9597, type: 3}
   m_Name: BossMonster
   m_EditorClassIdentifier: Assembly-CSharp::MonsterData
-  monsterName: BossMonster
+  monsterName: Golem
   elementType: 4
   atk: 175
   maxHp: 7000

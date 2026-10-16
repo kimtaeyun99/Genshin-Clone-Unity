@@ -27,8 +27,8 @@ public class CharacterRunTime
         Data = data;
         ATK = data.ATK;
         MaxHP = data.MaxHP;
-        CurrentHP = MaxHP;
-        CurrentEnergy = 0;
+        CurrentHP = 1;
+        CurrentEnergy = 100;
         BurstEnergyCost = data.BurstEnergyCost;
         SkillCoolDown = 0;
         BurstCoolDown = 0;

@@ -70440,8 +70440,8 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  groundCheckDistance: 0.2
-  groundCheckRadius: 0.3
+  groundCheckDistance: 0.5
+  groundCheckRadius: 0.7
   dodgeSpeed: 13
   dodgeDuration: 0.3
   dashMoveSpeed: 8

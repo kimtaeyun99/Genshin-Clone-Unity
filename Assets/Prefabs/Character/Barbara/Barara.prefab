@@ -119,7 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BarbaraSkill
   waterAuraPrefab: {fileID: -4135819851444712456, guid: 3617daedb686d924e991bdfa4d71b4c5, type: 3}
   waterAuraDuration: 10
-  waterAuraRadius: 2.5
+  waterAuraRadius: 1
 --- !u!114 &1332487744848707196
 MonoBehaviour:
   m_ObjectHideFlags: 0
