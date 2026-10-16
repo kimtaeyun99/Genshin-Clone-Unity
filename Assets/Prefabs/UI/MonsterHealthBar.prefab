@@ -120,12 +120,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2403981908949293727}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4054475d34a664041aae04ea488350c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterHealthBar
-  hpFill: {fileID: 5116323812803028146}
+  healthBarBG: {fileID: 0}
+  delayedHealthBar: {fileID: 0}
+  hostElementIcon: {fileID: 0}
+  pyroIcon: {fileID: 0}
+  hydroIcon: {fileID: 0}
+  cryoIcon: {fileID: 0}
+  electroIcon: {fileID: 0}
+  monster: {fileID: 0}
 --- !u!1 &2663387214966833452
 GameObject:
   m_ObjectHideFlags: 0

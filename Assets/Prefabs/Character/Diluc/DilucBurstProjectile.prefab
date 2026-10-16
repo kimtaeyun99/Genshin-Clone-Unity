@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35237a33d5825e34daea1f707d15fade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackProjectile
-  moveSpeed: 15
+  moveSpeed: 14
   lifeTime: 1.5
   targetLayer:
     serializedVersion: 2

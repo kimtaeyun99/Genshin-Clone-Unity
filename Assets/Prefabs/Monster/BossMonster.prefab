@@ -146,10 +146,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 3.4
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 180
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -170,19 +170,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d16147d38cdbad418aaba78025d2d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterController
-  monsterName: Golem
+  data: {fileID: 11400000, guid: c0cbc3066f1d58b40afaef05e58ff421, type: 2}
   isBoss: 1
-  maxHP: 100
+  bodyCollider: {fileID: 4620149988930584267}
   idleTime: 2
-  patrolRadius: 10
-  detectionRadius: 8
-  chaseRange: 15
-  attack: 100
-  attackRange: 3
-  attackDelay: 3
+  patrolRadius: 4
+  detectionRadius: 14
+  chaseRange: 22
+  attackRange: 3.5
+  attackDelay: 2.3
   attackMultiplier: 1
-  deadDestroyDelay: 3
-  elementType: -1
+  deadDestroyDelay: 4
+  agent: {fileID: 1582603332224226893}
+  monsterAnimationController: {fileID: -4508270777546901744}
+  health: {fileID: 5727128916410237385}
+  healthBar: {fileID: 0}
 --- !u!114 &-4508270777546901744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,6 +210,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fb503f485b2034abb43911838753bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossMonsterAttack
+  hitboxes:
+  - {fileID: 5558494687549298702}
+  - {fileID: 1756870336673221823}
+  - {fileID: 65157988207193127}
+  - {fileID: 4410763753853691304}
 --- !u!114 &5727128916410237385
 MonoBehaviour:
   m_ObjectHideFlags: 0

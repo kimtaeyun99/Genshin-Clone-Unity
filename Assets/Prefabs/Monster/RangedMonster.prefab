@@ -269,15 +269,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterHealthBar
   healthBarBG: {fileID: 5950141236772344840}
-  hpFill: {fileID: 6038947275757054097}
-  delayHpFill: {fileID: 1832087744939077766}
-  delayTime: 1
-  smoothTime: 0.3
+  delayedHealthBar: {fileID: 0}
   hostElementIcon: {fileID: 8158224885330509904}
   pyroIcon: {fileID: 21300000, guid: 7af873017776803418a3cfadb4aa4fe8, type: 3}
   hydroIcon: {fileID: 21300000, guid: dbfbdd9aa7cbccd49ae0fa378d2a899e, type: 3}
   cryoIcon: {fileID: 21300000, guid: eefc0b12bae4e49449a9e4ae2017a6cd, type: 3}
   electroIcon: {fileID: 21300000, guid: 76c6899e6f67bac47bcc351d02cd46b5, type: 3}
+  monster: {fileID: 2889792630340957570}
 --- !u!1 &5950141236772344840
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,10 +425,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 3.2
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 180
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -524,19 +522,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d16147d38cdbad418aaba78025d2d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterController
-  monsterName: 
+  data: {fileID: 11400000, guid: 994407328b90494449b7c70dead749f5, type: 2}
   isBoss: 0
-  maxHP: 100
+  bodyCollider: {fileID: 5782852195278055333}
   idleTime: 2
-  patrolRadius: 10
-  detectionRadius: 8
-  chaseRange: 15
-  attack: 100
-  attackRange: 15
+  patrolRadius: 4
+  detectionRadius: 13
+  chaseRange: 22
+  attackRange: 10
   attackDelay: 3
   attackMultiplier: 1
-  deadDestroyDelay: 3
-  elementType: -1
+  deadDestroyDelay: 2.5
+  agent: {fileID: 7489830860510488701}
+  monsterAnimationController: {fileID: 2919467549087267131}
+  health: {fileID: 6632842375821074291}
+  healthBar: {fileID: 5591250684950585466}
 --- !u!114 &2919467549087267131
 MonoBehaviour:
   m_ObjectHideFlags: 0

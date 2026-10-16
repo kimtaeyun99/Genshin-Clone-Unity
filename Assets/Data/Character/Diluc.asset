@@ -15,22 +15,24 @@ MonoBehaviour:
   id: CH_001
   characterName: Diluc
   prefab: {fileID: 8196238054752762640, guid: 606bfc1c3720bcc40ac4709c350287cb, type: 3}
-  icon: {fileID: 21300000, guid: 28cec0ee098685e46b321a0da7c66b6a, type: 3}
   elementType: 0
-  weaponType: 1
-  skillCooldown: 10
-  burstCooldown: 20
-  maxEnergy: 100
+  characterIcon: {fileID: 21300000, guid: 28cec0ee098685e46b321a0da7c66b6a, type: 3}
   skillIcon: {fileID: 21300000, guid: a8dccdfd17ac5c949b9382d46bc844c4, type: 3}
   burstIcon: {fileID: 21300000, guid: efed3ea9f434e0f41a81c667bb88a29d, type: 3}
-  hp: 1011
-  hpPerLevel: 100
-  atk: 26
-  atkPerLevel: 3
-  def: 61
-  defPerLevel: 8
-  elementalMastery: 0
-  ascensionData: {fileID: 11400000, guid: b7c21aca96e966b479307ac09cc367f0, type: 2}
+  atk: 120
+  maxHp: 1400
+  attackMultipliers:
+  - 0.9
+  - 1.05
+  - 1.25
+  skillMultipliers:
+  - 1.6
+  - 1.8
+  - 2
+  skillCoolDown: 10
+  burstEnergyCost: 100
+  burstMultipliers:
+  - 4
+  burstCoolDown: 18
   avatar: {fileID: 9000000, guid: d49c65de9fce66146b5d0e164b1f9d2d, type: 3}
   animatorController: {fileID: 9100000, guid: 3e79cffa401254946bc1e35e38320ac4, type: 2}
-  characterCombatData: {fileID: 11400000, guid: 1a95ee3ba3a37d74e89e3b7dbb3bce4e, type: 2}

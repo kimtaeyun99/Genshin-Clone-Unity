@@ -118,8 +118,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BarbaraSkill
   waterAuraPrefab: {fileID: -4135819851444712456, guid: 3617daedb686d924e991bdfa4d71b4c5, type: 3}
-  waterAuraDuration: 5
-  waterAuraRadius: 1
+  waterAuraDuration: 10
+  waterAuraRadius: 2.5
 --- !u!114 &1332487744848707196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BarbaraBurst
   burstVfxPrefab: {fileID: 3842567802355953820, guid: 08551b82c5312134999733f261705527, type: 3}
   burstVfxDuration: 3
-  burstVfxRadius: 1
+  burstVfxRadius: 3
 --- !u!1001 &3321093801075807124
 PrefabInstance:
   m_ObjectHideFlags: 0

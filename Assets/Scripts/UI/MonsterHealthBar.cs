@@ -17,7 +17,7 @@ public class MonsterHealthBar : MonoBehaviour
     [SerializeField] private MonsterController monster;
     private MonsterRunTime runtime;
     private Health health;
-    [SerializeField] private Camera mainCamera;
+    private Camera mainCamera;
 
     private bool isVisible;
 
@@ -28,6 +28,7 @@ public class MonsterHealthBar : MonoBehaviour
 
     private void Start()
     {
+        mainCamera = Camera.main;
         Subscribe();
         if (runtime == null || health == null)
             return;
