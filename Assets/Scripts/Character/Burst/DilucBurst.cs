@@ -30,7 +30,8 @@ public class DilucBurst : MonoBehaviour, ICharacterBurst
         AnimatorStateInfo stateInfo =
             playerAnimationController.GetCurrentStateInfo();
 
-        if (stateInfo.normalizedTime >= 0.95f)
+        if (stateInfo.IsName("Burst") &&
+            stateInfo.normalizedTime >= 0.9f)
         {
             isFinished = true;
         }

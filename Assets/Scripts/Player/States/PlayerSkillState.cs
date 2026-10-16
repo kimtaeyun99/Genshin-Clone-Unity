@@ -31,6 +31,9 @@ public class PlayerSkillState : PlayerStateBase
         if (currentSkill == null)
             return;
 
+        if (player.PlayerAnimationController.IsTransition())
+            return;
+
         currentSkill.SkillUpdate();
 
         if (currentSkill.IsFinished)

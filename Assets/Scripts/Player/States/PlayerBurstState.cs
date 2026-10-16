@@ -42,16 +42,15 @@ public class PlayerBurstState : PlayerStateBase
     public override void Update()
     {
         if (currentBurst == null)
-        {
             return;
-        }
+
+        if (player.PlayerAnimationController.IsTransition())
+            return;
 
         currentBurst.BurstUpdate();
 
         if (currentBurst.IsFinished)
-        {
             ChangeNextState();
-        }
     }
 
     public override void Exit()
