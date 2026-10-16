@@ -80,7 +80,9 @@ public class PlayerController : MonoBehaviour
 
     private void SwitchCharacter(int index)
     {
-        if (StateMachine.CurrentState is PlayerDeadState)
+        if (StateMachine.CurrentState is PlayerDeadState ||
+            StateMachine.CurrentState is PlayerSkillState ||
+            StateMachine.CurrentState is PlayerBurstState)
         {
             return;
         }
