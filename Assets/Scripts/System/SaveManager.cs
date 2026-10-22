@@ -19,6 +19,7 @@ public class SaveManager : MonoBehaviour
         );
 
     private PlayerController player;
+    private bool needsFailedSaveArchive;
 
     private void Awake()
     {
@@ -58,6 +59,12 @@ public class SaveManager : MonoBehaviour
 
         try
         {
+            // 보관하지 못한 실패 파일을 새 게임 저장으로 덮어쓰지 않는다.
+            if (needsFailedSaveArchive && !ArchiveFailedSaveFiles())
+            {
+                return;
+            }
+
             GameSaveData saveData = new GameSaveData();
             SavePlayer(saveData, player);
             SaveParty(saveData);
@@ -245,10 +252,10 @@ public class SaveManager : MonoBehaviour
                File.Exists(savePath + ".bak") ||
                File.Exists(savePath + ".tmp");
     }
-    public void LoadGame()
+    public bool LoadGame()
     {
         if (!HasSaveData())
-            return;
+            return false;
 
         string savePath = SavePath;
         string[] loadPaths =
@@ -273,12 +280,63 @@ public class SaveManager : MonoBehaviour
             LoadCharacters(saveData);
             LoadParty(saveData);
             LoadPlayer(saveData);
-            return;
+            return true;
         }
 
-        Debug.LogError(
+        needsFailedSaveArchive = true;
+        ArchiveFailedSaveFiles();
+
+        Debug.LogWarning(
             "[SaveManager] 불러오기 실패: 원본, 백업, 임시 파일에서 유효한 저장 데이터를 찾지 못했습니다."
         );
+        return false;
+    }
+
+    private bool ArchiveFailedSaveFiles()
+    {
+        if (!HasSaveData())
+        {
+            needsFailedSaveArchive = false;
+            return true;
+        }
+
+        string savePath = SavePath;
+        string[] failedPaths =
+        {
+            savePath,
+            savePath + ".bak",
+            savePath + ".tmp"
+        };
+
+        string archivePath = Path.Combine(
+            Application.persistentDataPath,
+            "FailedSaves",
+            DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + "_" + Guid.NewGuid().ToString("N")
+        );
+
+        try
+        {
+            Directory.CreateDirectory(archivePath);
+
+            foreach (string path in failedPaths)
+            {
+                if (File.Exists(path))
+                {
+                    File.Move(path, Path.Combine(archivePath, Path.GetFileName(path)));
+                }
+            }
+
+            needsFailedSaveArchive = false;
+            Debug.LogWarning($"[SaveManager] 불러오기에 실패한 저장 파일을 보관했습니다: {archivePath}");
+            return true;
+        }
+        catch (Exception exception)
+        {
+            Debug.LogWarning(
+                $"[SaveManager] 실패 파일 보관 실패, 다음 저장 시 다시 시도합니다: {exception.Message}"
+            );
+            return false;
+        }
     }
 
     private bool TryReadSaveFile(
