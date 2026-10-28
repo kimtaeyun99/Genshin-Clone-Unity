@@ -7,13 +7,8 @@ public class AttackHitbox : MonoBehaviour
 {
     [SerializeField] private LayerMask targetLayer;
 
-    private const int InitialOverlapCapacity = 16;
-
     private float damage;
     private ElementType element;
-
-    [SerializeField] private BoxCollider hitboxCollider;
-    private Collider[] overlapResults = new Collider[InitialOverlapCapacity];
 
     private readonly HashSet<Health> hitTargets = new();
 
@@ -21,16 +16,14 @@ public class AttackHitbox : MonoBehaviour
     public ElementType Element => element;
     public event Action OnHit;
 
-    private void OnEnable()
+    private void OnTriggerEnter(Collider other)
     {
-        CheckOverlaps();
+        TryHit(other);
     }
-
-    private void FixedUpdate()
+    private void OnTriggerExit(Collider other)
     {
-        CheckOverlaps();
+        TryHit(other);
     }
-
     public void SetAttack(float atk, float multiplier, ElementType elementType)
     {
         damage = atk * multiplier;
@@ -41,52 +34,19 @@ public class AttackHitbox : MonoBehaviour
     {
         hitTargets.Clear();
     }
-
-    private void CheckOverlaps()
+    private void TryHit(Collider other)
     {
-        if (hitboxCollider == null || !hitboxCollider.enabled)
+        if ((targetLayer.value & (1 << other.gameObject.layer)) == 0)
             return;
 
-        Vector3 center = transform.TransformPoint(hitboxCollider.center);
-        Vector3 scale = transform.lossyScale;
-        Vector3 halfExtents = Vector3.Scale(hitboxCollider.size * 0.5f,new Vector3(Mathf.Abs(scale.x), Mathf.Abs(scale.y), Mathf.Abs(scale.z)));
+        if (!other.TryGetComponent<Health>(out Health health))
+            return;
 
-        int count;
-        while (true)
-        {
-            count = Physics.OverlapBoxNonAlloc(
-                center,
-                halfExtents,
-                overlapResults,
-                transform.rotation,
-                targetLayer,
-                QueryTriggerInteraction.Collide
-            );
+        if (!hitTargets.Add(health))
+            return;
 
-            if (count < overlapResults.Length)
-                break;
 
-            Array.Resize(ref overlapResults, overlapResults.Length * 2);
-        }
-
-        HashSet<Health> targets = hitTargets;
-        for (int i = 0; i < count; i++)
-        {
-            Collider other = overlapResults[i];
-            if (other == null)
-                continue;
-
-            if (Physics.GetIgnoreLayerCollision(gameObject.layer, other.gameObject.layer))
-                continue;
-
-            if (!other.TryGetComponent<Health>(out Health health))
-                continue;
-
-            if (!targets.Add(health))
-                continue;
-
-            health.TakeAttack(new AttackData(damage, element));
-            OnHit?.Invoke();
-        }
+        health.TakeAttack(new AttackData(damage, element));
+        OnHit?.Invoke();
     }
 }
