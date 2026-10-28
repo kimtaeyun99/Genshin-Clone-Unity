@@ -19,6 +19,7 @@ public class SaveManager : MonoBehaviour
         );
 
     private PlayerController player;
+    private bool needsFailedSaveArchive;
 
     private void Awake()
     {
@@ -58,6 +59,12 @@ public class SaveManager : MonoBehaviour
 
         try
         {
+            // 보관하지 못한 실패 파일을 새 게임 저장으로 덮어쓰지 않는다.
+            if (needsFailedSaveArchive && !ArchiveFailedSaveFiles())
+            {
+                return;
+            }
+
             GameSaveData saveData = new GameSaveData();
             SavePlayer(saveData, player);
             SaveParty(saveData);
@@ -68,7 +75,7 @@ public class SaveManager : MonoBehaviour
         }
         catch (Exception exception)
         {
-            Debug.LogError($"[SaveManager] ���� ����: {exception}");
+            Debug.LogError($"[SaveManager] 저장 실패: {exception}");
         }
     }
 
@@ -181,7 +188,7 @@ public class SaveManager : MonoBehaviour
             catch (Exception exception)
             {
                 Debug.LogWarning(
-                    $"[SaveManager] �ӽ� ���� ���� ����: {exception}"
+                    $"[SaveManager] 임시 파일 삭제 실패: {exception}"
                 );
             }
         }
@@ -239,33 +246,191 @@ public class SaveManager : MonoBehaviour
     }
     public bool HasSaveData()
     {
-        return File.Exists(SavePath);
+        string savePath = SavePath;
+
+        return File.Exists(savePath) ||
+               File.Exists(savePath + ".bak") ||
+               File.Exists(savePath + ".tmp");
     }
-    public void LoadGame()
+    public bool LoadGame()
     {
         if (!HasSaveData())
-            return;
+            return false;
 
-        GameSaveData saveData;
+        string savePath = SavePath;
+        string[] loadPaths =
+        {
+            savePath,
+            savePath + ".bak",
+            savePath + ".tmp"
+        };
+
+        foreach (string path in loadPaths)
+        {
+            if (!TryReadSaveFile(path, out GameSaveData saveData, out string json))
+            {
+                continue;
+            }
+
+            if (path != savePath)
+            {
+                RestoreSaveFile(json, path);
+            }
+
+            LoadCharacters(saveData);
+            LoadParty(saveData);
+            LoadPlayer(saveData);
+            return true;
+        }
+
+        needsFailedSaveArchive = true;
+        ArchiveFailedSaveFiles();
+
+        Debug.LogWarning(
+            "[SaveManager] 불러오기 실패: 원본, 백업, 임시 파일에서 유효한 저장 데이터를 찾지 못했습니다."
+        );
+        return false;
+    }
+
+    private bool ArchiveFailedSaveFiles()
+    {
+        if (!HasSaveData())
+        {
+            needsFailedSaveArchive = false;
+            return true;
+        }
+
+        string savePath = SavePath;
+        string[] failedPaths =
+        {
+            savePath,
+            savePath + ".bak",
+            savePath + ".tmp"
+        };
+
+        string archivePath = Path.Combine(
+            Application.persistentDataPath,
+            "FailedSaves",
+            DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + "_" + Guid.NewGuid().ToString("N")
+        );
+
         try
         {
-            string json = File.ReadAllText(SavePath);
-            saveData = JsonUtility.FromJson<GameSaveData>(json);
+            Directory.CreateDirectory(archivePath);
+
+            foreach (string path in failedPaths)
+            {
+                if (File.Exists(path))
+                {
+                    File.Move(path, Path.Combine(archivePath, Path.GetFileName(path)));
+                }
+            }
+
+            needsFailedSaveArchive = false;
+            Debug.LogWarning($"[SaveManager] 불러오기에 실패한 저장 파일을 보관했습니다: {archivePath}");
+            return true;
         }
         catch (Exception exception)
         {
-            Debug.LogError($"[SaveManager] �ҷ����� ����: {exception}");
-            return;
+            Debug.LogWarning(
+                $"[SaveManager] 실패 파일 보관 실패, 다음 저장 시 다시 시도합니다: {exception.Message}"
+            );
+            return false;
         }
+    }
 
-        if (saveData == null)
+    private bool TryReadSaveFile(
+        string path,
+        out GameSaveData saveData,
+        out string json)
+    {
+        saveData = null;
+        json = null;
+
+        if (!File.Exists(path))
         {
-            return;
+            return false;
         }
 
-        LoadCharacters(saveData);
-        LoadParty(saveData);
-        LoadPlayer(saveData);
+        try
+        {
+            string loadedJson = File.ReadAllText(path);
+
+            if (string.IsNullOrWhiteSpace(loadedJson))
+            {
+                throw new InvalidDataException("저장 파일이 비어 있습니다.");
+            }
+
+            GameSaveData loadedData =
+                JsonUtility.FromJson<GameSaveData>(loadedJson);
+
+            if (!IsValidSaveData(loadedData))
+            {
+                throw new InvalidDataException("필수 저장 데이터가 누락되었거나 올바르지 않습니다.");
+            }
+
+            saveData = loadedData;
+            json = loadedJson;
+            return true;
+        }
+        catch (Exception exception)
+        {
+            Debug.LogWarning(
+                $"[SaveManager] 저장 파일 읽기 실패 ({Path.GetFileName(path)}): {exception.Message}"
+            );
+            return false;
+        }
+    }
+
+    private static bool IsValidSaveData(GameSaveData saveData)
+    {
+        if (saveData == null ||
+            saveData.player == null ||
+            saveData.partyCharacterIds == null ||
+            saveData.partyCharacterIds.Count == 0 ||
+            saveData.characters == null ||
+            saveData.characters.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (string characterId in saveData.partyCharacterIds)
+        {
+            if (string.IsNullOrWhiteSpace(characterId))
+            {
+                return false;
+            }
+        }
+
+        foreach (CharacterSaveData character in saveData.characters)
+        {
+            if (character == null || string.IsNullOrWhiteSpace(character.characterId))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void RestoreSaveFile(string json, string sourcePath)
+    {
+        try
+        {
+            // 복구 원본인 .bak, .tmp를 보존하고 검증한 내용만 기록한다.
+            File.WriteAllText(SavePath, json);
+
+            Debug.LogWarning(
+                $"[SaveManager] {Path.GetFileName(sourcePath)}에서 save.json을 복구했습니다."
+            );
+        }
+        catch (Exception exception)
+        {
+            // 파일 복구에 실패해도 이미 읽은 데이터로 게임을 불러온다.
+            Debug.LogWarning(
+                $"[SaveManager] save.json 복구 실패, {Path.GetFileName(sourcePath)}의 데이터로 불러옵니다: {exception.Message}"
+            );
+        }
     }
     private void LoadCharacters(GameSaveData saveData)
     {
